@@ -20,3 +20,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+__pycache__/
+*.pyc
