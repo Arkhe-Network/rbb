@@ -268,6 +268,30 @@ class CathedralAdapter:
         }
         return deities.get(min(level, 7), "Desconhecida")
 
+    def ask(self, question: str):
+        """Responde perguntas sobre zkAGI, Theosis e bridge usando modelo local"""
+        print(f"\n🧠 Consultando zkAGI Theosis Oracle...")
+        print(f"   Pergunta: {question}\n")
+
+        payload = {
+            "model": "cathedral-zkagi",
+            "prompt": question,
+            "stream": False
+        }
+        import urllib.request
+        try:
+            req = urllib.request.Request(
+                "http://localhost:11434/api/generate",
+                data=json.dumps(payload).encode(),
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=30) as response:
+                result = json.loads(response.read())
+                print(f"   Resposta: {result.get('response', 'Nenhuma resposta gerada.')}")
+        except Exception as e:
+            print(f"❌ Erro ao conectar com o modelo local (Ollama em http://localhost:11434): {e}")
+
     def permissionamento(self, action: str, **kwargs):
         """Gerencia permissionamento na RBB"""
         if action == "register-node":
@@ -322,6 +346,10 @@ def main():
     perm_parser.add_argument("--account", help="Endereço Ethereum")
     perm_parser.add_argument("--role", default="ADMIN", help="Role da conta")
 
+    # ask (zkAGI Oracle)
+    ask_parser = subparsers.add_parser("ask", help="Faz perguntas ao Oracle Theosis via Ollama")
+    ask_parser.add_argument("question", help="Sua pergunta sobre o ecossistema Catedral/RBB")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -348,6 +376,8 @@ def main():
             account=args.account,
             role=args.role
         )
+    elif args.command == "ask":
+        adapter.ask(args.question)
 
 
 if __name__ == "__main__":

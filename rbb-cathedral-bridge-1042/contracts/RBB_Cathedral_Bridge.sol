@@ -10,6 +10,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
+interface IPlonkVerifier {
+    function verifyProof(bytes memory proof, uint256[] memory pubSignals) external view returns (bool);
+}
+
 /**
  * @title RBB Cathedral Bridge
  * @notice Ponte cross-chain entre RBB e ecossistema Catedral/ARKHE
@@ -76,6 +80,9 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
     uint256 public anchorInterval = 300; // ~20 minutos (300 blocos @ 4s)
     uint256 public minTheosisLevel = 100; // Threshold mínimo
     uint256 public bridgeFee = 0.001 ether;
+
+    // ZK Verifier
+    address public zkVerifier;
 
     // Events
     event AnchorCreated(
@@ -245,7 +252,8 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         uint256 _amount,
         bytes calldata _payload,
         uint256 _sourceChainId,
-        bytes calldata _signature
+        bytes calldata _signature,
+        bytes calldata _zkProof
     ) external onlyRole(BRIDGE_OPERATOR) nonReentrant {
         require(!processedMessages[_messageId], "Bridge: mensagem já processada");
         require(_sourceChainId == CATHEDRAL_CHAIN_ID, "Bridge: source inválida");
@@ -262,6 +270,12 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
         bytes32 ethSignedHash = messageHash.toEthSignedMessageHash();
         address signer = ethSignedHash.recover(_signature);
         require(hasRole(BRIDGE_OPERATOR, signer), "Bridge: assinatura inválida");
+
+        if (zkVerifier != address(0) && _zkProof.length > 0) {
+            uint256[] memory pubSignals = new uint256[](1);
+            pubSignals[0] = theosisHistory[theosisEpoch].level; // Validate against current theosis level
+            require(IPlonkVerifier(zkVerifier).verifyProof(_zkProof, pubSignals), "Bridge: ZK Proof invalida");
+        }
 
         // Mint tokens (simplificado - em produção usar contract de token)
         mintedBalances[_recipient] += _amount;
@@ -336,6 +350,10 @@ contract RBB_Cathedral_Bridge is ReentrancyGuard, AccessControl {
 
     function withdrawFees() external onlyRole(DEFAULT_ADMIN_ROLE) {
         payable(msg.sender).transfer(address(this).balance);
+    }
+
+    function setZkVerifier(address _verifier) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        zkVerifier = _verifier;
     }
 
     receive() external payable {}

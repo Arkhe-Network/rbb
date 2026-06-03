@@ -134,10 +134,36 @@ class TheosisCollector:
             return None
 
     def _update_theosis(self):
-        """Atualiza métricas de Theosis"""
-        # Em produção, consultaria contrato Bridge ou API Catedral
-        # Simulação baseada em funções determinísticas
+        """Atualiza métricas de Theosis conectando com a API zkAGI/WormGraph"""
         now = time.time()
+
+        try:
+            # Tentar conectar ao endpoint do zkAGI ou WormGraph (assumindo http://localhost:8080/api/theosis como fallback genérico para zkAGI)
+            req = urllib.request.Request(
+                "http://localhost:8080/api/theosis",
+                headers={"Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=5) as response:
+                if response.status == 200:
+                    data = json.loads(response.read())
+                    self.theosis.level = float(data.get("level", 0.0))
+                    self.theosis.entropy = float(data.get("entropy", 0.0))
+                    self.theosis.circularity = float(data.get("circularity", 0.0))
+                    self.theosis.resilience = float(data.get("resilience", 0.0))
+                    self.theosis.timestamp = now
+                    self.theosis.epoch = int(data.get("epoch", int(now / self.update_interval)))
+                    self.theosis.substrate_seal = data.get("substrate_seal", "")
+
+                    if not self.theosis.substrate_seal:
+                        seal_data = f"theosis:{self.theosis.epoch}:{self.theosis.level}"
+                        self.theosis.substrate_seal = "0x" + hashlib.sha3_256(seal_data.encode()).hexdigest()
+
+                    return
+        except Exception as e:
+            # Em caso de falha, fallback para o comportamento determinístico
+            pass
+
+        # Simulação baseada em funções determinísticas (fallback)
         seed = int(now / self.update_interval)
 
         import random
