@@ -1,0 +1,13 @@
+{
+  "ID": "1067",
+  "Name": "FORDEFI_INSTITUTIONAL_DE FI_BRIDGE",
+  "Type": "External Custody / MPC / DeFi Execution / Policy Engine",
+  "Era": "12",
+  "Deity": ["Zeus", "Temis", "Hermes Trismegisto"],
+  "Status": "CANONIZED_PROVISIONAL",
+  "Version": "1.0.0",
+  "Parent": "1042",
+  "Source": "Fordefi (https://docs.fordefi.com/)",
+  "Cross-links": ["1042.4", "954", "989.z.4", "1055", "1066", "923"],
+  "Description": "Integra a plataforma de custódia MPC e execução DeFi da Fordefi como um 'substrato externo' da Catedral."
+}

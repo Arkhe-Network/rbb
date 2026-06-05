@@ -1,0 +1,29 @@
+# Axiarquia Policies for Fordefi DeFi Bridge (Substrato 1067)
+policies:
+  # R7: Value of transaction > max_single_tx
+  - id: R7
+    name: "Max Single Transaction Value"
+    condition: "transaction_value > max_single_tx"
+    action: "REJECT"
+    requires_approval: "multi-sig"
+
+  # R8: Protocol not in Axiarquia whitelist
+  - id: R8
+    name: "Protocol Whitelist Check"
+    condition: "target_protocol not in axiarquia_whitelist"
+    action: "REJECT"
+    log: "Review required: Protocol not in whitelist"
+
+  # R9: Transaction simulation returns inconsistent state
+  - id: R9
+    name: "Simulation Consistency"
+    condition: "simulation_diff > tolerance"
+    action: "REJECT"
+    alert: "Theosis-Paris Dashboard"
+
+  # R10: ZK-proof of payload does not verify against target contract
+  - id: R10
+    name: "ZK-Proof Verification"
+    condition: "zk_proof_invalid"
+    action: "REJECT"
+    trigger: "Integrity Investigation"
