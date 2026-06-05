@@ -1,0 +1,12 @@
+{
+    "arbitrum": {
+        "CathedralKlerosBridge": "0xArbitrumMockAddressBridge",
+        "CathedralKlerosBridgeWithVoting": "0xArbitrumMockAddressVotingBridge",
+        "PNKTheosisOracle": "0xArbitrumMockAddressOracle"
+    },
+    "rbb": {
+        "CathedralKlerosBridge": "0xRBBMockAddressBridge",
+        "CathedralKlerosBridgeWithVoting": "0xRBBMockAddressVotingBridge",
+        "PNKTheosisOracle": "0xRBBMockAddressOracle"
+    }
+}
