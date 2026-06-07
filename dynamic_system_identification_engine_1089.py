@@ -160,6 +160,14 @@ def sparse_regression_thresholded(Theta, dX, threshold=0.05, max_iterations=20):
 
 
 def cross_validate_threshold(Theta, dX, n_folds=5, n_thresholds=10):
+    n_samples = Theta.shape[0]
+    n_folds = min(n_folds, n_samples)
+    if n_folds < 2:
+        # Not enough samples to cross-validate properly, just return a default threshold
+        Xi_init = np.linalg.lstsq(Theta, dX, rcond=None)[0]
+        max_coef = np.max(np.abs(Xi_init))
+        return (1e-3 * max_coef if max_coef > 1e-10 else 0.5), float('inf')
+
     kf = KFold(n_splits=n_folds, shuffle=True, random_state=42)
     Xi_init = np.linalg.lstsq(Theta, dX, rcond=None)[0]
     max_coef = np.max(np.abs(Xi_init))

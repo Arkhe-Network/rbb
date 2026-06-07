@@ -1,0 +1,40 @@
+--- vector_theosis_1091_1.py
++++ vector_theosis_1091_1.py
+@@ -19,6 +19,8 @@
+ from enum import Enum, auto
+
++import torch
++
+ # ═══════════════════════════════════════════════════════════════════════════════
+ # CONSTANTES CANÔNICAS
+ # ═══════════════════════════════════════════════════════════════════════════════
+@@ -406,6 +408,24 @@
+         self.emergency_count = 0
+         self.garden_path_count = 0
+         self._cycle_log: List[Dict] = []
+         self._active = False
++
++    def attach_to_transformer_layer(self, model_layer, tokenizer=None):
++        """
++        Integração Stethoscope 1081: Conectar VectorTheosis à extração real de
++        hidden states de transformers via PyTorch register_forward_hook.
++        """
++        def hook_fn(module, input, output):
++            if isinstance(output, tuple):
++                hidden_state = output[0]
++            else:
++                hidden_state = output
++
++            # Pega o último token do batch 0
++            if hidden_state.dim() == 3:
++                state_vec = hidden_state[0, -1, :].detach().cpu().numpy()
++            else:
++                state_vec = hidden_state.detach().cpu().numpy().flatten()
++
++            # Ingest o estado oculto
++            self.ingest_hidden_state(state_vec)
++
++        self.hook_handle = model_layer.register_forward_hook(hook_fn)
++        return self.hook_handle
+
+     def start_cycle(self):
