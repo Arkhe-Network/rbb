@@ -270,19 +270,31 @@ class VectorTheosis1092:
 
     def _rkhs_predict(self, buffer):
         if len(buffer) < 3: return None
-        states = np.array(buffer); n = len(states)
-        K = np.zeros((n-1, n-1))
-        for i in range(n-1):
-            for j in range(n-1):
-                dist = np.linalg.norm(states[i] - states[j])
-                K[i, j] = np.exp(-dist**2 / (2 * self.rkhs_bandwidth**2))
-        y = states[-1]
+
+        states = np.array(buffer, dtype=np.float64)
+        n = len(states) - 1
+
+        X = states[:-1]
+        Y = states[1:]
+
+        K = np.zeros((n, n))
+        bw2 = 2.0 * self.rkhs_bandwidth ** 2
+        for i in range(n):
+            diff_i = X[i] - X
+            K[i] = np.exp(-np.sum(diff_i ** 2, axis=1) / bw2)
+
+        reg = 1e-6
         try:
-            alpha = np.linalg.solve(K + 1e-6 * np.eye(n-1), np.dot(states[:-1], y))
-            pred = np.zeros(self.dim)
-            for i in range(n-1): pred += alpha[i] * states[i]
-            return pred
-        except np.linalg.LinAlgError: return self._linear_predict(buffer)
+            alpha = np.linalg.solve(K + reg * np.eye(n), Y)
+        except np.linalg.LinAlgError:
+            return self._linear_predict(buffer)
+
+        latest = states[-1]
+        diff_latest = latest - X
+        k_star = np.exp(-np.sum(diff_latest ** 2, axis=1) / bw2)
+
+        pred = k_star @ alpha
+        return pred
 
     def _linear_predict(self, buffer):
         if len(buffer) < 3: return None
