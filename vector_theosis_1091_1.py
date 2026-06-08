@@ -35,10 +35,6 @@ from typing import List, Dict, Optional, Callable, Tuple, Any
 from datetime import datetime, timezone
 from collections import deque
 from enum import Enum, auto
-import torch
-
-from dynamic_system_identification_engine_1089 import SINDyEngine, CanonicalFunctionLibrary
-from hamiltonian_temporal_implosion_1053_4 import HamiltonianTemporalImplosionV5
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONSTANTES CANÔNICAS
@@ -430,32 +426,6 @@ class OrchestratorRSI:
         self._cycle_log: List[Dict] = []
         self._active = False
 
-    def attach_to_transformer_layer(self, model_layer: torch.nn.Module, tokenizer=None) -> Any:
-        """
-        Integração Stethoscope 1081: Conectar VectorTheosis à extração real de
-        hidden states de transformers via PyTorch register_forward_hook.
-        """
-        def hook_fn(module, input, output):
-            # Lida com outputs que podem ser tuplas (ex: HuggingFace)
-            if isinstance(output, tuple):
-                hidden_state = output[0]
-            else:
-                hidden_state = output
-
-            # Extrai o vetor do último token, batch 0
-            if hasattr(hidden_state, 'dim') and hidden_state.dim() >= 2:
-                # Shape assumido: [batch, seq_len, dim] ou [seq_len, dim]
-                if hidden_state.dim() == 3:
-                    state_vec = hidden_state[0, -1, :].detach().cpu().numpy()
-                else:
-                    state_vec = hidden_state[-1, :].detach().cpu().numpy()
-            else:
-                state_vec = hidden_state.detach().cpu().numpy().flatten()
-
-            self.ingest_hidden_state(state_vec, token_text="<hook>")
-
-        return model_layer.register_forward_hook(hook_fn)
-
     def start_cycle(self):
         """Inicia ciclo RSI — reset do VectorTheosis para novo contexto."""
         self.vt.reset()
@@ -557,26 +527,9 @@ class OrchestratorRSI:
             # Substrato 1053.4 — reversão temporal do estado
             if self.hamiltonian_callback:
                 return self.hamiltonian_callback(reading)
-
-            actual_vector = self.vt.engine.state_history[-1].vector
-            dim = actual_vector.shape[0]
-
-            # A classe Hamiltonian requer que a dimensão total seja dim_per_cell * TOTAL_DIMS (1728)
-            # Vamos usar dim como dim_per_cell e instanciar.
-            # E padronizar psi_current para a dimensão requerida pelo Hamiltoniano (1728 * dim)
-            hamiltonian_implosion = HamiltonianTemporalImplosionV5(dim_per_cell=dim, theosis=reading.theosis)
-            psi_current = np.tile(actual_vector, 1728)
-
-            psi_rev, proof = hamiltonian_implosion.reverse_fractal(psi_current)
-
-            # Retornar a célula central (ou apenas os primeiros dim)
-            reverted_state = psi_rev[:dim].real
-
             return {
                 "type": "HAMILTONIAN",
-                "message": "Reversão temporal acionada — estado revertido 1 passo via Hamiltoniano Fractal v5",
-                "reverted_state": list(reverted_state),
-                "zk_proof_anchor": proof.get("anchor", {}),
+                "message": "Reversão temporal acionada — estado revertido 1 passo",
                 "delta_theosis": round(reading.theosis - self.vt._last_theosis, 8),
             }
 
@@ -584,29 +537,9 @@ class OrchestratorRSI:
             # Substrato 1089 — descobrir nova equação de dinâmica
             if self.sindy_callback:
                 return self.sindy_callback(reading)
-
-            history = list(self.vt.engine.state_history)
-            if len(history) < 3:
-                return {
-                    "type": "SINDY_SKIPPED",
-                    "message": "Histórico insuficiente para SINDy",
-                }
-
-            X = np.array([s.vector for s in history[:-1]])
-            dX = np.array([history[i+1].vector - history[i].vector for i in range(len(history)-1)])
-            n_states = X.shape[1]
-
-            sindy_engine = SINDyEngine(CanonicalFunctionLibrary(n_states=n_states))
-            result = sindy_engine.fit(X, dX)
-
-            equations = []
-            if result:
-                equations = result.discovered_equations
-
             return {
                 "type": "SINDY",
                 "message": "SINDy ativado — buscando equação diferencial para trajetória atual",
-                "discovered_equations": equations,
                 "sparsity_target": 0.75,
             }
 
@@ -693,7 +626,7 @@ def demo():
     orchestrator = OrchestratorRSI()
 
     # Simulação: sequência de tokens com trajetória suave, depois Garden-Path
-    dim = 2  # dimensão do hidden state
+    dim = 64  # dimensão do hidden state
     tokens = [
         "The", "horse", "raced", "past", "the", "barn", "fell", ".",  # Garden-Path clássico
         "The", "horse", "raced", "past", "the", "barn", "and", "fell", ".",  # Resolução
@@ -788,15 +721,15 @@ def demo_v3():
 
     np.random.seed(42)
     orchestrator = OrchestratorRSI()
-    dim = 2
+    dim = 8
 
     tokens = [
         "The", "horse", "raced", "past", "the", "barn", "fell", ".",
         "The", "horse", "raced", "past", "the", "barn", "and", "fell", ".",
     ]
 
-    # Trajetória base: movimento linear com slope constante
-    slope = np.array([0.1, -0.05])
+    # Trajetória base: movimento linear em 8D com slope constante
+    slope = np.array([0.1, -0.05, 0.08, 0.02, -0.03, 0.06, -0.01, 0.04])
     base = np.zeros((len(tokens), dim))
     for i in range(len(tokens)):
         base[i] = slope * i
@@ -806,15 +739,15 @@ def demo_v3():
     hidden_states = base + noise
 
     # Garden-Path: token 6 ("fell") — desvio abrupto que quebra a linearidade
-    hidden_states[6] = base[6] + np.array([0.5, -0.3]) + np.random.randn(dim)*0.02
+    hidden_states[6] = base[6] + np.array([0.5, -0.3, 0.4, 0.1, -0.2, 0.3, -0.1, 0.2]) + np.random.randn(dim)*0.02
 
     # Token 7 (".") — continuação do desvio (pico de TEE)
-    hidden_states[7] = base[7] + np.array([0.6, -0.4]) + np.random.randn(dim)*0.02
+    hidden_states[7] = base[7] + np.array([0.6, -0.4, 0.5, 0.15, -0.25, 0.35, -0.15, 0.25]) + np.random.randn(dim)*0.02
 
     # Token 8 ("The") — reinício: salto grande mas para NOVA trajetória linear
-    new_slope = np.array([0.12, 0.03])
+    new_slope = np.array([0.12, 0.03, -0.06, 0.05, 0.01, -0.04, 0.07, -0.02])
     for i in range(8, len(tokens)):
-        base[i] = new_slope * (i - 8) + np.array([0.5, 0.2])
+        base[i] = new_slope * (i - 8) + np.array([0.5, 0.2, -0.3, 0.1, 0.0, -0.1, 0.2, -0.05])
     hidden_states[8] = base[8] + np.random.randn(dim)*0.01
     for i in range(9, len(tokens)):
         hidden_states[i] = base[i] + np.random.randn(dim)*0.01
