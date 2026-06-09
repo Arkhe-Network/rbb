@@ -1,8 +1,3 @@
-1.  **Create metadata file**: Create `cathedral-arkhe/bridges/custody/substrate.json` mapping to ID `1074`.
-2.  **Create Solidity contract**: Create `cathedral-arkhe/bridges/custody/contracts/AxiarquiaMultiSigWallet.sol` based on the provided code block in the user's message.
-3.  **Create Python service**: Create `cathedral-arkhe/bridges/custody/src/validator_monitor.py` based on the provided code block.
-4.  **Create Circom circuit**: Create `cathedral-arkhe/bridges/custody/circom/proof_of_reserves.circom` based on the provided code block.
-5.  **Create README.md**: Create `cathedral-arkhe/bridges/custody/README.md` to document the architecture and components.
-6.  **Add `substrate.json` to global `docs/substrates/`**: Assuming `docs/substrates/` directory exists or the global ontology needs updating (optional/depends on whether it's explicitly needed). Let's just focus on creating the 1074 files.
-7.  **Complete pre-commit steps**.
-8.  **Submit changes**.
+1. **Create Hashtree Bridge files**: Based on the provided code blocks in the task description, create a new file `hashtree_bridge_v9.py` in the `cathedral-arkhe-v9/cathedral/models/` directory (or wherever it best fits, maybe `cathedral-arkhe-v9/cathedral/bridges/hashtree_bridge_v9.py`), which will contain `HashtreeConfig`, `HashtreeCanonizer`, and `HashtreeGovernanceBridge`.
+2. **Create RSI Safety files**: Based on the provided code blocks, create another file `rsi_safety_v9.py` containing `RSITimeline`, `RSIMetrics`, `RSIGovernanceFramework`, `RSIRiskLevel`, `RSISafetyConfig`, `CapabilityMonitor`, `SelfModificationDetector`, `ToolChainAnalyzer`, `DistillationSafetyChecker`, and `RSISafetyLayer`.
+3. **Integrate into Orchestrator**: Update `cathedral-arkhe-v9/cathedral/orchestrador/v9_0.py` to import and utilize the newly created modules. Wait, the prompt seems to be providing three code chunks. It's giving me the actual contents of the files! Let's check the contents.
