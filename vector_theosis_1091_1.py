@@ -426,6 +426,29 @@ class OrchestratorRSI:
         self._cycle_log: List[Dict] = []
         self._active = False
 
+    def attach_to_transformer_layer(self, model_layer, tokenizer=None):
+        """
+        Integração Stethoscope 1081: Conectar VectorTheosis à extração real de
+        hidden states de transformers via PyTorch register_forward_hook.
+        """
+        def hook_fn(module, input, output):
+            if isinstance(output, tuple):
+                hidden_state = output[0]
+            else:
+                hidden_state = output
+
+            # Pega o último token do batch 0
+            if hidden_state.dim() == 3:
+                state_vec = hidden_state[0, -1, :].detach().cpu().numpy()
+            else:
+                state_vec = hidden_state.detach().cpu().numpy().flatten()
+
+            # Ingest o estado oculto
+            self.ingest_hidden_state(state_vec)
+
+        self.hook_handle = model_layer.register_forward_hook(hook_fn)
+        return self.hook_handle
+
     def start_cycle(self):
         """Inicia ciclo RSI — reset do VectorTheosis para novo contexto."""
         self.vt.reset()
