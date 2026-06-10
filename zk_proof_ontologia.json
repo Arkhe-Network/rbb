@@ -1,0 +1,28 @@
+{
+  "proof_type": "OntologicalConsistency_Groth16",
+  "public_signals": {
+    "ontology_root": "a92f8597936f545200a68b696d7c4bddc326d2352efa1395a88bf7135a51d8ca",
+    "domain_count": 7,
+    "total_concepts": 736
+  },
+  "pi_a": [
+    "0x123...",
+    "0x456..."
+  ],
+  "pi_b": [
+    [
+      "0x789...",
+      "0xabc..."
+    ],
+    [
+      "0xdef...",
+      "0x012..."
+    ]
+  ],
+  "pi_c": [
+    "0x345...",
+    "0x678..."
+  ],
+  "protocol": "groth16",
+  "curve": "bn128"
+}

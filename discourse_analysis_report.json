@@ -1,0 +1,112 @@
+{
+  "text_length": 493,
+  "detected_concepts": [
+    {
+      "id": "521ba9ad-2b2d-4f",
+      "label": "Evidence",
+      "category": "entity",
+      "discourse": "analyst",
+      "status": "canonized"
+    },
+    {
+      "id": "b42f6256-d32a-46",
+      "label": "Reproducibility",
+      "category": "property",
+      "discourse": "analyst",
+      "status": "canonized"
+    },
+    {
+      "id": "2acf1aaa-2c93-4c",
+      "label": "P-hacking",
+      "category": "process",
+      "discourse": "analyst",
+      "status": "canonized"
+    },
+    {
+      "id": "c73db382-b1f4-45",
+      "label": "Epistemic Justice",
+      "category": "value",
+      "discourse": "analyst",
+      "status": "canonized"
+    },
+    {
+      "id": "87cb2c84-2585-4b",
+      "label": "Quantum Entanglement",
+      "category": "entity",
+      "discourse": "university",
+      "status": "verified"
+    },
+    {
+      "id": "0f81a47a-c4a6-4",
+      "label": "Standard Model",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "ca23ce82-3453-4",
+      "label": "Wave Function Collapse",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "e8ca59cc-3b40-4",
+      "label": "Placebo Effect",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "d7ee3517-b2c4-4",
+      "label": "Clinical Trial",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "1f631c74-44b8-4",
+      "label": "Null Hypothesis",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "9fec9715-a761-4",
+      "label": "Statistical Power",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "f21992f6-ecce-4",
+      "label": "Deep Learning",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "ffafa9b5-5b7a-4",
+      "label": "Transformer Model",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    },
+    {
+      "id": "92f22422-9436-4",
+      "label": "Traditional Ecological Knowledge",
+      "category": "entity",
+      "discourse": "university",
+      "status": "evidenced"
+    }
+  ],
+  "discourse_profile": {
+    "analyst": 4,
+    "university": 10,
+    "master": 0,
+    "hysteric": 0,
+    "capitalist": 0
+  },
+  "epistemic_score": 0.2857142857142857,
+  "metadata": {}
+}
