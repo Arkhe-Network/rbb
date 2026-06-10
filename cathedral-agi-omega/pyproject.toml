@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cathedral-agi-omega"
+version = "1.0.0"
+description = "CATHEDRAL AGI OMEGA - Mathematical alignment and formal verification for AGI"
+authors = [
+    { name = "Cathedral AGI Team" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "blst-py",
+    "substrate-interface",
+    "py_ecc",
+    "web3",
+    "neo4j",
+    "torch",
+    "ezkl",
+    "numpy",
+    "pydantic"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+    "mypy"
+]
