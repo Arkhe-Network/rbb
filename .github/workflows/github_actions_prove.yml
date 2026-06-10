@@ -1,0 +1,24 @@
+name: Cathedral ZK/Lean4 Enforcement
+
+on:
+  pull_request:
+    paths:
+      - 'ZK_REASONING_ENGINE/circuits/**'
+      - 'COGNITIVE_CORTEX/agents/**'
+      - 'DISTRIBUTED_COMPUTATION/**'
+
+jobs:
+  reject_unproven:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Enforce Lean 4 Proofs
+        run: python ci_cd/reject_unproven.py
