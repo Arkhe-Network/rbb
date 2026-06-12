@@ -1,0 +1,17 @@
+#!/bin/bash
+# /etc/qubes-rpc/cathedral.KillQube (no dom0)
+# Recebe target_qube via stdin, executa terminação
+
+read -r TARGET_QUBE < /dev/stdin
+
+if [ -z "$TARGET_QUBE" ]; then
+    echo "Erro: target_qube não fornecido" >&2
+    exit 1
+fi
+
+if [[ ! "$TARGET_QUBE" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+    echo "Erro: target_qube inválido" >&2
+    exit 1
+fi
+
+qvm-kill -- "$TARGET_QUBE"
