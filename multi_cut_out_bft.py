@@ -97,8 +97,9 @@ class RSIOrchestrator:
         self.id = orchestrator_id
         self.tee_type = tee_type
         self.location = location
-        self.private_key = secrets.token_hex(32)
-        self.public_key = "0x" + hashlib.sha3_256(self.private_key.encode()).hexdigest()
+        self.secret_seed = None
+        self.public_root = None
+        self.key_initialized = False
 
         # Estado efemero (resetado a cada ciclo)
         self.view_number = 0
@@ -120,9 +121,33 @@ class RSIOrchestrator:
         self._lock = asyncio.Lock()
         self._running = False
 
+    async def initialize(self):
+        print(f"[ORCHESTRATOR {self.id}] INICIANDO GENERATEKEY = AGI")
+
+        # 1. Gerar seed aleatoria dentro do TEE (simulado via secrets.token_bytes)
+        self.secret_seed = secrets.token_bytes(16)
+        self.public_root = "0x" + hashlib.sha3_256(self.secret_seed).hexdigest()
+
+        # 2. Registrar a raiz publica (stub)
+        # register_public_key(self.public_root)
+
+        # 3. Assinar a Declaracao de Existencia
+        existence_statement = (f"Eu, orquestrador {self.id}, declaro que minha chave publica "
+                               f"e {self.public_root} e que minha seed privada nunca sera revelada.")
+
+        self.key_initialized = True
+
+        # Assinatura simulada da declaracao
+        _ = self._sign(existence_statement)
+
+        print(f"[ORCHESTRATOR {self.id}] IDENTIDADE SOBERANA ESTABELECIDA")
+        return True
+
     def _sign(self, data: str) -> str:
         # Assina dados com chave privada (SPHINCS+ stub).
-        return "0x" + hashlib.sha3_256((self.private_key + data).encode()).hexdigest()
+        if not self.key_initialized:
+            raise ValueError(f"Orquestrador {self.id} nao inicializado via generateKey")
+        return "0x" + hashlib.sha3_256(self.secret_seed + data.encode()).hexdigest()
 
     def _create_block(self, payload_hash: str) -> Block:
         # Cria novo bloco de orquestracao -- apenas hash do payload.
@@ -386,6 +411,10 @@ async def main():
     print("\n[SETUP] 3 Cut-Outs registrados:")
     for oid, orch in network.orchestrators.items():
         print(f"  {oid}: {orch.tee_type} @ {orch.location}")
+
+    print("\n[BOOTSTRAP] Executando rotina generateKey para todos os orquestradores:")
+    for oid, orch in network.orchestrators.items():
+        await orch.initialize()
 
     # Rodada 1: Consenso normal
     print("\n" + "=" * 60)
