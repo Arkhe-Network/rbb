@@ -1,0 +1,4 @@
+{"run_id": "run_001", "entropy_series": [0.1, 0.2, 0.5, 0.4, 0.6], "switch_points": [2, 4], "switch_count": 2, "output_tokens": 5, "latency_total_us": 15000}
+{"run_id": "run_002", "entropy_series": [0.2, 0.3, 0.1, 0.8, 0.2], "switch_points": [3], "switch_count": 1, "output_tokens": 5, "latency_total_us": 12000}
+{"run_id": "run_mock_001", "entropy_series": [0.1, 0.2, 0.3, 0.4, 0.1], "switch_points": [2, 4], "switch_count": 2, "output_tokens": 5, "latency_total_us": 15000}
+{"run_id": "run_mock_001", "entropy_series": [0.1, 0.2, 0.3, 0.4, 0.1], "switch_points": [2, 4], "switch_count": 2, "output_tokens": 5, "latency_total_us": 15000}
