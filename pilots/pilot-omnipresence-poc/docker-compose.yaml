@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  ipfs-node:
+    image: ipfs/go-ipfs:v0.20.0
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+    volumes:
+      - ipfs-data:/data/ipfs
+    environment:
+      - IPFS_PROFILE=server
+
+  hotmint-node1:
+    image: alpine:latest
+    command: ["echo", "Mock Hotmint BFT node 1 initialized"]
+    depends_on:
+      - ipfs-node
+
+  hotmint-node2:
+    image: alpine:latest
+    command: ["echo", "Mock Hotmint BFT node 2 initialized"]
+    depends_on:
+      - ipfs-node
+
+volumes:
+  ipfs-data:
