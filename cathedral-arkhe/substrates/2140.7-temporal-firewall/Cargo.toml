@@ -1,0 +1,9 @@
+[package]
+name = "temporal_firewall_2140_7"
+version = "1.0.0"
+edition = "2021"
+description = "Firewall Semântico Temporal — Kernel ARKHE (Substrato 2140.7)"
+
+[dependencies]
+# alloc is available from standard library via #![no_std] and extern crate alloc;
+# no need to add to Cargo.toml directly, let's remove it if it fails.
