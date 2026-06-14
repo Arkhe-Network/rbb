@@ -18,6 +18,7 @@ prometheus-client = "^0.17.0"
 fastapi = "^0.100.0"
 uvicorn = "^0.23.0"
 pydantic = "^2.0.0"
+pyzmq = "^25.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
