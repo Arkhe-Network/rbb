@@ -1,0 +1,30 @@
+[package]
+name = "wormgraph-989y"
+version = "5.2.0"
+edition = "2021"
+
+[dependencies]
+sha3 = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hex = "0.4"
+tokio = { version = "1.0", features = ["time", "macros", "rt"] }
+log = "0.4"
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+serde-wasm-bindgen = "0.6"
+
+[dev-dependencies]
+criterion = "0.4"
+rand = "0.8"
+
+[features]
+pyo3 = ["dep:pyo3"]
+
+[dependencies.pyo3]
+version = "0.19"
+optional = true
+features = ["extension-module"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
