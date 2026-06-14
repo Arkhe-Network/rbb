@@ -1,0 +1,1 @@
+{"timestamp": 1781464582.4827416, "observation_summary": null, "fast_brain_action": [0.0, 0.0, 0.0, 0.0], "slow_brain_decision": {"action_vector": [0.0, 0.0, 0.0, 0.0], "confidence": 0.0}, "reward": 0.0, "route": "slow", "safety_approved": false}
