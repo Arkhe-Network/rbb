@@ -1,0 +1,32 @@
+name: Security scan with zkHydra
+
+on:
+  pull_request:
+    paths:
+      - '**/*.circom'
+
+jobs:
+  zkhydra_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run zkHydra Gateway
+        run: |
+          for circuit in $(find . -name "*.circom"); do
+            echo "Analyzing $circuit"
+            # Skipping actual docker run for tests, but command format is standard
+            python cathedral_v17/zkhydra/zkhydra_gateway.py analyze \
+              --circuit "$circuit" \
+              --tools all \
+              --fail-on-finding \
+              --output "security-report-$(basename $circuit).json"
+          done

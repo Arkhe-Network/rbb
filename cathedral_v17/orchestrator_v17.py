@@ -107,6 +107,14 @@ class CathedralAGI_v17:
         except ImportError:
             pass
 
+        # zkHydra Gateway (opcional)
+        self.zkhydra = None
+        try:
+            from .zkhydra import ZkHydraGateway
+            self.zkhydra = ZkHydraGateway()
+        except ImportError:
+            pass
+
         # NexRL logger (opcional)
         self.nexrl_logger = None
         try:
@@ -177,6 +185,12 @@ class CathedralAGI_v17:
                 reward=confidence,  # reward simplificado
                 route=route,
             )
+
+        # 5. Geração e verificação de provas ZK (se slow brain acionado e zkhydra disponível)
+        if route == "slow" and self.zkhydra:
+            # Em uma implementação real, passaria o circuito gerado pela decisão do slow brain
+            # self.zkhydra.analyze_circuit("path_to_circuit.circom")
+            pass
 
         latency = (time.perf_counter() - t0) * 1000
 

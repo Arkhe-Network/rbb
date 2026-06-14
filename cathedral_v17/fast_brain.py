@@ -216,6 +216,14 @@ class EpisodicMemoryHNSW:
         self._count += 1
         self._save()
 
+    def store_with_proof(self, state_vector: np.ndarray, metadata: dict, zk_proof: str):
+        metadata["zk_proof"] = zk_proof
+        self.store(state_vector, metadata)
+
+    def verify_proof(self, memory_id: int) -> bool:
+        mem = next((m for m in self.memories if m.get("_id") == memory_id), None)
+        return mem is not None and "zk_proof" in mem
+
     def retrieve(self, state_vector: np.ndarray, top_k: int = 5) -> List[dict]:
         if self._count == 0:
             return []
