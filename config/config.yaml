@@ -1,4 +1,6 @@
+# config/config.yaml
 # Cathedral ARKHE v17.0 - Configuração Central
+# Gerado para: x86_64 CPU
 
 cathedral:
   version: "17.0"
@@ -19,14 +21,16 @@ cathedral:
     enabled: true
     action_dim: 4
     embed_dim: 256
-    device: "cuda"
+    device: "cpu"                    # "cuda" se tiver GPU, "cpu" se não
     target_cycle_ms: 5.0
     target_frequency_hz: 100
 
     vision:
-      encoder: "yolov8n"
-      device: "cuda"
+      encoder: "yolov8n"              # yolov8n (mais rápido) ou yolov8s (mais preciso)
+      device: "cpu"
       confidence_threshold: 0.5
+      # Se não tiver câmera, desabilite:
+      # enabled: false
 
     world_model:
       type: "rssm"
@@ -35,7 +39,7 @@ cathedral:
       hidden_dim: 256
 
     safety:
-      engine: "z3"
+      engine: "z3"                    # "z3" ou "stub" se Z3 der problemas
       max_force: 10.0
       forbidden_targets: ["humano", "animal", "objeto_fragil"]
 
@@ -45,10 +49,10 @@ cathedral:
       prototype_dim: 256
 
     memory:
-      backend: "hnsw"
+      backend: "hnsw"                 # "zvec" precisa de Milvus; use "hnsw" para começar
       data_dir: "./zvec_data"
       collection_name: "cathedral_fastbrain_v17"
-      state_dim: 288
+      state_dim: 288                  # 256 (deter) + 32 (stoch)
       top_k: 5
 
   # ============================================================
@@ -56,25 +60,29 @@ cathedral:
   # ============================================================
   slow_brain:
     enabled: true
-    engine: "sglang"
+    engine: "sglang"                  # "sglang" (recomendado) ou "vllm" (alternativa)
 
+    # Endpoint do servidor SGLang rodando no WSL2
     api_base: "http://localhost:8000/v1"
     api_key: "cathedral_key"
-    model_name: "default"
+    model_name: "default"             # SGLang usa "default" como model name
     timeout: 30.0
     max_tokens: 500
     temperature: 0.1
 
+    # XGrammar: schema JSON para saída estruturada
     xgrammar:
       enabled: true
       schema_file: "./config/slow_brain_schema.json"
 
+    # RAG com memória episódica
     rag:
       enabled: true
-      memory_backend: "hnsw"
+      memory_backend: "hnsw"          # "zvec" ou "hnsw"
       top_k_memories: 5
       context_window_tokens: 2000
 
+    # SwiReasoning
     swi_reasoning:
       enabled: true
       system_prompt: |
@@ -84,13 +92,15 @@ cathedral:
         e só então proponha a ação.
         Responda SEMPRE em JSON válido seguindo o schema fornecido.
 
+    # Fallback quando SGLang não está disponível
     fallback:
       enabled: true
-      stub_action: "zero"
+      stub_action: "zero"             # "zero", "random", "last_known"
       max_retries: 3
       retry_delay_ms: 1000
+      # Fallback para Windows AI APIs (Phi Silica / Aion)
       windows_native:
-        enabled: false
+        enabled: false                # Ative na Fase 5 se quiser explorar
         endpoint: "http://localhost:8001/v1"
         model: "phi-4-mini"
 
@@ -133,8 +143,9 @@ cathedral:
   # ============================================================
   zvec:
     enabled: true
+    # Milvus (requer Docker) - desabilite se não quiser rodar Milvus
     milvus:
-      enabled: false
+      enabled: false                  # Mude para true na Fase 6 (Nex-AGI)
       host: "localhost"
       port: 19530
       collection_name: "cathedral_memories"
@@ -142,6 +153,7 @@ cathedral:
       metric_type: "L2"
       dim: 288
 
+    # HNSW fallback (roda em RAM, sem Docker)
     fallback:
       enabled: true
       backend: "hnswlib"
@@ -167,22 +179,22 @@ cathedral:
   # HARDWARE PROFILE
   # ============================================================
   hardware:
-    gpu: "Auto"
-    vram_gb: 24
+    gpu: "N/A"
+    vram_gb: 0
     ram_gb: 64
-    cpu_cores: 16
+    cpu_cores: 8
 
   # ============================================================
   # SECURITY
   # ============================================================
   security:
     pqc:
-      enabled: false
+      enabled: false                  # Ative quando tiver libsphincs compilada
       algorithm: "SPHINCS+"
       key_dir: "./keys"
 
     provenance:
-      enabled: false
+      enabled: false                  # Ative quando tiver modelos assinados
       gguf_required: false
       reject_unknown_origin: false
 

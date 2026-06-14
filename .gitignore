@@ -23,3 +23,10 @@ out/
 __pycache__/
 output/
 cathedral-arkhe/substrates/2140.7-temporal-firewall/target/
+cathedral_v14/rust_data_plane/target/
+
+# Rust outputs
+cathedral_v14/rust_data_plane/target/
+rust_data_plane/target
+rust_data_plane/target/
+rust_data_plane/target

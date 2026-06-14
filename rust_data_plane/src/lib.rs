@@ -1,3 +1,4 @@
+// src/lib.rs — Mínimo para compilar e gerar DLL / SO
 #[no_mangle]
 pub extern "C" fn arkhe_process_cycle(
     _input: *const f32,
@@ -5,8 +6,8 @@ pub extern "C" fn arkhe_process_cycle(
 ) -> *mut f32 {
     // Stub: retorna vetor de zeros
     let result = vec![0.0f32; 4]; // action_dim = 4
-    let boxed = result.into_boxed_slice();
-    let ptr = boxed.as_ptr();
+    let mut boxed = result.into_boxed_slice();
+    let ptr = boxed.as_mut_ptr();
     std::mem::forget(boxed);
     ptr
 }
