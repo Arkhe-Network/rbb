@@ -16,6 +16,7 @@ from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_
 import uvicorn
 
 from .engine import GgufInferenceEngine
+from .cognitive_substrate import CognitiveSubstrate
 
 log = logging.getLogger("cathedral.v14.server")
 
@@ -40,6 +41,7 @@ REQUEST_IN_FLIGHT = Counter(
 )
 
 engine = None
+cognitive_substrate = None
 
 async def verify_token(authorization: str = Header(None), x_request_id: str = Header(None)):
     expected = "Bearer %s" % os.getenv('SIDECAR_TOKEN', 'cathedral-super-secret-token')
@@ -49,7 +51,7 @@ async def verify_token(authorization: str = Header(None), x_request_id: str = He
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global engine
+    global engine, cognitive_substrate
     cfg = {
         "model_id": os.getenv("GGUF_MODEL", "unsloth/Qwen3-0.6B-GGUF"),
         "quant": os.getenv("GGUF_QUANT", "Q4_K_M"),
@@ -59,9 +61,12 @@ async def lifespan(app: FastAPI):
     }
     engine = GgufInferenceEngine(**cfg)
     await engine.start()
+    cognitive_substrate = CognitiveSubstrate(embed_dim=engine._embed_dim if engine._embed_dim > 0 else 64)
     log.info("Sidecar v14.0.0 iniciado. Modelo: %s", cfg["model_id"])
     yield
     await engine.stop()
+    if cognitive_substrate:
+        await cognitive_substrate.close()
     log.info("Sidecar v14.0.0 desligado.")
 
 app = FastAPI(
@@ -91,12 +96,27 @@ async def generate(
         with REQUEST_LATENCY.time():
             result = await engine.generate(prompt, use_history=use_history)
 
+            # Cognitive Tick
+            if cognitive_substrate:
+                cog_data = await cognitive_substrate.process_cognitive_tick(
+                    prompt=prompt,
+                    gguf_output_text=result.get("text", ""),
+                    gguf_tokens=result.get("tokens", 0),
+                    gguf_embedding=result.get("embedding", [0.0]*64)
+                )
+                result["cognitive_substrate"] = cog_data
+
         REQUEST_COUNT.labels(status="success").inc()
         if result.get("cache_hit"):
             CACHE_HITS.inc()
 
         log.info("Req %s processada (cache=%s, tokens=%d)",
                  req_id, result.get("cache_hit", False), result.get("tokens", 0))
+
+        # Remove embedding to not pollute final json, optionally return it if requested, but for now we remove it
+        if "embedding" in result:
+            del result["embedding"]
+
         return result
 
     except Exception as e:

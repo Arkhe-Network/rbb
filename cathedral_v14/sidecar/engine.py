@@ -229,7 +229,12 @@ class GgufInferenceEngine:
         self._gen_time_ms += duration_ms
 
         if not result.get("cache_hit"):
-            self._semantic_cache.append((await self.embed(prompt), result["text"]))
+            prompt_embed = await self.embed(prompt)
+            self._semantic_cache.append((prompt_embed, result["text"]))
+            result["embedding"] = await self.embed(result["text"])
+        else:
+            result["embedding"] = await self.embed(result["text"])
+
         return result
 
     def get_stats(self) -> Dict:
