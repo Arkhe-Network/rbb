@@ -1,0 +1,8 @@
+[package]
+name = "cathedral-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aegis-plausible-reasoner = { path = "../crates/aegis-plausible-reasoner" }
+aegis = { path = "../crates/aegis" }
