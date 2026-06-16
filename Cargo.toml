@@ -1,0 +1,11 @@
+[workspace]
+members = [
+    "crates/aegis",
+    "crates/aegis-plausible-reasoner",
+    "cathedral-core"
+]
+resolver = "2"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+rand = "0.8"
