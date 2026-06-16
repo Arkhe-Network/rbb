@@ -3,7 +3,7 @@ members = [
     "crates/aegis",
     "crates/aegis-plausible-reasoner",
     "cathedral-core"
-]
+, "cathedral-orchestrator"]
 resolver = "2"
 
 [workspace.dependencies]
