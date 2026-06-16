@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "orchestrator",
     "crates/aegis",
     "crates/aegis-plausible-reasoner",
     "cathedral-core",
