@@ -1,0 +1,37 @@
+{
+  "dashboard": {
+    "title": "Cathedral ARKHE v28.3 — Emergence Metrics",
+    "panels": [
+      {
+        "title": "Mean Compression Score",
+        "targets": [
+          {
+            "expr": "avg(cathedral_compression_score) by (agent_id)",
+            "legendFormat": "{{agent_id}}"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+      },
+      {
+        "title": "Agent Diversity",
+        "targets": [
+          {
+            "expr": "count(count by (agent_role)(cathedral_agent_count))",
+            "legendFormat": "Specializations"
+          }
+        ],
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
+      },
+      {
+        "title": "Rollout Count / min",
+        "targets": [
+          {
+            "expr": "rate(cathedral_rollout_count[1m])",
+            "legendFormat": "Rollouts"
+          }
+        ],
+        "gridPos": { "x": 0, "y": 8, "w": 24, "h": 8 }
+      }
+    ]
+  }
+}
