@@ -5,7 +5,8 @@ members = [
     "crates/aegis-plausible-reasoner",
     "cathedral-core",
     "cathedral-embodied-no_std",
-    "cathedral-napi"
+    "cathedral-napi",
+    "cathedral-wasm"
 ]
 resolver = "2"
 
