@@ -1,0 +1,47 @@
+# Cathedral ARKHE v28.3 — LLM Server (vLLM)
+# Imagem otimizada baseada em NVIDIA CUDA com suporte a Cathedral
+# Selo: CATHEDRAL-ARKHE-v28.3-DOCKER-LLM-2026-06-16
+
+FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
+
+# Configurações do ambiente
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV CATHEDRAL_MODEL_PATH=/models
+ENV VLLM_PORT=8000
+
+WORKDIR /app
+
+# Instalação de dependências do sistema
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-pip \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configuração de links simbólicos para Python
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
+
+# Instalação de vLLM e dependências adicionais
+RUN pip3 install --no-cache-dir vllm fastapi uvicorn requests pyyaml pydantic opentelemetry-api opentelemetry-sdk opentelemetry-instrumentation-fastapi
+
+# Preparação de diretórios
+RUN mkdir -p /models /app/config
+
+# Cópia de arquivos locais (assumindo a estrutura do Cathedral ARKHE v28.3)
+# COPY core/model/manifest.json /app/config/manifest.json
+
+# Script de entrada para executar o vLLM Server
+# Utiliza os parâmetros do manifesto e suporta quantização (AWQ/GPTQ)
+COPY runtime/start_llm.sh /app/start_llm.sh
+RUN chmod +x /app/start_llm.sh
+
+# Porta exposta
+EXPOSE 8000
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
+ENTRYPOINT ["/app/start_llm.sh"]

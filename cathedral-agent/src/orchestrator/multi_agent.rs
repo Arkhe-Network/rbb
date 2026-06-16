@@ -225,6 +225,16 @@ pub enum SystemHealth {
 // ============================================================
 
 impl MultiAgentOrchestrator {
+    pub async fn new_with_config(config_path: &str, manifest_path: &str) -> Result<Self, OrchestratorError> {
+        Ok(Self {
+            agents: RwLock::new(HashMap::new()),
+            coalitions: RwLock::new(HashMap::new()),
+            event_bus: None,
+            telemetry: cathedral_embodied_no_std::telemetry::TelemetryCollector::new("multi_agent_orchestrator"),
+            consensus_history: RwLock::new(VecDeque::with_capacity(1000)),
+            emergency_stop_active: RwLock::new(false),
+        })
+    }
     pub fn new(event_bus: Option<Arc<cathedral_embodied_no_std::event_bus::EventBus>>) -> Self {
         Self {
             agents: RwLock::new(HashMap::new()),
