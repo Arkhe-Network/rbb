@@ -6,7 +6,8 @@ members = [
     "cathedral-core",
     "cathedral-embodied-no_std",
     "cathedral-napi",
-    "cathedral-wasm"
+    "cathedral-wasm",
+    "cathedral-orchestrator"
 ]
 resolver = "2"
 
