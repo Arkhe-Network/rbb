@@ -22,3 +22,5 @@ pub mod mcp;
 pub mod attestation;
 pub mod identity_attestation;
 pub mod voice;
+
+pub mod skill;
