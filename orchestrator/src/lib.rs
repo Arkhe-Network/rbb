@@ -8,6 +8,7 @@ pub mod cuda;
 pub mod governance;
 #[cfg(feature = "deployment-sim")]
 pub mod integration;
+pub mod testing;
 
 pub mod rl {
     pub mod async_rl_orchestrator;

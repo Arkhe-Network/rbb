@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "rust_data_plane",
     "orchestrator",
     "crates/aegis",
     "crates/aegis-plausible-reasoner",
