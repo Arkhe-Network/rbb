@@ -1,47 +1,21 @@
-# Cathedral ARKHE v28.3 — LLM Server (vLLM)
-# Imagem otimizada baseada em NVIDIA CUDA com suporte a Cathedral
-# Selo: CATHEDRAL-ARKHE-v28.3-DOCKER-LLM-2026-06-16
+# ============================================================================
+# Stage: Quantização GGUF (usando llama.cpp)
+# ============================================================================
+FROM base AS quantize-gguf
+RUN apt-get update && apt-get install -y build-essential cmake git
+WORKDIR /build
+RUN git clone https://github.com/ggerganov/llama.cpp && cd llama.cpp && make
+COPY models/cathedral-llm-v28.3.safetensors /models/
+# Converte para GGUF FP16
+RUN python3 llama.cpp/convert.py /models/cathedral-llm-v28.3.safetensors --outfile /models/cathedral-llm-v28.3.fp16.gguf
+# Quantização Q4_K_M
+RUN llama.cpp/quantize /models/cathedral-llm-v28.3.fp16.gguf /models/cathedral-llm-v28.3.Q4_K_M.gguf Q4_K_M
 
-FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
-
-# Configurações do ambiente
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHONUNBUFFERED=1
-ENV CATHEDRAL_MODEL_PATH=/models
-ENV VLLM_PORT=8000
-
-WORKDIR /app
-
-# Instalação de dependências do sistema
-RUN apt-get update && apt-get install -y \
-    python3.10 \
-    python3-pip \
-    curl \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-
-# Configuração de links simbólicos para Python
-RUN ln -s /usr/bin/python3.10 /usr/bin/python
-
-# Instalação de vLLM e dependências adicionais
-RUN pip3 install --no-cache-dir vllm fastapi uvicorn requests pyyaml pydantic opentelemetry-api opentelemetry-sdk opentelemetry-instrumentation-fastapi
-
-# Preparação de diretórios
-RUN mkdir -p /models /app/config
-
-# Cópia de arquivos locais (assumindo a estrutura do Cathedral ARKHE v28.3)
-# COPY core/model/manifest.json /app/config/manifest.json
-
-# Script de entrada para executar o vLLM Server
-# Utiliza os parâmetros do manifesto e suporta quantização (AWQ/GPTQ)
-COPY runtime/start_llm.sh /app/start_llm.sh
-RUN chmod +x /app/start_llm.sh
-
-# Porta exposta
-EXPOSE 8000
-
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-  CMD curl -f http://localhost:8000/health || exit 1
-
-ENTRYPOINT ["/app/start_llm.sh"]
+# ============================================================================
+# Stage: Quantização AWQ (usando AutoAWQ)
+# ============================================================================
+FROM base AS quantize-awq
+RUN pip install autoawq transformers
+COPY models/cathedral-llm-v28.3 /models/
+WORKDIR /workspace
+RUN python3 -c "from awq import AutoAWQForCausalLM; model = AutoAWQForCausalLM.from_pretrained('/models'); model.quantize(quant_config={ 'zero_point': True, 'q_group_size': 128, 'w_bit': 4, 'version': 'GEMM' })"
