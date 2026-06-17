@@ -1,4 +1,4 @@
-use std::sync::Arc;
+
 use crate::rl::reward_model::RewardModel;
 
 pub struct DebateConsensusRewardModel {}

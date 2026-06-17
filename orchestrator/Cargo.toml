@@ -12,3 +12,12 @@ serde_json = "1.0"
 tracing = "0.1"
 blake3 = "1.3"
 hex = "0.4"
+ndarray = { version = "0.15", optional = true }
+nalgebra = { version = "0.32", optional = true }
+chrono = { version = "0.4", optional = true }
+uuid = { version = "1.0", features = ["v4"], optional = true }
+async-trait = { version = "0.1", optional = true }
+
+[features]
+default = []
+deployment-sim = ["ndarray", "nalgebra", "chrono", "uuid", "async-trait"]
