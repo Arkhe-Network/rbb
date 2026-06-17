@@ -16,3 +16,8 @@ pub mod rl {
     pub mod reward_model;
     pub mod contract_bindings;
 }
+
+pub mod mcp;
+pub mod attestation;
+pub mod identity_attestation;
+pub mod voice;
