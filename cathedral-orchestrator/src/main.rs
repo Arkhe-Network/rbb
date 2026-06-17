@@ -5,10 +5,56 @@ pub mod task;
 use crate::orchestrator::NeuroSymbolicOrchestrator;
 use crate::task::CognitiveTask;
 use chrono::Utc;
+use std::sync::Arc;
+use tracing::error;
+
+use ::orchestrator::attestation::manager::{AttestationManager, CathedralComputeProvider};
+use ::orchestrator::identity_attestation::DummyIdentityProvider;
+use ::orchestrator::voice::VoiceCore;
+use ::orchestrator::mcp::server::start_mcp_server;
 
 #[tokio::main]
 async fn main() -> Result<(), String> {
     println!("🏛️ Cathedral ARKHE v28 - Neuro-Symbolic Multi-Model Orchestrator Initialized");
+
+    let mcp_enabled = std::env::var("ENABLE_MCP_SERVER")
+        .unwrap_or_else(|_| "true".to_string())
+        .parse::<bool>()
+        .unwrap_or(true);
+
+    if mcp_enabled {
+        let mcp_port = std::env::var("MCP_PORT")
+            .unwrap_or_else(|_| "3032".to_string())
+            .parse::<u16>()
+            .unwrap_or(3032);
+
+        let attestation_manager = Arc::new(AttestationManager::new());
+        let identity_provider = Arc::new(DummyIdentityProvider::new());
+        let execution_provider = Arc::new(CathedralComputeProvider::new());
+        let voice_core = Arc::new(VoiceCore::new());
+
+        let attestation_manager_clone = attestation_manager.clone();
+        let identity_provider_clone = identity_provider.clone();
+        let execution_provider_clone = execution_provider.clone();
+        let voice_core_clone = Some(voice_core.clone());
+
+        tokio::spawn(async move {
+            if let Err(e) = start_mcp_server(
+                attestation_manager_clone,
+                identity_provider_clone,
+                execution_provider_clone,
+                None, // architect_verifier
+                voice_core_clone,
+                mcp_port,
+            )
+            .await
+            {
+                error!("❌ MCP Server falhou: {}", e);
+            }
+        });
+
+        println!("🧠 MCP Server iniciado na porta {}", mcp_port);
+    }
 
     // Simulate PREFER_LOCAL_LLM=true environment variable
     let prefer_local_llm = true;
