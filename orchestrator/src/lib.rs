@@ -22,3 +22,10 @@ pub mod mcp;
 pub mod attestation;
 pub mod identity_attestation;
 pub mod voice;
+
+pub mod hashtree;
+pub mod okf;
+pub mod swarm;
+pub mod skill;
+pub mod dark_relay;
+pub mod cli;

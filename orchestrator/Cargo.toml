@@ -10,26 +10,26 @@ opentelemetry-otlp = { version = "0.27", features = ["grpc-tonic", "metrics"] }
 opentelemetry_sdk = { version = "0.27", features = ["rt-tokio"] }
 tracing-opentelemetry = { version = "0.29" }
 prometheus-client = "0.22"
-async-trait = "0.1"
 uuid = { version = "1.10", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 futures = "0.3"
 
 ethers = { version = "2.0", features = ["rustls"] }
-tokio = { version = "1.38", features = ["full"] }
+tokio = { version = "1.38", features = ["full", "sync"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tracing = "0.1"
+cron = "0.12.0"
+bincode = "1.3"
+
 blake3 = "1.3"
 hex = "0.4"
 axum = "0.7"
 ndarray = { version = "0.15", optional = true }
 nalgebra = { version = "0.32", optional = true }
-chrono = { version = "0.4" }
-uuid = { version = "1.0", features = ["v4"], optional = true }
 async-trait = { version = "0.1" }
 
 [features]
 default = []
-deployment-sim = ["ndarray", "nalgebra", "uuid"]
+deployment-sim = ["ndarray", "nalgebra"]
