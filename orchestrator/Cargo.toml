@@ -23,10 +23,6 @@ hex = "0.4"
 axum = "0.7"
 ndarray = { version = "0.15", optional = true }
 nalgebra = { version = "0.32", optional = true }
-chrono = { version = "0.4", features = ["serde"] }
-uuid = { version = "1.10", features = ["v4", "serde"] }
-async-trait = { version = "0.1" }
-serde-big-array = "0.5.1"
 
 [features]
 default = []

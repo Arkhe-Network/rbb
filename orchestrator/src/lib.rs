@@ -23,3 +23,5 @@ pub mod crawler;
 pub mod identity_attestation;
 pub mod mcp;
 pub mod voice;
+
+pub mod skill;
