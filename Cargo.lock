@@ -2786,7 +2786,6 @@ checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
 name = "orchestrator"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "axum",
  "bincode",
  "blake3",
@@ -2804,7 +2803,6 @@ dependencies = [
  "rand 0.8.6",
  "reqwest 0.12.28",
  "serde",
- "serde-big-array",
  "serde_json",
  "tokio",
  "tracing",
@@ -3858,15 +3856,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde-big-array"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11fc7cc2c76d73e0f27ee52abbd64eec84d46f370c88371120433196934e4b7f"
-dependencies = [
- "serde",
-]
-
-[[package]]
 name = "serde-wasm-bindgen"
 version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4863,7 +4852,6 @@ checksum = "144d6b123cef80b301b8f72a9e2ca4370ddec21950d0a103dd22c437006d2db7"
 dependencies = [
  "getrandom 0.4.2",
  "js-sys",
- "serde_core",
  "wasm-bindgen",
 ]
 
