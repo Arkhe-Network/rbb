@@ -1,9 +1,6 @@
-pub mod builtin;
-pub mod executor;
-pub mod manager;
-pub mod persistence;
-pub mod registry;
-pub mod scheduler;
 pub mod types;
-pub mod notifier;
-pub mod background_scheduler;
+pub mod manager;
+pub mod executor;
+pub mod builtin;
+pub mod registry;
+pub mod background_swarm;

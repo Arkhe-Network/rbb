@@ -1,46 +1,38 @@
-use crate::skill::types::{ExecutionStatus};
+use crate::skill::types::{Skill, SkillExecution, ExecutionStatus};
 use crate::skill::manager::SkillManager;
-use crate::swarm::orchestrator::SwarmOrchestrator;
-use crate::swarm::types::SwarmResult;
 use tracing::{info, error};
 
-pub struct SkillExecutor<'a> {
-    orchestrator: SwarmOrchestrator,
-    skill_manager: &'a mut SkillManager,
+pub struct SkillExecutor {
+    skill_manager: SkillManager,
 }
 
-impl<'a> SkillExecutor<'a> {
-    pub fn new(orchestrator: SwarmOrchestrator, skill_manager: &'a mut SkillManager) -> Self {
-        Self { orchestrator, skill_manager }
+impl SkillExecutor {
+    pub fn new(skill_manager: SkillManager) -> Self {
+        Self { skill_manager }
     }
 
-    pub async fn execute_skill(&mut self, skill_name: &str) -> Result<SwarmResult, String> {
-        info!("⚡ Executando skill '{}' como SwarmSpec", skill_name);
+    pub async fn execute_skill(&mut self, skill_name: &str) -> Result<(), String> {
+        info!("⚡ Executando skill '{}'", skill_name);
 
-        let skill = self.skill_manager.load_skill(skill_name).await
+        let skill = self.skill_manager.load_skill(skill_name)
             .ok_or_else(|| format!("Skill '{}' não encontrada", skill_name))?
             .clone();
-
-        let spec = skill.to_swarm_spec();
-
-        let result = self.orchestrator.run_spec(spec).await?;
 
         self.skill_manager.record_execution(
             skill_name,
             ExecutionStatus::Completed,
-            Some(format!("{:?}", result).into_bytes()),
+            Some(format!("Executed {}", skill_name).into_bytes()),
             None,
         );
 
-        info!("✅ Skill '{}' executada com sucesso ({} agentes)", skill_name, result.agent_count);
-        Ok(result)
+        info!("✅ Skill '{}' executada com sucesso", skill_name);
+        Ok(())
     }
 
-    pub async fn execute_skill_background(&mut self, skill_name: &str) -> Result<(), String> {
+    pub async fn execute_skill_background(&mut self, skill_name: &str) {
         match self.execute_skill(skill_name).await {
             Ok(_) => {
                 info!("✅ Background skill '{}' concluída", skill_name);
-                Ok(())
             }
             Err(e) => {
                 error!("❌ Background skill '{}' falhou: {}", skill_name, e);
@@ -48,9 +40,8 @@ impl<'a> SkillExecutor<'a> {
                     skill_name,
                     ExecutionStatus::Failed,
                     None,
-                    Some(e.clone()),
+                    Some(e),
                 );
-                Err(e)
             }
         }
     }

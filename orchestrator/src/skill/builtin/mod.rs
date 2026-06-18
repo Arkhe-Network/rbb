@@ -20,9 +20,8 @@ pub async fn register_all(skill_mgr: &mut SkillManager) -> Result<Vec<String>, S
 
     let mut registered = Vec::new();
     for skill in skills {
-        let hash = skill_mgr.save_skill(&skill).await?;
-        registered.push(skill.name.clone());
-        tracing::info!("✅ Skill '{}' registrada (hash: {})", skill.name, hash.to_nhash());
+        let _ = skill_mgr.save_skill(&skill)?;
+        registered.push(skill.name);
     }
 
     Ok(registered)
