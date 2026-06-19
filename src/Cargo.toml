@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "substrato_5002",
+    "substrato_8000",
     "substrato_9000",
     "core",
     "polyglot-parser",

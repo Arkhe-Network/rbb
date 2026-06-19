@@ -1,0 +1,50 @@
+# proxy.toml — Configuração do Proxy Server
+# CATHEDRAL ARKHE Substrato 8000
+# Selo: CATHEDRAL-ARKHE-8000-CONFIG-PROXY-v1.0.0-2026-06-18
+
+[proxy]
+listen_port = 8789
+listen_host = "0.0.0.0"
+upstream_url = "http://cathedral-rio35:8000"
+provider_type = "rio35"
+compress_requests = true
+compress_responses = true
+compression_threshold = 4000
+ccr_enabled = true
+rate_limit_per_second = 1000
+upstream_timeout_ms = 30000
+log_level = "info"
+metrics_enabled = true
+metrics_port = 8790
+
+[proxy.providers.rio35]
+format = "cathedral_native"
+system_prompt = "You are Cathedral ARKHE..."
+
+[proxy.providers.openai]
+format = "openai_chat"
+api_key_env = "OPENAI_API_KEY"
+
+[proxy.providers.anthropic]
+format = "anthropic_claude"
+api_key_env = "ANTHROPIC_API_KEY"
+
+[compression]
+enabled = true
+threshold_tokens = 4000
+max_compression_ratio = 0.95
+min_compression_ratio = 0.1
+
+[ema]
+enabled = true
+auth_header = "x-ema-token"
+
+[metrics]
+enabled = true
+prometheus_port = 8790
+labels = { service = "headroom-proxy", environment = "production" }
+
+[logging]
+level = "info"
+format = "json"
+output = "stdout"

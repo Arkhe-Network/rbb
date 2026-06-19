@@ -1,0 +1,16 @@
+[package]
+name = "headroom-ffi"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "1.0"
+pyo3 = { version = "0.21", features = ["extension-module"] }
+reqwest = { version = "0.12", features = ["json"] }
+tracing = "0.1"
+
+[lib]
+path = "src/lib.rs"
