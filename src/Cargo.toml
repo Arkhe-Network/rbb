@@ -1,5 +1,7 @@
 [workspace]
 members = [
+    "substrato_5002",
+    "substrato_9000",
     "core",
     "polyglot-parser",
     "si-layer/shared_memory",
