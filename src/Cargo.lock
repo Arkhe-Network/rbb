@@ -678,7 +678,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
- "libm",
 ]
 
 [[package]]
@@ -862,16 +861,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom 0.2.17",
-]
-
-[[package]]
-name = "rand_distr"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32cb0b9bc82b0a0876c2dd994a7e7a2683d3e7390ca40e6886785ef0c7e3ee31"
-dependencies = [
- "num-traits",
- "rand",
 ]
 
 [[package]]
@@ -1140,14 +1129,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 
 [[package]]
-name = "substrato_5002"
+name = "substrato-5002"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "chrono",
  "hex",
  "rand",
- "rand_distr",
  "serde",
  "serde_json",
  "sha2",
@@ -1157,7 +1145,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "substrato_9000"
+name = "substrato-9000"
 version = "0.1.0"
 dependencies = [
  "chrono",
