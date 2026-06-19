@@ -1,0 +1,56 @@
+{
+  "dashboard": {
+    "title": "Cathedral ARKHE — Gestão Cambial (BC Regulamentação)",
+    "tags": ["forex", "bc", "financial", "compliance"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 1,
+    "refresh": "1m",
+    "panels": [
+      {
+        "title": "Saldos por Moeda",
+        "type": "bargauge",
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 0},
+        "targets": [{"expr": "foreign_balance_by_currency"}],
+        "fieldConfig": {"defaults": {"unit": "currencyUSD"}}
+      },
+      {
+        "title": "Transferências sem Câmbio (últimos 7 dias)",
+        "type": "timeseries",
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 0},
+        "targets": [{"expr": "rate(forex_transfer_without_exchange_total[1d])"}]
+      },
+      {
+        "title": "Exposição Cambial por Empresa",
+        "type": "table",
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 0},
+        "targets": [{"expr": "foreign_net_exposure_by_company"}]
+      },
+      {
+        "title": "Hedge Positions Ativas",
+        "type": "table",
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 6},
+        "targets": [{"expr": "foreign_hedge_positions_active"}]
+      },
+      {
+        "title": "Compliance Reports (últimos 30 dias)",
+        "type": "logs",
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 6},
+        "targets": [{"expr": "{source=\"compliance\"}"}]
+      },
+      {
+        "title": "Cotação USD/BRL (em tempo real)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 12},
+        "targets": [{"expr": "forex_rate_usd_brl"}],
+        "fieldConfig": {"defaults": {"unit": "none", "decimals": 4}}
+      },
+      {
+        "title": "Alertas de Variação Cambial",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 12},
+        "targets": [{"expr": "forex_alert_count"}]
+      }
+    ]
+  }
+}

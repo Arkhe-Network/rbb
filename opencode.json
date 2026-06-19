@@ -1,0 +1,26 @@
+{
+  "tools": [
+    {
+      "name": "cathedral-financial",
+      "type": "mcp",
+      "server": {
+        "command": "cargo",
+        "args": [
+          "run",
+          "--bin",
+          "cathedral-financial-mcp",
+          "--features",
+          "mcp,financial",
+          "--",
+          "--config",
+          "${workspaceFolder}/substrato-7001/config/financial.toml"
+        ],
+        "env": {
+          "RUST_LOG": "info",
+          "BCB_API_KEY": "${env:BCB_API_KEY}"
+        }
+      },
+      "description": "Serviços financeiros internacionais — contas em moeda estrangeira, transferências sem câmbio, hedge, compliance BC"
+    }
+  ]
+}
