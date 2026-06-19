@@ -97,6 +97,7 @@ pub struct Trajectory {
 }
 
 #[async_trait::async_trait]
+#[async_trait::async_trait]
 pub trait TrajectoryStore: Send + Sync {
     async fn list_trajectories(&self) -> Vec<Trajectory>;
     async fn record_trajectory(
@@ -116,6 +117,7 @@ impl DummyTrajectoryStore {
     pub fn new() -> Self { Self {} }
 }
 
+#[async_trait::async_trait]
 #[async_trait::async_trait]
 impl TrajectoryStore for DummyTrajectoryStore {
     async fn list_trajectories(&self) -> Vec<Trajectory> { vec![] }

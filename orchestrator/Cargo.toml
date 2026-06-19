@@ -28,6 +28,9 @@ ndarray = { version = "0.15", optional = true }
 nalgebra = { version = "0.32", optional = true }
 chrono = { version = "0.4.45", features = ["serde"] }
 uuid = { version = "1.23.3", features = ["v4"] }
+anyhow = "1.0.102"
+base64 = "0.22.1"
+async-trait = "0.1.89"
 
 [features]
 default = []
