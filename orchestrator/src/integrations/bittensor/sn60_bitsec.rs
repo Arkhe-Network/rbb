@@ -1,25 +1,36 @@
+// src/integrations/bittensor/sn60_bitsec.rs
+//! Integração com a SN60 (Bitsec.ai) para análise de segurança de código.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
 
+// ─── Tipos ──────────────────────────────────────────────────────────────────
+
+/// Request para análise de segurança
 #[derive(Debug, Clone, Serialize)]
 pub struct BitsecAnalysisRequest {
     pub code: String,
-    pub language: String,
-    pub analysis_depth: Option<String>,
+    pub language: String, // "rust", "python", "javascript", etc.
+    pub analysis_depth: Option<String>, // "quick", "standard", "deep"
     pub include_fixes: Option<bool>,
 }
 
+/// Vulnerabilidade encontrada pela SN60
 #[derive(Debug, Clone, Deserialize)]
 pub struct BitsecVulnerability {
     pub id: String,
     pub title: String,
     pub description: String,
-    pub severity: String,
-    pub location: String,
+    pub severity: String, // "critical", "high", "medium", "low"
+    pub location: String, // file:line
     pub cwe_id: Option<String>,
     pub remediation: Option<String>,
 }
 
+/// Resposta da análise
 #[derive(Debug, Clone, Deserialize)]
 pub struct BitsecAnalysisResponse {
     pub vulnerabilities: Vec<BitsecVulnerability>,
@@ -36,6 +47,8 @@ pub struct BitsecSummary {
     pub low: usize,
 }
 
+// ─── Cliente SN60 ──────────────────────────────────────────────────────────
+
 pub struct BitsecClient {
     bittensor: Arc<BittensorClient>,
     subnet_id: u16,
@@ -49,6 +62,7 @@ impl BitsecClient {
         }
     }
 
+    /// Analisa código fonte
     pub async fn analyze_code(
         &self,
         code: &str,
@@ -76,6 +90,7 @@ impl BitsecClient {
         best.data.clone().ok_or_else(|| anyhow!("Resposta vazia da SN60"))
     }
 
+    /// Analisa um arquivo inteiro (via caminho)
     pub async fn analyze_file(
         &self,
         file_path: &str,
@@ -85,6 +100,7 @@ impl BitsecClient {
         self.analyze_code(&code, language, true).await
     }
 
+    /// Obtém apenas as vulnerabilidades críticas
     pub async fn get_critical_vulnerabilities(
         &self,
         code: &str,

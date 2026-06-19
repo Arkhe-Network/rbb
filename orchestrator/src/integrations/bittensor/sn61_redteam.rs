@@ -1,11 +1,18 @@
+// src/integrations/bittensor/sn61_redteam.rs
+//! Integração com a SN61 (RedTeam) para testes de penetração.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
+
+// ─── Tipos ──────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize)]
 pub struct RedTeamPentestRequest {
-    pub target: String,
-    pub attack_type: String,
-    pub depth: Option<String>,
+    pub target: String,          // URL, endereço IP, ou contrato
+    pub attack_type: String,     // "web", "smart_contract", "network"
+    pub depth: Option<String>,   // "quick", "standard", "exhaustive"
     pub max_duration_secs: Option<u64>,
 }
 
@@ -34,6 +41,8 @@ pub struct RedTeamSummary {
     pub low: usize,
 }
 
+// ─── Cliente SN61 ──────────────────────────────────────────────────────────
+
 pub struct RedTeamClient {
     bittensor: Arc<BittensorClient>,
     subnet_id: u16,
@@ -47,6 +56,7 @@ impl RedTeamClient {
         }
     }
 
+    /// Executa um teste de penetração
     pub async fn run_pentest(
         &self,
         target: &str,
@@ -74,6 +84,7 @@ impl RedTeamClient {
         best.data.clone().ok_or_else(|| anyhow!("Resposta vazia da SN61"))
     }
 
+    /// Testa um contrato inteligente
     pub async fn test_smart_contract(
         &self,
         contract_address: &str,
@@ -83,6 +94,7 @@ impl RedTeamClient {
         self.run_pentest(&target, "smart_contract", true).await
     }
 
+    /// Testa uma aplicação web
     pub async fn test_web_app(
         &self,
         url: &str,

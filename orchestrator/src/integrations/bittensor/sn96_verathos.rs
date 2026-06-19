@@ -1,7 +1,16 @@
+// src/integrations/bittensor/sn96_verathos.rs
+//! Integração com a SN96 (Verathos) para inferência verificada com ZK.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use tracing::info;
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
 
+// ─── Tipos ──────────────────────────────────────────────────────────────────
+
+/// Request para inferência na SN96
 #[derive(Debug, Clone, Serialize)]
 pub struct VerathosInferenceRequest {
     pub prompt: String,
@@ -9,13 +18,14 @@ pub struct VerathosInferenceRequest {
     pub temperature: Option<f32>,
     pub top_p: Option<f32>,
     pub stream: Option<bool>,
-    pub enable_zk_verification: Option<bool>,
+    pub enable_zk_verification: Option<bool>, // Ativa a verificação ZK
 }
 
+/// Resposta de inferência com prova ZK
 #[derive(Debug, Clone, Deserialize)]
 pub struct VerathosInferenceResponse {
     pub text: String,
-    pub zk_proof: Option<String>,
+    pub zk_proof: Option<String>, // Prova ZK serializada (hex)
     pub model: String,
     pub usage: VerathosUsage,
 }
@@ -27,12 +37,15 @@ pub struct VerathosUsage {
     pub total_tokens: u32,
 }
 
+/// Prova ZK verificada
 #[derive(Debug, Clone, Deserialize)]
 pub struct VerathosZKProof {
-    pub proof: String,
+    pub proof: String,      // Prova ZK (hex)
     pub public_inputs: Vec<String>,
     pub verification_key: String,
 }
+
+// ─── Cliente SN96 ──────────────────────────────────────────────────────────
 
 pub struct VerathosClient {
     bittensor: Arc<BittensorClient>,
@@ -47,6 +60,7 @@ impl VerathosClient {
         }
     }
 
+    /// Inferência simples (sem verificação ZK)
     pub async fn infer(
         &self,
         prompt: &str,
@@ -67,15 +81,17 @@ impl VerathosClient {
                 self.subnet_id,
                 "inference",
                 &request,
-                3,
-                1,
+                3, // top 3 miners
+                1, // pelo menos 1 sucesso
             )
             .await?;
 
+        // Pega a melhor resposta
         let best = &responses[0];
         Ok(best.data.as_ref().unwrap().text.clone())
     }
 
+    /// Inferência com verificação ZK (retorna a prova)
     pub async fn infer_with_zk(
         &self,
         prompt: &str,
@@ -104,6 +120,8 @@ impl VerathosClient {
         let best = &responses[0];
         let data = best.data.as_ref().unwrap();
 
+        // Extrai a prova ZK do response (assumindo que vem em um campo extra)
+        // Em produção: a prova seria retornada em um campo separado
         let zk_proof = VerathosZKProof {
             proof: data.zk_proof.clone().unwrap_or_default(),
             public_inputs: vec![prompt.to_string()],
@@ -113,8 +131,11 @@ impl VerathosClient {
         Ok((data.text.clone(), zk_proof))
     }
 
-    pub async fn verify_zk_proof(&self, proof: &VerathosZKProof) -> Result<bool> {
+    /// Verifica uma prova ZK off-chain (usando o verifier da Cathedral)
+    pub async fn verify_zk_proof(&self, _proof: &VerathosZKProof) -> Result<bool> {
+        // Integra com o verifier ZK-SNARK da Cathedral
+        // Aqui só fazemos um stub
         info!("🔐 Verificando prova ZK da SN96");
-        Ok(true)
+        Ok(true) // Em produção: chamar o verifier
     }
 }

@@ -1,11 +1,18 @@
+// src/integrations/bittensor/sn1_apex.rs
+//! Integração com a SN1 (Apex) para desafios de segurança.
+
 use super::*;
 use serde::{Deserialize, Serialize};
 use tracing::info;
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
+
+// ─── Tipos ──────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ApexChallengeRequest {
     pub challenge_id: Option<String>,
-    pub challenge_type: Option<String>,
+    pub challenge_type: Option<String>, // "security", "algorithm", "exploit"
     pub max_solutions: Option<usize>,
 }
 
@@ -14,7 +21,7 @@ pub struct ApexChallenge {
     pub id: String,
     pub title: String,
     pub description: String,
-    pub difficulty: String,
+    pub difficulty: String, // "easy", "medium", "hard"
     pub category: String,
     pub points: u32,
     pub time_limit_secs: u64,
@@ -23,8 +30,8 @@ pub struct ApexChallenge {
 #[derive(Debug, Clone, Serialize)]
 pub struct ApexSolution {
     pub challenge_id: String,
-    pub solution: String,
-    pub proof_of_work: Option<String>,
+    pub solution: String,            // Código ou explicação
+    pub proof_of_work: Option<String>, // Para provar que o agent resolveu
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -34,6 +41,8 @@ pub struct ApexSolutionResult {
     pub feedback: Option<String>,
     pub ranking: Option<u32>,
 }
+
+// ─── Cliente SN1 ──────────────────────────────────────────────────────────
 
 pub struct ApexClient {
     bittensor: Arc<BittensorClient>,
@@ -48,6 +57,7 @@ impl ApexClient {
         }
     }
 
+    /// Obtém desafios disponíveis
     pub async fn get_challenges(
         &self,
         challenge_type: Option<&str>,
@@ -72,6 +82,7 @@ impl ApexClient {
         best.data.clone().ok_or_else(|| anyhow!("Resposta vazia da SN1"))
     }
 
+    /// Submete uma solução para um desafio
     pub async fn submit_solution(
         &self,
         challenge_id: &str,
@@ -96,6 +107,4 @@ impl ApexClient {
         let best = &responses[0];
         best.data.clone().ok_or_else(|| anyhow!("Resposta vazia da SN1"))
     }
-
-    // Agent solve is integrated at the orchestrator layer
 }

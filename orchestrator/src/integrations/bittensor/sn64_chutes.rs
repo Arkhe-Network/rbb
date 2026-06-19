@@ -1,20 +1,30 @@
+// src/integrations/bittensor/sn64_chutes.rs
+//! Integração com a SN64 (Chutes) para computação GPU.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
 
+// ─── Tipos ──────────────────────────────────────────────────────────────────
+
+/// Request para executar um job na SN64
 #[derive(Debug, Clone, Serialize)]
 pub struct ChutesJobRequest {
-    pub image: String,
-    pub command: Vec<String>,
-    pub gpu_memory: Option<u32>,
-    pub cpu_cores: Option<u32>,
-    pub ram_mb: Option<u32>,
+    pub image: String,            // Docker image com o código
+    pub command: Vec<String>,     // Comando a executar
+    pub gpu_memory: Option<u32>,  // Memória GPU em MB
+    pub cpu_cores: Option<u32>,   // Núcleos de CPU
+    pub ram_mb: Option<u32>,      // RAM em MB
     pub env_vars: Option<Vec<(String, String)>>,
 }
 
+/// Resposta de um job na SN64
 #[derive(Debug, Clone, Deserialize)]
 pub struct ChutesJobResponse {
     pub job_id: String,
-    pub status: String,
+    pub status: String,           // "running", "completed", "failed"
     pub output: Option<String>,
     pub error: Option<String>,
     pub metrics: ChutesMetrics,
@@ -26,6 +36,8 @@ pub struct ChutesMetrics {
     pub memory_usage_mb: u32,
     pub execution_time_ms: u64,
 }
+
+// ─── Cliente SN64 ──────────────────────────────────────────────────────────
 
 pub struct ChutesClient {
     bittensor: Arc<BittensorClient>,
@@ -40,6 +52,7 @@ impl ChutesClient {
         }
     }
 
+    /// Executa um job na SN64
     pub async fn execute_job(
         &self,
         request: &ChutesJobRequest,
@@ -58,6 +71,7 @@ impl ChutesClient {
         best.data.clone().ok_or_else(|| anyhow!("Resposta vazia da SN64"))
     }
 
+    /// Treina um modelo usando GPU na SN64
     pub async fn train_model(
         &self,
         model_code: &str,
@@ -86,6 +100,7 @@ impl ChutesClient {
         Ok(response.output.unwrap_or_default())
     }
 
+    /// Roda inferência em batch na SN64
     pub async fn batch_infer(
         &self,
         prompts: Vec<String>,
@@ -110,6 +125,7 @@ impl ChutesClient {
         };
 
         let response = self.execute_job(&request).await?;
+        // Assume que o output é uma linha por resultado
         let lines: Vec<String> = response.output
             .unwrap_or_default()
             .lines()

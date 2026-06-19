@@ -1,5 +1,12 @@
+// src/integrations/bittensor/sn62_ridges.rs
+//! Integração com a SN62 (Ridges) para correção de código.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
+
+// ─── Tipos ──────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize)]
 pub struct RidgesFixRequest {
@@ -17,6 +24,8 @@ pub struct RidgesFixResponse {
     pub alternative_fixes: Option<Vec<String>>,
 }
 
+// ─── Cliente SN62 ──────────────────────────────────────────────────────────
+
 pub struct RidgesClient {
     bittensor: Arc<BittensorClient>,
     subnet_id: u16,
@@ -30,6 +39,7 @@ impl RidgesClient {
         }
     }
 
+    /// Corrige um problema de código
     pub async fn fix_code(
         &self,
         code: &str,

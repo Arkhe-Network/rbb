@@ -1,12 +1,6 @@
-use anyhow::{anyhow, Result};
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
-use reqwest::Client;
-use std::collections::HashMap;
-use std::time::Duration;
-use tracing::{info, warn, error, debug};
-use tokio::sync::Mutex;
-use std::sync::Arc;
+// src/integrations/bittensor/mod.rs
+//! Integração com a rede Bittensor para inferência descentralizada de IA.
+//! Suporte a múltiplas subnets com fallback e cache de axons.
 
 pub mod sn96_verathos;
 pub mod sn64_chutes;
@@ -17,6 +11,19 @@ pub mod sn62_ridges;
 pub mod sn31_recall;
 pub mod sn4_targon;
 
+use anyhow::{anyhow, Result};
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use reqwest::Client;
+use std::collections::HashMap;
+use std::time::Duration;
+use tracing::{info, warn, error, debug};
+use tokio::sync::Mutex;
+use std::sync::Arc;
+
+// ─── Tipos Comuns ──────────────────────────────────────────────────────────
+
+/// Configuração do cliente Bittensor
 #[derive(Debug, Clone)]
 pub struct BittensorConfig {
     pub network: BittensorNetwork,
@@ -55,6 +62,7 @@ impl BittensorNetwork {
     }
 }
 
+/// Resposta genérica de uma subnet
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SubnetResponse<T> {
     pub success: bool,
@@ -65,11 +73,12 @@ pub struct SubnetResponse<T> {
     pub error: Option<String>,
 }
 
+/// Axon (endpoint de um miner)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Axon {
     pub ip: String,
     pub port: u16,
-    pub protocol: String,
+    pub protocol: String, // "http" ou "https"
     pub uid: u32,
     pub hotkey: String,
     pub coldkey: String,
@@ -81,9 +90,12 @@ impl Axon {
     }
 }
 
+// ─── Cliente Base ──────────────────────────────────────────────────────────
+
 pub struct BittensorClient {
     config: BittensorConfig,
     client: Client,
+    // Cache de axons por subnet
     axons_cache: Arc<Mutex<HashMap<u16, Vec<Axon>>>>,
 }
 
@@ -100,15 +112,19 @@ impl BittensorClient {
         })
     }
 
+    /// Obtém os top-k axons de uma subnet
     pub async fn get_top_axons(&self, subnet_id: u16, top_k: usize) -> Result<Vec<Axon>> {
         let mut cache = self.axons_cache.lock().await;
 
+        // Verifica cache
         if let Some(axons) = cache.get(&subnet_id) {
             let mut sorted = axons.clone();
+            // Em produção: ordenar por score do validador
             sorted.truncate(top_k);
             return Ok(sorted);
         }
 
+        // Busca da Metagraph via Subtensor
         let axons = self.fetch_axons_from_metagraph(subnet_id).await?;
         cache.insert(subnet_id, axons.clone());
 
@@ -117,7 +133,12 @@ impl BittensorClient {
         Ok(sorted)
     }
 
+    /// Busca axons da Metagraph (usando bittensor-rs ou RPC)
     async fn fetch_axons_from_metagraph(&self, subnet_id: u16) -> Result<Vec<Axon>> {
+        // Em produção: usar bittensor-rs para consultar a cadeia
+        // https://github.com/womboai/rusttensor
+
+        // Stub para POC - em produção, consultar o Subtensor
         let mock_axons = vec![
             Axon {
                 ip: format!("127.0.0.{}", 1),
@@ -148,6 +169,7 @@ impl BittensorClient {
         Ok(mock_axons)
     }
 
+    /// Consulta um axon específico
     pub async fn query_axon<T: Serialize, R: for<'de> Deserialize<'de>>(
         &self,
         axon: &Axon,
@@ -173,7 +195,7 @@ impl BittensorClient {
                 success: true,
                 data: Some(data),
                 miner_uid: axon.uid,
-                validator_score: 0.9,
+                validator_score: 0.9, // Em produção: obter da metagraph
                 processing_time_ms,
                 error: None,
             })
@@ -190,6 +212,7 @@ impl BittensorClient {
         }
     }
 
+    /// Consulta uma subnet com fallback entre múltiplos axons
     pub async fn query_subnet_with_fallback<T: Serialize + Clone, R: for<'de> Deserialize<'de> + Send + 'static>(
         &self,
         subnet_id: u16,
@@ -207,6 +230,7 @@ impl BittensorClient {
             let endpoint = endpoint.to_string();
 
             tasks.push(tokio::spawn(async move {
+                // Criar um cliente temporário para esta consulta
                 let temp_client = BittensorClient {
                     config: BittensorConfig::default(),
                     client,
@@ -233,9 +257,8 @@ impl BittensorClient {
             ));
         }
 
+        // Ordena por score (decrescente)
         results.sort_by(|a, b| b.validator_score.partial_cmp(&a.validator_score).unwrap());
         Ok(results)
     }
 }
-pub mod stubs;
-pub mod orchestrator_ext;

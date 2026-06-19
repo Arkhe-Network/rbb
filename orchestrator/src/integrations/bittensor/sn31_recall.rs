@@ -1,5 +1,13 @@
+// src/integrations/bittensor/sn31_recall.rs
+//! Integração com a SN31 (Recall) para RAG descentralizada.
+
 use super::*;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+use anyhow::{anyhow, Result};
+use std::sync::Arc;
+
+// ─── Tipos ──────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, Serialize)]
 pub struct RecallQueryRequest {
@@ -29,7 +37,7 @@ pub struct RecallStoreRequest {
     pub id: String,
     pub content: String,
     pub metadata: serde_json::Value,
-    pub embedding: Option<Vec<f32>>,
+    pub embedding: Option<Vec<f32>>, // Se não fornecido, a subnet gera
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -37,6 +45,8 @@ pub struct RecallStoreResponse {
     pub id: String,
     pub success: bool,
 }
+
+// ─── Cliente SN31 ──────────────────────────────────────────────────────────
 
 pub struct RecallClient {
     bittensor: Arc<BittensorClient>,
@@ -51,6 +61,7 @@ impl RecallClient {
         }
     }
 
+    /// Busca documentos relevantes
     pub async fn query(
         &self,
         query: &str,
@@ -78,6 +89,7 @@ impl RecallClient {
         Ok(response.documents)
     }
 
+    /// Armazena um documento na SN31
     pub async fn store(
         &self,
         id: &str,

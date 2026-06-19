@@ -1,0 +1,17 @@
+[package]
+name = "cathedral-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+reqwest = { workspace = true }
+
+polyglot-parser = { path = "../polyglot-parser" }
+wormgraph = { path = "../si-layer/shared_memory" }
+uuid = { workspace = true, features = ["v4"] }
+# ethers = "2.0" # This would be used in real scenario, omitted for simple compile check here
