@@ -1,0 +1,56 @@
+groups:
+  - name: cathedral_security_alerts
+    interval: 30s
+    rules:
+      - alert: HighAccessDenials
+        expr: rate(security_access_denials_total[5m]) > 10
+        for: 1m
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "High Access Denials"
+          description: "There is a high rate of access denials, indicating potential unauthorized access attempts."
+
+      - alert: TokenRevocationSpike
+        expr: rate(capability_tokens_revoked_total[5m]) > 5
+        for: 1m
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Spike in Token Revocations"
+          description: "A sudden spike in capability token revocations detected."
+
+      - alert: SealValidationLatencyHigh
+        expr: histogram_quantile(0.95, rate(seal_validation_duration_seconds_bucket[5m])) > 2
+        for: 2m
+        labels:
+          severity: warning
+          component: seal
+        annotations:
+          summary: "High Seal Validation Latency"
+          description: "The 95th percentile Seal validation latency is over 2 seconds."
+
+  - name: cathedral_wormgraph_alerts
+    interval: 30s
+    rules:
+      - alert: WormgraphWriteErrors
+        expr: rate(wormgraph_write_errors_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          component: wormgraph
+        annotations:
+          summary: "WormGraph Write Errors"
+          description: "WormGraph is experiencing write errors."
+
+      - alert: MemoryCacheMissSpike
+        expr: rate(hybrid_memory_cache_misses[5m]) > 100
+        for: 2m
+        labels:
+          severity: warning
+          component: hybrid_memory
+        annotations:
+          summary: "Spike in Cache Misses"
+          description: "High rate of cache misses in the hybrid memory."
