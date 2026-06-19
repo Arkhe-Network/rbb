@@ -1,0 +1,136 @@
+# mcp.toml — Configuração do MCP Server
+# CATHEDRAL ARKHE Substrato 8000
+# Selo: CATHEDRAL-ARKHE-8000-CONFIG-MCP-v1.0.0-2026-06-18
+
+[mcp]
+port = 8787
+host = "0.0.0.0"
+auth_enabled = true
+rate_limit_per_minute = 1000
+max_request_size_mb = 50
+prometheus_endpoint = "/metrics"
+zkp_verification = true
+ema_integration = true
+
+[headroom]
+compression_enabled = true
+compression_threshold = 0.3
+max_tokens_before_compress = 4000
+ccr_enabled = true
+ccr_ttl_seconds = 3600
+cross_agent_memory = true
+cache_aligner_enabled = true
+metrics_export = true
+
+[headroom.compressors]
+smart_crusher = { enabled = true, priority = 1 }
+code_compressor = { enabled = true, priority = 2, languages = ["rust", "python", "solidity", "javascript"] }
+kompress_base = { enabled = true, priority = 3 }
+
+[cache_aligner]
+enabled = true
+providers = ["anthropic", "openai", "gemini", "rio35", "vllm"]
+
+[cache_aligner.anthropic]
+stable_prefix_size = 1024
+alignment_strategy = "hierarchical"
+native_prefix_caching = true
+system_prompt_tokens = [
+    "You are a helpful AI assistant.",
+    "Follow the instructions carefully."
+]
+
+[cache_aligner.openai]
+stable_prefix_size = 512
+alignment_strategy = "fixed_prefix"
+native_prefix_caching = false
+system_prompt_tokens = ["You are a helpful assistant."]
+
+[cache_aligner.gemini]
+stable_prefix_size = 768
+alignment_strategy = "rotating_prefix"
+native_prefix_caching = true
+system_prompt_tokens = ["You are a helpful AI."]
+
+[cache_aligner.rio35]
+stable_prefix_size = 2048
+alignment_strategy = "domain_specific"
+domain = "cathedral_arkhe"
+native_prefix_caching = true
+system_prompt_tokens = [
+    "You are Cathedral ARKHE, an advanced cognitive system.",
+    "Follow EthicalFilter P1-P7.",
+    "Use Immersion-Driven Thinking for complex tasks."
+]
+
+[cache_aligner.vllm]
+stable_prefix_size = 1024
+alignment_strategy = "fixed_prefix"
+native_prefix_caching = true
+system_prompt_tokens = []
+
+[cross_agent_memory]
+max_entries = 100000
+default_ttl = 86400
+dedup_similarity_threshold = 0.92
+auto_dedup = true
+semantic_indexing = true
+embedding_dimensions = 384
+relevance_decay_factor = 0.95
+
+[ema]
+max_token_lifetime = 86400
+check_revocation = true
+enforce_quota = true
+enforce_classification = true
+quota_warning_threshold = 0.8
+
+[ema.classification_levels]
+public = { max_compression = 1.0 }
+internal = { max_compression = 0.9 }
+confidential = { max_compression = 0.8, require_zkp = true }
+restricted = { max_compression = 0.7, require_zkp = true, require_ema = true }
+secret = { max_compression = 0.5, require_zkp = true, require_ema = true, require_multi_sig = true }
+
+[zkp]
+enabled = true
+curve = "secp256k1"
+proving_system = "groth16"
+batch_size = 16
+proof_timeout_ms = 5000
+hardware_verification = true
+gpu_offload = true
+
+[zvec]
+grpc_endpoint = "http://cathedral-zvec:50051"
+connection_timeout_ms = 5000
+query_timeout_ms = 1000
+embedding_model = "all-MiniLM-L6-v2"
+use_hnsw = true
+use_bm25 = true
+rrf_weight = 0.5
+local_embedding_cache = true
+cache_size = 10000
+
+[tensorzkp]
+accelerator_endpoint = "http://cathedral-tensorzkp:50061"
+connection_type = "tcp"
+curve = "secp256k1"
+proving_system = "groth16"
+batch_size = 16
+proof_timeout_ms = 5000
+hardware_verification = true
+gpu_offload = true
+
+[logging]
+level = "info"
+format = "json"
+output = "stdout"
+file_path = "/var/log/cathedral/headroom/mcp.log"
+max_file_size_mb = 100
+max_files = 5
+
+[prometheus]
+enabled = true
+port = 8788
+path = "/metrics"
