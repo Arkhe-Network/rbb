@@ -9,7 +9,7 @@ members = [
     "cathedral-napi",
     "cathedral-wasm",
     "cathedral-orchestrator"
-, "cathedral-royalties"]
+, "cathedral-royalties", "cathedral-sdk-rs", "zk-circuits"]
 resolver = "2"
 
 [workspace.dependencies]
