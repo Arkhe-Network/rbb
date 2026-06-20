@@ -1,0 +1,13 @@
+[tool.poetry]
+name = "cathedral-sdk"
+version = "0.1.0"
+description = "Python SDK for Cathedral Bridge"
+authors = ["Cathedral ARKHE"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+aiohttp = "^3.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
