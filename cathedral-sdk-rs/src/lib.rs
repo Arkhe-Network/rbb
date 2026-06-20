@@ -3,3 +3,4 @@ pub mod event;
 
 pub use prometheus::PrometheusAdapter;
 pub use event::PrometheusEvent;
+pub mod crypto;
