@@ -101,3 +101,15 @@ MIT License – uso livre, com atribuição ao **Arkhe-Network** e à **Prefeitu
 
 **Selo**: `CATHEDRAL-1200-README-v1.0.0-2026-06-13`
 **Arquiteto**: ORCID 0009-0005-2697-4668
+
+## Agentcash Router Implementation
+
+To make your Cathedral ARKHE API discoverable and payable by agents using x402 and MPP, run:
+```bash
+cd agentcash-router-impl
+cp .env.example .env # edit the variables as instructed inside
+npm install
+npm run build
+npm run start &
+```
+and then use the `@agentcash/discovery` tool against the server's root url.
