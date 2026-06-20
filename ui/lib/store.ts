@@ -1,0 +1,31 @@
+import { create } from 'zustand';
+
+interface CathedralStore {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  engine: { status: string; throughput: number };
+  setEngine: (e: any) => void;
+  wormhole: { compressionRatio: number; activeWorkers: number };
+  setWormhole: (w: any) => void;
+  depin: { activeWorkers: number; avgReputation: number };
+  setDePIN: (d: any) => void;
+  sseConnected: boolean;
+  setSseConnected: (b: boolean) => void;
+  ui: { activeTab: string; timeRange: string };
+  metrics: { historical: any[]; current: any };
+}
+
+export const useCathedralStore = create<CathedralStore>((set) => ({
+  activeTab: 'dashboard',
+  setActiveTab: (tab) => set({ activeTab: tab }),
+  engine: { status: 'idle', throughput: 0 },
+  setEngine: (e) => set((state) => ({ engine: { ...state.engine, ...e } })),
+  wormhole: { compressionRatio: 0.95, activeWorkers: 0 },
+  setWormhole: (w) => set((state) => ({ wormhole: { ...state.wormhole, ...w } })),
+  depin: { activeWorkers: 0, avgReputation: 0 },
+  setDePIN: (d) => set((state) => ({ depin: { ...state.depin, ...d } })),
+  sseConnected: false,
+  setSseConnected: (b) => set({ sseConnected: b }),
+  ui: { activeTab: 'dashboard', timeRange: '24h' },
+  metrics: { historical: [], current: null },
+}));
