@@ -1,0 +1,12 @@
+[workspace]
+
+[package]
+name = "benches"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+common = { path = "../common" }
+cathedral-sdk = { path = "../cathedral-sdk-rs" }
+criterion = "0.5"
+pqcrypto-dilithium = "0.3"

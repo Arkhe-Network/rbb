@@ -1,0 +1,14 @@
+[workspace]
+
+[package]
+name = "cathedral-bridge"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+common = { path = "../common" }
+cathedral-sdk = { path = "../cathedral-sdk-rs" }
+anyhow = "1"
+tokio = { version = "1", features = ["sync", "time", "rt-multi-thread"] }
+tracing = "0.1"
+blake3 = "1"
