@@ -18,12 +18,12 @@ use std::collections::HashMap;
 
 /// Inicializa o módulo Python Headroom
 #[pyfunction]
-fn init_headroom_module(py: Python) -> PyResult<&PyModule> {
+fn init_headroom_module(py: Python) -> PyResult<()> {
     let module = PyModule::new_bound(py, "cathedral_headroom")?;
 
     // Fake functions
 
-    Ok(module)
+    Ok(())
 }
 
 #[pymodule]

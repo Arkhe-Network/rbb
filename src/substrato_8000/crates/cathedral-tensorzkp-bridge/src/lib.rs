@@ -351,7 +351,7 @@ impl TensorZkpBridge {
         let mut witnesses = vec![];
         let mut results = vec![];
 
-        for item in items {
+        for item in &items {
             let original_hash = sha256(item.original.as_bytes());
             let compressed_hash = sha256(item.compressed.as_bytes());
 
@@ -361,7 +361,7 @@ impl TensorZkpBridge {
                 original_embedding_commitment: sha256(&serialize_embedding(&item.original_embedding)),
                 compressed_embedding_commitment: sha256(&serialize_embedding(&item.compressed_embedding)),
                 similarity_threshold: item.similarity_threshold,
-                content_type: item.content_type,
+                content_type: item.content_type.clone(),
             };
 
             let circuit = circuit_def.compile()?;

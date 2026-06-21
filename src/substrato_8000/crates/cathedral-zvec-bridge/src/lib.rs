@@ -8,9 +8,9 @@
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use serde::{Serialize, Deserialize};
-use tonic::{transport::Channel, Request, Response, Status};
+use tonic::{transport::Channel, Request};
 use thiserror::Error;
-use tracing::{info, error, debug};
+use tracing::info;
 
 // gRPC generated from zVEC proto (Substrato 3000)
 pub mod zvec_proto {
@@ -46,10 +46,10 @@ pub mod zvec_proto {
 }
 
 use zvec_proto::{
-    zvec_client::ZvecClient,
-    EmbeddingRequest, EmbeddingResponse,
-    SearchRequest, SearchResponse,
-    IndexRequest, IndexResponse,
+    ZvecClient,
+    EmbeddingRequest,
+    SearchRequest,
+    IndexRequest,
     MemoryEntry, Vector,
 };
 
@@ -59,27 +59,16 @@ use zvec_proto::{
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ZvecBridgeConfig {
-    /// Endereço gRPC do zVEC server
     pub zvec_grpc_endpoint: String,
-    /// Timeout de conexão (ms)
     pub connection_timeout_ms: u64,
-    /// Timeout de query (ms)
     pub query_timeout_ms: u64,
-    /// Dimensões do embedding
     pub embedding_dimensions: usize,
-    /// Modelo de embedding
     pub embedding_model: String,
-    /// Batch size para indexação
     pub index_batch_size: usize,
-    /// Se usa HNSW index
     pub use_hnsw: bool,
-    /// Se usa BM25 sparse index
     pub use_bm25: bool,
-    /// RRF (Reciprocal Rank Fusion) weight
     pub rrf_weight: f64,
-    /// Cache local de embeddings
     pub local_embedding_cache: bool,
-    /// Tamanho do cache
     pub cache_size: usize,
 }
 
@@ -108,9 +97,7 @@ impl Default for ZvecBridgeConfig {
 pub struct ZvecBridge {
     config: ZvecBridgeConfig,
     client: Arc<RwLock<Option<ZvecClient<Channel>>>>,
-    /// Cache local de embeddings
     embedding_cache: Arc<RwLock<lru::LruCache<String, Vec<f32>>>>,
-    /// Métricas
     metrics: Arc<RwLock<ZvecBridgeMetrics>>,
 }
 
@@ -127,9 +114,12 @@ pub struct ZvecBridgeMetrics {
 
 impl ZvecBridge {
     pub async fn new(config: ZvecBridgeConfig) -> Result<Self, ZvecBridgeError> {
-        // Conecta ao zVEC server
-        let endpoint = Channel::from_shared(config.zvec_grpc_endpoint.clone())
+        let endpoint = tonic::transport::Endpoint::from_shared(config.zvec_grpc_endpoint.clone())
             .map_err(|e| ZvecBridgeError::ConnectionError(e.to_string()))?;
+
+        // Aumentamos o limite para suportar ML-DSA de grande payload (16 MB)
+        let endpoint = endpoint
+            .connect_timeout(std::time::Duration::from_millis(config.connection_timeout_ms));
 
         let channel = endpoint.connect().await
             .map_err(|e| ZvecBridgeError::ConnectionError(e.to_string()))?;
@@ -139,45 +129,25 @@ impl ZvecBridge {
         info!("✅ zVEC Bridge connected to {}", config.zvec_grpc_endpoint);
 
         Ok(Self {
-            config,
+            config: config.clone(),
             client: Arc::new(RwLock::new(Some(client))),
-            embedding_cache: Arc::new(RwLock::new(
-                lru::LruCache::new(std::num::NonZeroUsize::new(config.cache_size).unwrap())
-            )),
+            embedding_cache: Arc::new(RwLock::new(lru::LruCache::new(std::num::NonZeroUsize::new(config.cache_size).unwrap()))),
             metrics: Arc::new(RwLock::new(ZvecBridgeMetrics::default())),
         })
     }
 
-    /// ============================================================
-    /// 2.1 GENERATE EMBEDDING
-    /// ============================================================
-
-    /// Gera embedding para texto via zVEC
-    pub async fn generate_embedding(
-        &self,
-        text: &str,
-    ) -> Result<Vec<f32>, ZvecBridgeError> {
-        let start = std::time::Instant::now();
-
-        // Verifica cache
-        {
+    pub async fn generate_embedding(&self, text: &str) -> Result<Vec<f32>, ZvecBridgeError> {
+        if self.config.local_embedding_cache {
             let mut cache = self.embedding_cache.write().await;
             if let Some(emb) = cache.get(text) {
                 let mut metrics = self.metrics.write().await;
                 metrics.cache_hits += 1;
-                debug!("💾 zVEC cache hit");
                 return Ok(emb.clone());
             }
         }
 
-        let mut metrics = self.metrics.write().await;
-        metrics.cache_misses += 1;
-        drop(metrics);
-
-        // Chama zVEC
-        let mut client_guard = self.client.write().await;
-        let client = client_guard.as_mut()
-            .ok_or(ZvecBridgeError::NotConnected)?;
+        let mut client_guard: tokio::sync::RwLockWriteGuard<Option<ZvecClient<Channel>>> = self.client.write().await;
+        let client: &mut ZvecClient<Channel> = client_guard.as_mut().ok_or(ZvecBridgeError::NotConnected)?;
 
         let request = Request::new(EmbeddingRequest {
             text: text.to_string(),
@@ -185,31 +155,22 @@ impl ZvecBridge {
             dimensions: self.config.embedding_dimensions as u32,
         });
 
-        let response = client.generate_embedding(request).await
-            .map_err(|e| ZvecBridgeError::GrpcError(e.to_string()))?;
+        let response: Result<_, tonic::Status> = client.generate_embedding(request).await;
+        let response = response
+            .map_err(|e: tonic::Status| ZvecBridgeError::GrpcError(e.to_string()))?;
 
         let embedding = response.into_inner().embedding;
 
-        // Armazena no cache
-        {
+        if self.config.local_embedding_cache {
             let mut cache = self.embedding_cache.write().await;
             cache.put(text.to_string(), embedding.clone());
+            let mut metrics = self.metrics.write().await;
+            metrics.cache_misses += 1;
         }
-
-        let mut metrics = self.metrics.write().await;
-        metrics.avg_query_latency_ms =
-            (metrics.avg_query_latency_ms * metrics.total_queries as f64 + start.elapsed().as_millis() as f64)
-            / (metrics.total_queries + 1) as f64;
-        metrics.total_queries += 1;
 
         Ok(embedding)
     }
 
-    /// ============================================================
-    /// 2.2 SEMANTIC SEARCH
-    /// ============================================================
-
-    /// Busca por similaridade semântica
     pub async fn semantic_search(
         &self,
         query: &str,
@@ -217,13 +178,10 @@ impl ZvecBridge {
         filter: Option<SearchFilter>,
     ) -> Result<Vec<SearchResult>, ZvecBridgeError> {
         let start = std::time::Instant::now();
-
-        // Gera embedding da query
         let query_embedding = self.generate_embedding(query).await?;
 
-        let mut client_guard = self.client.write().await;
-        let client = client_guard.as_mut()
-            .ok_or(ZvecBridgeError::NotConnected)?;
+        let mut client_guard: tokio::sync::RwLockWriteGuard<Option<ZvecClient<Channel>>> = self.client.write().await;
+        let client: &mut ZvecClient<Channel> = client_guard.as_mut().ok_or(ZvecBridgeError::NotConnected)?;
 
         let request = Request::new(SearchRequest {
             query_vector: Some(Vector { values: query_embedding }),
@@ -234,10 +192,11 @@ impl ZvecBridge {
             rrf_weight: self.config.rrf_weight,
         });
 
-        let response = client.search(request).await
-            .map_err(|e| ZvecBridgeError::GrpcError(e.to_string()))?;
+        let response: Result<_, tonic::Status> = client.search(request).await;
+        let response = response
+            .map_err(|e: tonic::Status| ZvecBridgeError::GrpcError(e.to_string()))?;
 
-        let results = response.into_inner().results.into_iter()
+        let results: Vec<_> = response.into_inner().results.into_iter()
             .map(|r| SearchResult {
                 entry_id: r.entry_id,
                 score: r.score,
@@ -255,11 +214,6 @@ impl ZvecBridge {
         Ok(results)
     }
 
-    /// ============================================================
-    /// 2.3 INDEX MEMORY ENTRY
-    /// ============================================================
-
-    /// Indexa entrada de memória no zVEC
     pub async fn index_memory(
         &self,
         entry_id: &str,
@@ -267,13 +221,10 @@ impl ZvecBridge {
         metadata: &MemoryMetadata,
     ) -> Result<(), ZvecBridgeError> {
         let start = std::time::Instant::now();
-
-        // Gera embedding
         let embedding = self.generate_embedding(content).await?;
 
-        let mut client_guard = self.client.write().await;
-        let client = client_guard.as_mut()
-            .ok_or(ZvecBridgeError::NotConnected)?;
+        let mut client_guard: tokio::sync::RwLockWriteGuard<Option<ZvecClient<Channel>>> = self.client.write().await;
+        let client: &mut ZvecClient<Channel> = client_guard.as_mut().ok_or(ZvecBridgeError::NotConnected)?;
 
         let request = Request::new(IndexRequest {
             entry: Some(MemoryEntry {
@@ -286,8 +237,9 @@ impl ZvecBridge {
             batch: false,
         });
 
-        let _response = client.index(request).await
-            .map_err(|e| ZvecBridgeError::GrpcError(e.to_string()))?;
+        let _response: Result<_, tonic::Status> = client.index(request).await;
+        let _response = _response
+            .map_err(|e: tonic::Status| ZvecBridgeError::GrpcError(e.to_string()))?;
 
         let mut metrics = self.metrics.write().await;
         metrics.avg_index_latency_ms =
@@ -296,15 +248,9 @@ impl ZvecBridge {
         metrics.total_indexed += 1;
 
         info!("📥 Indexed memory entry: {} (time={}ms)", entry_id, start.elapsed().as_millis());
-
         Ok(())
     }
 
-    /// ============================================================
-    /// 2.4 BATCH INDEX
-    /// ============================================================
-
-    /// Indexa múltiplas entradas em batch
     pub async fn batch_index(
         &self,
         entries: Vec<(String, String, MemoryMetadata)>,
@@ -312,9 +258,8 @@ impl ZvecBridge {
         let mut indexed = vec![];
 
         for chunk in entries.chunks(self.config.index_batch_size) {
-            let mut client_guard = self.client.write().await;
-            let client = client_guard.as_mut()
-                .ok_or(ZvecBridgeError::NotConnected)?;
+            let mut client_guard: tokio::sync::RwLockWriteGuard<Option<ZvecClient<Channel>>> = self.client.write().await;
+            let client: &mut ZvecClient<Channel> = client_guard.as_mut().ok_or(ZvecBridgeError::NotConnected)?;
 
             let zvec_entries: Vec<MemoryEntry> = futures::future::try_join_all(
                 chunk.iter().map(|(id, content, meta)| async move {
@@ -329,19 +274,14 @@ impl ZvecBridge {
                 })
             ).await?;
 
-            let request = Request::new(IndexRequest {
-                entry: None,
-                batch: true,
-            });
-
-            // Em produção: enviar batch completo
             for entry in zvec_entries {
                 let single_request = Request::new(IndexRequest {
                     entry: Some(entry.clone()),
                     batch: false,
                 });
-                client.index(single_request).await
-                    .map_err(|e| ZvecBridgeError::GrpcError(e.to_string()))?;
+                let _res: Result<_, tonic::Status> = client.index(single_request).await;
+                let _res = _res
+                    .map_err(|e: tonic::Status| ZvecBridgeError::GrpcError(e.to_string()))?;
                 indexed.push(entry.id);
             }
         }
@@ -349,26 +289,19 @@ impl ZvecBridge {
         Ok(indexed)
     }
 
-    /// ============================================================
-    /// 2.5 HYBRID SEARCH (Dense + Sparse + RRF)
-    /// ============================================================
-
-    /// Busca híbrida: HNSW (dense) + BM25 (sparse) + RRF
     pub async fn hybrid_search(
         &self,
-        query: &str,
+        _query: &str,
         top_k: usize,
-        dense_weight: f64,
-        sparse_weight: f64,
+        _dense_weight: f64,
+        _sparse_weight: f64,
     ) -> Result<Vec<SearchResult>, ZvecBridgeError> {
         let start = std::time::Instant::now();
-
-        let mut client_guard = self.client.write().await;
-        let client = client_guard.as_mut()
-            .ok_or(ZvecBridgeError::NotConnected)?;
+        let mut client_guard: tokio::sync::RwLockWriteGuard<Option<ZvecClient<Channel>>> = self.client.write().await;
+        let client: &mut ZvecClient<Channel> = client_guard.as_mut().ok_or(ZvecBridgeError::NotConnected)?;
 
         let request = Request::new(SearchRequest {
-            query_vector: None, // zVEC gera internamente
+            query_vector: None,
             top_k: top_k as u32,
             filter: None,
             use_hnsw: self.config.use_hnsw,
@@ -376,10 +309,11 @@ impl ZvecBridge {
             rrf_weight: self.config.rrf_weight,
         });
 
-        let response = client.hybrid_search(request).await
-            .map_err(|e| ZvecBridgeError::GrpcError(e.to_string()))?;
+        let response: Result<_, tonic::Status> = client.hybrid_search(request).await;
+        let response = response
+            .map_err(|e: tonic::Status| ZvecBridgeError::GrpcError(e.to_string()))?;
 
-        let results = response.into_inner().results.into_iter()
+        let results: Vec<_> = response.into_inner().results.into_iter()
             .map(|r| SearchResult {
                 entry_id: r.entry_id,
                 score: r.score,
@@ -389,13 +323,8 @@ impl ZvecBridge {
             .collect();
 
         info!("🔍 Hybrid search: {} results in {}ms", results.len(), start.elapsed().as_millis());
-
         Ok(results)
     }
-
-    /// ============================================================
-    /// 2.6 MÉTRICAS
-    /// ============================================================
 
     pub async fn get_metrics(&self) -> ZvecBridgeMetrics {
         self.metrics.read().await.clone()
@@ -476,7 +405,6 @@ pub enum ZvecBridgeError {
     #[error("Index failed: {0}")]
     IndexFailed(String),
 }
-
 
 #[cfg(test)]
 mod tests {
