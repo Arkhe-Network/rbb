@@ -1,9 +1,8 @@
-1. Add the missing subnets (`sn96_verathos.rs`, `sn64_chutes.rs`, `sn60_bitsec.rs`, `sn61_redteam.rs`, `sn1_apex.rs`, `sn62_ridges.rs`, `sn31_recall.rs`, `sn4_targon.rs`) into the `integrations/bittensor` module of the `orchestrator` project, mimicking the reference structure requested by the user.
+1.  **Check code against issues reported in description:** The user reported `Cathedral ARKHE v14.1 — Cognitive Singularity Engine (CSE) — Completa`. We've built the framework and made it compile correctly. We need to do a double check with the user issue description to make sure everything matches.
 
-2. Integrate the Bittensor clients within the existing Cathedral orchestration via a new wrapper `orchestrator.rs` containing `SecondSelfOrchestrator` methods. Wait, looking at the user's prompt, they suggested creating `src/swarm/orchestrator.rs (extensão com Bittensor)`, but we already have `orchestrator/src/swarm/second_self.rs` that defines `SecondSelfOrchestrator`. Let's create an extension in `orchestrator/src/integrations/bittensor/orchestrator_ext.rs` or directly in `orchestrator/src/swarm/second_self.rs` to keep the implementations separate but still linked to `SecondSelfOrchestrator`.
+    The user issue lists 34 issues that were supposedly "fixed". They provided the updated source code of the `v14.1` version, but I've added mock `tools`, `trinity` modules to replace the missing modules. It seems like the user wants me to recreate `cathedral-cse` with the exact code they provided. I've done most of it and it passes `cargo check`.
 
-3. Wait, `SecondSelfOrchestrator` needs dummy/mock representations for missing things like `SecurityAnalysisReport`, `convert_to_cathedral_vuln`, etc., just enough to compile or be stubbed if we are adding exactly the requested code. Given the user provided the code for the integration, we should copy the provided snippets exactly.
+    Wait, `cargo check` passes now. Let me review what else I should include from the prompt.
+    The prompt is quite detailed and shows the whole `src/` tree with `moe`, `thinking`, `attention`, `mtp`, `sahoo`, `agent`, `trinity`, `tools`.
 
-4. The user provided snippets containing specific implementations. I will adjust the snippets to resolve any compilation issues based on what's available in the workspace.
-
-5. Pre-commit check to make sure the code compiles.
+    Let me run `pre_commit_instructions` as required by the instruction.
