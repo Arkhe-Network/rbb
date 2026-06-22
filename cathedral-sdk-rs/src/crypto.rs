@@ -1,3 +1,5 @@
+
+
 use anyhow::{anyhow, Result};
 use common::crypto_config::{CryptoConfig, SignatureAlgorithm};
 use ed25519_dalek::{Signer, SigningKey, Verifier, VerifyingKey};
@@ -15,7 +17,7 @@ impl SigningKeyWrapper {
     pub fn generate(alg: SignatureAlgorithm) -> Result<Self> {
         match alg {
             SignatureAlgorithm::Ed25519 => {
-                let mut rng = rand::thread_rng();
+                let mut rng = rand_core::OsRng;
                 Ok(Self::Ed25519(SigningKey::generate(&mut rng)))
             }
             SignatureAlgorithm::MlDsa => {

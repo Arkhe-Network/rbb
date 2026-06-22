@@ -7,7 +7,6 @@
 
 use std::collections::HashMap;
 use rand_distr::{Distribution, Beta};
-use rand::Rng;
 use serde::{Serialize, Deserialize};
 use thiserror::Error;
 
@@ -44,7 +43,7 @@ impl BetaDistribution {
     /// Amostra da distribuição Beta (Thompson Sampling)
     pub fn sample(&self) -> f64 {
         let beta_dist = Beta::new(self.alpha, self.beta).unwrap();
-        beta_dist.sample(&mut rand::thread_rng())
+        beta_dist.sample(&mut rand::rng())
     }
 
     /// Média posterior (expected value)

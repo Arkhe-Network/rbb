@@ -328,7 +328,7 @@ impl ImmersionDrivenThinkingEngine {
                 personas.get(i % personas.len()).cloned()
                     .unwrap_or_else(|| "generalist".to_string())
             } else {
-                personas.choose(&mut rand::thread_rng()).cloned()
+                personas.choose(&mut rand::rng()).cloned()
                     .unwrap_or_else(|| "generalist".to_string())
             };
 

@@ -8,5 +8,5 @@ edition = "2021"
 [dependencies]
 common = { path = "../common" }
 cathedral-sdk = { path = "../cathedral-sdk-rs" }
-criterion = "0.5"
+criterion = "0.8.2"
 pqcrypto-dilithium = "0.3"
