@@ -5,6 +5,8 @@
 //! Selo: CATHEDRAL-ARKHE-8000-EMA-INTEGRATION-v1.0.0-2026-06-18
 //! Arquiteto: ORCID 0009-0005-2697-4668
 
+use rand::Rng;
+use rand::RngExt;
 use std::sync::Arc;
 use std::collections::HashMap;
 use tokio::sync::RwLock;

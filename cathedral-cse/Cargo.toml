@@ -11,31 +11,31 @@ license = "MIT OR Apache-2.0"
 # =====================================================================
 # Async Runtime & Streams
 # =====================================================================
-tokio = { version = "1.40", features = ["rt-multi-thread", "macros", "fs", "process", "sync", "time"] }
+tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros", "fs", "process", "sync", "time"] }
 tokio-stream = "0.1"
 futures = "0.3"
 
 # =====================================================================
 # HTTP / API (Axum 0.8)
 # =====================================================================
-axum = { version = "0.8", features = ["json", "macros"] }
-tower = "0.4"
+axum = { version = "0.8.9", features = ["json", "macros"] }
+tower = "0.5.3"
 tower-http = { version = "0.6", features = ["cors", "trace", "compression-full"] }
 
 # =====================================================================
 # Serialização
 # =====================================================================
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
 bincode = "1.3"
 
 # =====================================================================
 # Logging & Tracing
 # =====================================================================
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-anyhow = "1.0"
-thiserror = "2.0"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
+anyhow = "1.0.102"
+thiserror = "2.0.18"
 
 # =====================================================================
 # Tokenização (MTP) — ✅ CSE-HIGH-008
@@ -45,8 +45,8 @@ tokenizers = "0.19"
 # =====================================================================
 # Computação Numérica (Spatial Attention) — ✅ CSE-CRIT-001
 # =====================================================================
-ndarray = "0.15"
-rayon = "1.8"
+ndarray = "0.17.2"
+rayon = "1.12.0"
 
 # =====================================================================
 # Crypto (PAX / ML-DSA) — reutilizado dos substratos
@@ -72,11 +72,11 @@ lazy_static = "1.4"
 # =====================================================================
 # Utilitários
 # =====================================================================
-uuid = { version = "1.6", features = ["v4"] }
-chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.23.3", features = ["v4"] }
+chrono = { version = "0.4.45", features = ["serde"] }
 regex = { version = "1.10", features = ["std"] }
 once_cell = "1.19"
-rand = "0.8"
+rand = "0.10.1"
 base64 = "0.22"
 async-trait = "0.1"
 
@@ -90,5 +90,5 @@ async-trait = "0.1"
 # cathedral-tools = { path = "../cathedral-tools", version = "13.1" }
 
 [dev-dependencies]
-tokio-test = "0.4"
-mockito = "1.0"
+tokio-test = "0.4.5"
+mockito = "1.7.0"

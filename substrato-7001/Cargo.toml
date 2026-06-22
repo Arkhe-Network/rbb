@@ -17,18 +17,18 @@ full = ["mcp-server", "webhooks", "oss", "metrics-export", "cli"]
 
 [dependencies]
 # Async runtime
-tokio = { version = "1.45", features = ["full"], optional = true }
+tokio = { version = "1.52.3", features = ["full"], optional = true }
 
 # HTTP
 reqwest = { version = "0.12", default-features = false, features = [
     "json", "rustls-tls", "hickory-dns"
 ] }
-axum = { version = "0.8", features = ["macros"], optional = true }
+axum = { version = "0.8.9", features = ["macros"], optional = true }
 tower-http = { version = "0.6", features = ["trace", "cors"], optional = true }
 
 # Serialization
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
 
 # Crypto (webhook signature verification)
 hmac = { version = "0.12", optional = true }
@@ -40,15 +40,15 @@ metrics = { version = "0.24", optional = true }
 metrics-exporter-prometheus = { version = "0.16", optional = true }
 
 # Time
-chrono = { version = "0.4", features = ["serde"], optional = true }
+chrono = { version = "0.4.45", features = ["serde"], optional = true }
 
 # Logging
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "json"] }
 
 # Error handling
-anyhow = "1.0"
-thiserror = "2.0"
+anyhow = "1.0.102"
+thiserror = "2.0.18"
 
 # CLI
 clap = { version = "4.5", features = ["derive", "env"], optional = true }
@@ -61,7 +61,7 @@ tokio-retry = "0.3"
 
 [dev-dependencies]
 wiremock = "0.6"
-tokio-test = "0.4"
+tokio-test = "0.4.5"
 assert-json-diff = "2.0"
 
 [[bin]]

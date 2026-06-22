@@ -1,3 +1,5 @@
+use rand::Rng;
+use rand::RngExt;
 use ndarray::{s, Array2};
 use ndarray_rand::RandomExt;
 use rand::distributions::Standard;

@@ -3,6 +3,8 @@
 // Selo: CATHEDRAL-989.y.8-WORMGRAPH-BENCH-v5.2.0-2026-06-13
 // Arquiteto: ORCID 0009-0005-2697-4668
 
+use rand::Rng;
+use rand::RngExt;
 use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
 use std::collections::BTreeSet;
 use rand::prelude::*;

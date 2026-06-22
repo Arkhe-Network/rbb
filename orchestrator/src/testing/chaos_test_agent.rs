@@ -2,7 +2,8 @@ use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{info, warn, instrument};
 use serde_json::json;
-use rand::{Rng, thread_rng};
+use rand::Rng;
+use rand::RngExt;
 
 use crate::testing::test_agent::{TestAgent, TestResult, TestType, TestContext};
 use crate::testing::deps::SubagentSpawner;
@@ -57,7 +58,7 @@ impl TestAgent for ChaosTestAgent {
             .collect();
 
         for id in &to_kill {
-            if thread_rng().gen_bool(self.failure_rate) {
+            if rand::rng().random_bool(self.failure_rate) {
                 warn!("💥 Falha simulada ao terminar {}", id);
                 errors += 1;
             } else {

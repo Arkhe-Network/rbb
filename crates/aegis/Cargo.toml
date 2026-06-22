@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 aegis-plausible-reasoner = { path = "../aegis-plausible-reasoner" }
-rand = "0.8"
+rand = "0.10.1"
