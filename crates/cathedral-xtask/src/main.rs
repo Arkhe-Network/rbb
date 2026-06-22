@@ -172,7 +172,7 @@ fn check_coverage_threshold() -> Result<()> {
     println!("  ▶ Verificando cobertura (threshold: 80%) ...");
 
     // Simulação: se o arquivo existir, consideramos OK.
-    // Em um pipeline real, extrairíamos o valor do JSON.
+    // Em um pipeline real, extrairíamos o JSON.
     if std::path::Path::new(coverage_file).exists() {
         println!("✅ cobertura OK (arquivo gerado)");
         Ok(())

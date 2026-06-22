@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-nostr-sdk = "0.26"
+nostr-sdk = "0.36"

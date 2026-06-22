@@ -64,6 +64,7 @@ impl ZkHandler {
                 entry_hash: blake3::hash(req.proof_bytes.as_slice()).as_bytes().to_vec(),
                 nostr_event_id: None,
                 tree_id: None,
+
                 agent_identity: None,
             };
             let _ = state.wormgraph.append(entry).await;

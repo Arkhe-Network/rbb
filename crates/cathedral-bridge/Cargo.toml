@@ -11,7 +11,7 @@ cathedral-zk-risc0 = { path = "../cathedral-zk-risc0" }
 cathedral-zk-circuits = { path = "../cathedral-zk-circuits" }
 cathedral-wormgraph = { path = "../cathedral-wormgraph" }
 cathedral-nostr = { path = "../cathedral-nostr" }
-nostr-sdk = "0.26"
+nostr-sdk = "0.36"
 uuid = { version = "1.0", features = ["v4"] }
 chrono = "0.4"
 blake3 = "1.4"

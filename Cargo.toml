@@ -14,7 +14,11 @@ members = [
     "zk-circuits",
     "cathedral-cse",
     "crates/cathedral-xtask",
-    "crates/cathedral-bridge"
+    "crates/cathedral-bridge",
+    "crates/cathedral-zk-circuits",
+    "crates/cathedral-zk-risc0",
+    "crates/cathedral-wormgraph",
+    "crates/cathedral-nostr"
 ]
 resolver = "2"
 
