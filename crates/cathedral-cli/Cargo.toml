@@ -1,10 +1,6 @@
 [package]
 name = "cathedral-cli"
-version.workspace = true
-edition.workspace = true
-authors.workspace = true
-license.workspace = true
-repository.workspace = true
-rust-version.workspace = true
+version = "0.1.0"
+edition = "2021"
 
 [dependencies]
