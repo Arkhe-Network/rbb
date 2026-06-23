@@ -1,0 +1,28 @@
+[package]
+name = "cathedral-server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.7", features = ["json", "ws", "macros"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace", "compression-br", "compression-gzip"] }
+serde = { workspace = true }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+hex = "0.4"
+anyhow = "1.0"
+thiserror = "1.0"
+chrono = "0.4"
+uuid = { version = "1.0", features = ["v4"] }
+
+cathedral-core = { path = "../../cathedral-core" }
+cathedral-identity = { path = "../cathedral-identity" }
+cathedral-wormgraph = { path = "../cathedral-wormgraph" }
+cathedral-zk-circuits = { path = "../cathedral-zk-circuits" }
+cathedral-remix-bridge = { path = "../cathedral-remix-bridge" }
+cathedral-opencode-bridge = { path = "../cathedral-opencode-bridge" }
+cathedral-agents = { path = "../cathedral-agents" }
+cathedral-permissions = { path = "../cathedral-permissions" }

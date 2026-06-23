@@ -40,7 +40,7 @@ dependencies = [
 name = "aegis-plausible-reasoner"
 version = "0.1.0"
 dependencies = [
- "rand 0.10.1",
+ "rand 0.8.6",
  "serde",
 ]
 
@@ -487,11 +487,15 @@ checksum = "edca88bc138befd0323b20752846e6587272d3b03b0343c8ea28a6f819e6e71f"
 dependencies = [
  "async-trait",
  "axum-core 0.4.5",
+ "axum-macros 0.4.2",
+ "base64 0.22.1",
  "bytes",
  "futures-util",
  "http 1.4.2",
  "http-body 1.0.1",
  "http-body-util",
+ "hyper 1.10.1",
+ "hyper-util",
  "itoa",
  "matchit 0.7.3",
  "memchr",
@@ -500,10 +504,17 @@ dependencies = [
  "pin-project-lite",
  "rustversion",
  "serde",
+ "serde_json",
+ "serde_path_to_error",
+ "serde_urlencoded",
+ "sha1",
  "sync_wrapper 1.0.2",
+ "tokio",
+ "tokio-tungstenite 0.24.0",
  "tower 0.5.3",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]
@@ -513,7 +524,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "31b698c5f9a010f6573133b09e0de5408834d0c82f8d7475a89fc1867a71cd90"
 dependencies = [
  "axum-core 0.5.6",
- "axum-macros",
+ "axum-macros 0.5.1",
  "bytes",
  "form_urlencoded",
  "futures-util",
@@ -575,6 +586,7 @@ dependencies = [
  "sync_wrapper 1.0.2",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]
@@ -594,6 +606,17 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
+]
+
+[[package]]
+name = "axum-macros"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57d123550fa8d071b7255cb0cc04dc302baa6c8c4a79f55701552684d8399bce"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.118",
 ]
 
 [[package]]
@@ -909,6 +932,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "cathedral-agents"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cathedral-identity",
+ "cathedral-permissions",
+ "cathedral-tools",
+ "cathedral-wormgraph",
+ "cathedral-zk-circuits",
+ "chrono",
+ "serde",
+ "serde_json",
+ "uuid 1.23.3",
+]
+
+[[package]]
 name = "cathedral-bridge"
 version = "1.0.0"
 dependencies = [
@@ -925,6 +964,10 @@ dependencies = [
  "tracing",
  "uuid 1.23.3",
 ]
+
+[[package]]
+name = "cathedral-cli"
+version = "1.0.0"
 
 [[package]]
 name = "cathedral-core"
@@ -984,6 +1027,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "cathedral-harness"
+version = "1.0.0"
+
+[[package]]
+name = "cathedral-identity"
+version = "0.1.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "cathedral-napi"
 version = "0.1.0"
 dependencies = [
@@ -1005,6 +1059,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "cathedral-opencode-bridge"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "reqwest 0.11.27",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "cathedral-orchestrator"
 version = "0.1.0"
 dependencies = [
@@ -1013,6 +1080,30 @@ dependencies = [
  "orchestrator",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "cathedral-permissions"
+version = "0.1.0"
+dependencies = [
+ "cathedral-identity",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "cathedral-remix-bridge"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "reqwest 0.11.27",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "uuid 1.23.3",
 ]
 
 [[package]]
@@ -1057,6 +1148,61 @@ dependencies = [
  "serde_json",
  "tokio",
  "tracing",
+ "uuid 1.23.3",
+]
+
+[[package]]
+name = "cathedral-self-improve"
+version = "1.0.0"
+
+[[package]]
+name = "cathedral-server"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum 0.7.9",
+ "cathedral-agents",
+ "cathedral-core",
+ "cathedral-identity",
+ "cathedral-opencode-bridge",
+ "cathedral-permissions",
+ "cathedral-remix-bridge",
+ "cathedral-wormgraph",
+ "cathedral-zk-circuits",
+ "chrono",
+ "hex",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tower 0.4.13",
+ "tower-http 0.5.2",
+ "tracing",
+ "tracing-subscriber",
+ "uuid 1.23.3",
+]
+
+[[package]]
+name = "cathedral-skills"
+version = "0.1.0"
+dependencies = [
+ "cathedral-identity",
+ "cathedral-permissions",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "cathedral-tools"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "cathedral-identity",
+ "cathedral-permissions",
+ "cathedral-wormgraph",
+ "chrono",
+ "serde",
+ "serde_json",
  "uuid 1.23.3",
 ]
 
@@ -5523,10 +5669,12 @@ dependencies = [
  "tokio",
  "tokio-native-tls",
  "tokio-rustls 0.24.1",
+ "tokio-util",
  "tower-service",
  "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
+ "wasm-streams",
  "web-sys",
  "webpki-roots 0.25.4",
  "winreg",
@@ -7069,14 +7217,18 @@ version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1e9cd434a998747dd2c4276bc96ee2e0c7a2eadf3cae88e52be55a05fa9053f5"
 dependencies = [
+ "async-compression",
  "base64 0.21.7",
  "bitflags 2.13.0",
  "bytes",
+ "futures-core",
  "http 1.4.2",
  "http-body 1.0.1",
  "http-body-util",
  "mime",
  "pin-project-lite",
+ "tokio",
+ "tokio-util",
  "tower-layer",
  "tower-service",
  "tracing",
@@ -7584,6 +7736,19 @@ dependencies = [
  "indexmap 2.14.0",
  "wasm-encoder",
  "wasmparser",
+]
+
+[[package]]
+name = "wasm-streams"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "15053d8d85c7eccdbefef60f06769760a563c7f0a9d6902a13d35c7800b0ad65"
+dependencies = [
+ "futures-util",
+ "js-sys",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
 ]
 
 [[package]]
