@@ -1,7 +1,6 @@
 //! Plausible reasoning engine that generates structural policy mutations by analogy.
 
 use rand::Rng;
-use rand::RngExt;
 use crate::policy::{Condition, Policy, PolicyAction, PolicyRule};
 use crate::success_db::SuccessDatabase;
 use std::collections::HashMap;
@@ -15,7 +14,7 @@ impl PlausibleReasoner {
     pub fn new() -> Self {
         Self {
             success_db: SuccessDatabase::new(),
-            rng: rand::rng(),
+            rng: rand::thread_rng(),
         }
     }
 
@@ -67,7 +66,7 @@ impl PlausibleReasoner {
         match cond {
             Condition::StepCountModulo(m) => {
                 // Explore nearby moduli (e.g., if 5 worked, try 10 or 3)
-                let new_m = if self.rng.random_bool(0.5) { m * 2 } else { m / 2 };
+                let new_m = if self.rng.gen_bool(0.5) { m * 2 } else { m / 2 };
                 Condition::StepCountModulo(new_m.max(1))
             }
             Condition::ActionRisk(risk) => Condition::ActionRisk(risk.clone()),
@@ -86,7 +85,7 @@ impl PlausibleReasoner {
     fn analogical_action(&mut self, action: &PolicyAction) -> PolicyAction {
         match action {
             PolicyAction::Prove => {
-                if self.rng.random_bool(0.3) {
+                if self.rng.gen_bool(0.3) {
                     PolicyAction::ProveAndVerifyOnChain
                 } else {
                     PolicyAction::Prove
@@ -105,13 +104,13 @@ impl PlausibleReasoner {
 
     fn random_structural_mutation(&mut self, target_policy: &Policy) -> PolicyMutation {
         // Randomly add a rule with a simple condition
-        let condition = match self.rng.random_range(0..4) {
-            0 => Condition::StepCountModulo(self.rng.random_range(1..20)),
+        let condition = match self.rng.gen_range(0..4) {
+            0 => Condition::StepCountModulo(self.rng.gen_range(1..20)),
             1 => Condition::ActionRisk("high".to_string()),
             2 => Condition::ConfidenceBelow(0.6),
             _ => Condition::InterferenceAbove(0.7),
         };
-        let action = if self.rng.random_bool(0.7) {
+        let action = if self.rng.gen_bool(0.7) {
             PolicyAction::Prove
         } else {
             PolicyAction::Skip
@@ -120,7 +119,7 @@ impl PlausibleReasoner {
             id: target_policy.rules.iter().map(|r| r.id).max().unwrap_or(0) + 1,
             condition,
             action,
-            priority: self.rng.random_range(0..255) as u8,
+            priority: self.rng.gen_range(0..255) as u8,
         })
     }
 }

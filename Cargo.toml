@@ -18,8 +18,18 @@ members = [
     "crates/cathedral-zk-circuits",
     "crates/cathedral-zk-risc0",
     "crates/cathedral-wormgraph",
-    "crates/cathedral-nostr"
-]
+    "crates/cathedral-nostr",
+    "crates/cathedral-permissions",
+    "crates/cathedral-tools",
+    "crates/cathedral-skills",
+    "crates/cathedral-agents",
+    "crates/cathedral-opencode-bridge",
+    "crates/cathedral-remix-bridge",
+    "crates/cathedral-server",
+    "crates/cathedral-cli",
+    "crates/cathedral-harness",
+    "crates/cathedral-self-improve"
+, "crates/cathedral-identity"]
 resolver = "2"
 
 [workspace.package]
