@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Bitcoin Regtest Node
+  bitcoind:
+    image: lncm/bitcoind:v25.0
+    command:
+      - -regtest
+      - -rpcallowip=0.0.0.0/0
+      - -rpcbind=0.0.0.0
+      - -rpcuser=devuser
+      - -rpcpassword=devpass
+      - -server
+      - -txindex=1
+      - -deprecatedrpc=create_bip146_arm
+    ports:
+      - "18443:18443"   # RPC
+      - "18444:18444"   # P2P
+      - "28332:28332"   # ZMQ Block
+      - "28333:28333"   # ZMQ Tx
+
+  # LND - Alice
+  lnd-alice:
+    image: lightninglabs/lnd:v0.17.0-beta
+    command:
+      - --bitcoin.regtest
+      - --bitcoin.active
+      - --bitcoin.node=bitcoind
+      - --bitcoind.rpcuser=devuser
+      - --bitcoind.rpcpass=devpass
+      - --bitcoind.zmqpubrawblock=tcp://bitcoind:28332
+      - --bitcoind.zmqpubrawtx=tcp://bitcoind:28333
+      - --bitcoind.rpchost=bitcoind:18443
+      - --accept-keysend
+      - --rpclisten=0.0.0.0:10009
+      - --restlisten=0.0.0.0:8080
+      - --tlsextradomain=lnd-alice
+      - --no-macaroons
+    depends_on:
+      - bitcoind
+    ports:
+      - "10009:10009"   # gRPC
+      - "8080:8080"     # REST
+
+  # LND - Bob
+  lnd-bob:
+    image: lightninglabs/lnd:v0.17.0-beta
+    command:
+      - --bitcoin.regtest
+      - --bitcoin.active
+      - --bitcoin.node=bitcoind
+      - --bitcoind.rpcuser=devuser
+      - --bitcoind.rpcpass=devpass
+      - --bitcoind.zmqpubrawblock=tcp://bitcoind:28332
+      - --bitcoind.zmqpubrawtx=tcp://bitcoind:28333
+      - --bitcoind.rpchost=bitcoind:18443
+      - --accept-keysend
+      - --rpclisten=0.0.0.0:10009
+      - --restlisten=0.0.0.0:8080
+      - --tlsextradomain=lnd-bob
+      - --no-macaroons
+    depends_on:
+      - bitcoind
+    ports:
+      - "10010:10009"   # gRPC
+      - "8081:8080"     # REST
+
+  # Taproot Assets Daemon - Alice
+  tapd-alice:
+    image: lightninglabs/taproot-assets:v0.4.1-alpha
+    command:
+      - --network=regtest
+      - --debuglevel=debug
+      - --no-macaroons
+      - --lnd.host=lnd-alice:10009
+      - --rpcserver=0.0.0.0:10029
+      - --restlisten=0.0.0.0:8089
+    depends_on:
+      - lnd-alice
+    ports:
+      - "10029:10029"   # gRPC
+      - "8089:8089"     # REST
+
+  # Taproot Assets Daemon - Bob
+  tapd-bob:
+    image: lightninglabs/taproot-assets:v0.4.1-alpha
+    command:
+      - --network=regtest
+      - --debuglevel=debug
+      - --no-macaroons
+      - --lnd.host=lnd-bob:10009
+      - --rpcserver=0.0.0.0:10029
+      - --restlisten=0.0.0.0:8089
+    depends_on:
+      - lnd-bob
+    ports:
+      - "10030:10029"   # gRPC
+      - "8090:8089"     # REST

@@ -126,3 +126,6 @@ impl Agent for PlanAgent {
         Ok(serde_json::json!({ "status": "planned", "plan": [] }))
     }
 }
+pub mod taproot_agent;
+pub mod rfq;
+pub mod taproot;

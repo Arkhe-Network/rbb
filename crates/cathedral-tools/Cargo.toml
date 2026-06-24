@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+async-trait = { workspace = true }
+cathedral-identity = { path = "../cathedral-identity" }
+cathedral-permissions = { path = "../cathedral-permissions" }
+cathedral-wormgraph = { path = "../cathedral-wormgraph" }
+uuid = { workspace = true }
+chrono = { workspace = true }
+serde_json = { workspace = true }

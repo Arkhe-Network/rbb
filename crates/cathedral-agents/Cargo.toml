@@ -4,3 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+cathedral-identity = { path = "../cathedral-identity" }
+cathedral-permissions = { path = "../cathedral-permissions" }
+cathedral-tools = { path = "../cathedral-tools" }
+cathedral-wormgraph = { path = "../cathedral-wormgraph" }
+cathedral-taproot-bridge = { path = "../cathedral-taproot-bridge" }
+async-trait = { workspace = true }
+serde_json = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
