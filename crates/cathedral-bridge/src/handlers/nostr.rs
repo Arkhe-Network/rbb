@@ -39,7 +39,7 @@ impl NostrHandler {
             req.wormgraph_json,
             tags.into_iter().filter_map(|t| nostr_sdk::Tag::parse(&t).ok()).collect::<Vec<_>>(),
         )
-        .sign_with_keys(&nostr_sdk::Keys::generate() ).map_err(|e| Status::internal(format!("Falha na criação: {}", e)))?; // Em produção, usar chave configurada
+        .to_event(&nostr_sdk::Keys::generate()).map_err(|e| Status::internal(format!("Falha na criação: {}", e)))?; // Em produção, usar chave configurada
 
         // 3. Publica nos relays
         let relays = if req.relay_urls.is_empty() {

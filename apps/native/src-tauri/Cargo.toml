@@ -24,3 +24,4 @@ frameworks = ["WebKit.framework"]
 
 [package.metadata.bundle.windows]
 wix = true
+tokio = { workspace = true }

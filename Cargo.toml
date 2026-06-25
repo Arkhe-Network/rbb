@@ -24,7 +24,7 @@ members = [
     "crates/cathedral-cli",
     "crates/cathedral-kernel",
     "apps/native/src-tauri",
-    "native/desktop",
+    "native/desktop", "crates/cathedral-taproot-bridge",
 ]
 resolver = "2"
 
