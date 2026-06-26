@@ -25,6 +25,9 @@ members = [
     "crates/cathedral-kernel",
     "apps/native/src-tauri",
     "native/desktop", "crates/cathedral-taproot-bridge",
+    "crates/arkhe-parsing",
+    "crates/arkhe-nexus-governance",
+    "crates/arkhe-governance",
 ]
 resolver = "2"
 
