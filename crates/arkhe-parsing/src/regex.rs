@@ -2,6 +2,7 @@ use regex::Regex;
 use std::time::{Duration, Instant};
 use crate::error::{ParseError, ParseResult};
 
+
 #[derive(Debug, Clone)]
 pub struct SafeRegex {
     regex: Regex,
@@ -89,9 +90,9 @@ macro_rules! lazy_regex {
         static ref $name:ident = $pattern:expr;
     ) => {
         $(#[$meta])*
-        static $name: once_cell::sync::Lazy<arkhe_parsing::SafeRegex> =
-            once_cell::sync::Lazy::new(|| {
-                arkhe_parsing::SafeRegex::new($pattern)
+        static $name: $crate::Lazy<$crate::SafeRegex> =
+            $crate::Lazy::new(|| {
+                $crate::SafeRegex::new($pattern)
                     .expect("Invalid regex pattern")
             });
     };

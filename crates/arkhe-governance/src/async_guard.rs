@@ -1,6 +1,11 @@
-use crate::guard::{GovernanceGuard, GuardError, ExecutionResult};
-use crate::invariants::GovernanceProposal;
+//! AsyncGovernanceGuard — versão async do GovernanceGuard.
+//!
+//! ✅ P9: Fornece alternativa async para contextos Tokio.
 
+use crate::guard::{GovernanceGuard, GuardError};
+use crate::invariants::{GovernanceAction};
+
+/// Versão async do GovernanceGuard.
 pub struct AsyncGovernanceGuard {
     inner: tokio::sync::Mutex<GovernanceGuard>,
 }
@@ -12,14 +17,18 @@ impl AsyncGovernanceGuard {
         }
     }
 
-    pub async fn submit(&self, proposal: GovernanceProposal) -> Result<(), crate::invariants::GovernanceViolation> {
+    pub async fn submit(&self, action: GovernanceAction) -> Result<String, GuardError> {
         let guard = self.inner.lock().await;
-        guard.submit(proposal)
+        guard.submit(action)
     }
 
-    pub async fn execute<F>(&self, proposal_id: &str, action: F) -> Result<ExecutionResult, GuardError>
+    pub async fn execute<F, R>(
+        &self,
+        proposal_id: &str,
+        action: F,
+    ) -> Result<R, GuardError>
     where
-        F: FnOnce(&GovernanceProposal) -> Result<(), Box<dyn std::error::Error + Send + Sync>>,
+        F: FnOnce(&GovernanceAction) -> Result<R, String>,
     {
         let guard = self.inner.lock().await;
         guard.execute(proposal_id, action)

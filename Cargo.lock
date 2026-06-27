@@ -66,30 +66,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
 
 [[package]]
-name = "arkhe-agents"
-version = "0.1.0"
-dependencies = [
- "arkhe-core",
- "arkhe-llm",
- "arkhe-metacognition",
-]
-
-[[package]]
-name = "arkhe-bridge"
-version = "0.1.0"
-
-[[package]]
-name = "arkhe-core"
-version = "0.1.0"
-dependencies = [
- "regex",
-]
-
-[[package]]
 name = "arkhe-governance"
-version = "0.1.0"
+version = "2.1.0"
 dependencies = [
- "arkhe-core",
  "blake3",
  "chrono",
  "hex",
@@ -100,22 +79,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "arkhe-llm"
-version = "0.1.0"
-dependencies = [
- "arkhe-core",
- "async-trait",
-]
-
-[[package]]
-name = "arkhe-metacognition"
-version = "0.1.0"
-
-[[package]]
 name = "arkhe-nexus-governance"
 version = "0.1.0"
 dependencies = [
- "arkhe-core",
  "arkhe-governance",
  "chrono",
  "thiserror 1.0.69",

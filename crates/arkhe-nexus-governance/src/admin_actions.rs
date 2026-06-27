@@ -2,7 +2,10 @@
 //!
 //! Esta enum mapeia as ações específicas do NEXUS para os tipos
 //! genéricos de AdministrativeAction do arkhe-governance.
-use arkhe_governance::AdministrativeAction;
+
+use arkhe_governance::{ActionClass, GovernanceAction};
+use chrono::Duration;
+
 /// Ações administrativas específicas do NEXUS/Safe Core.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum NexusAdminAction {
@@ -23,34 +26,36 @@ pub enum NexusAdminAction {
     /// Outra ação administrativa.
     Other,
 }
+
 impl NexusAdminAction {
-    /// Mapeia para AdministrativeAction genérico.
-    pub fn to_generic(&self) -> AdministrativeAction {
+    /// Mapeia para ActionClass genérico.
+    pub fn to_generic(&self) -> ActionClass {
         match self {
-            Self::KernelUpdate => AdministrativeAction::SafeCoreUpdate,
-            Self::SecurityPolicyChange => AdministrativeAction::SafeCoreUpdate,
-            Self::CapsuleModification => AdministrativeAction::CapsulePrivilegeChange,
-            Self::ComplianceRulesUpdate => AdministrativeAction::ComplianceRuleChange,
-            Self::FlockConfigUpdate => AdministrativeAction::FlockParameterChange,
-            Self::WormGraphOperation => AdministrativeAction::WormGraphOperation,
-            Self::BundleHashtreeUpdate => AdministrativeAction::BundleHashtreeChange,
-            Self::Other => AdministrativeAction::Other,
+            Self::KernelUpdate => ActionClass::Critical,
+            Self::SecurityPolicyChange => ActionClass::Critical,
+            Self::CapsuleModification => ActionClass::Operational,
+            Self::ComplianceRulesUpdate => ActionClass::Operational,
+            Self::FlockConfigUpdate => ActionClass::Critical,
+            Self::WormGraphOperation => ActionClass::Operational,
+            Self::BundleHashtreeUpdate => ActionClass::Operational,
+            Self::Other => ActionClass::Other,
         }
     }
+
     /// Cria proposta de governança para esta ação.
     pub fn to_proposal(
         &self,
-        id: String,
+        _id: String,
         description: String,
-        total_voters: u64,
+        _total_voters: u64,
         delay_hours: i64,
-    ) -> arkhe_governance::GovernanceProposal {
-        arkhe_governance::GovernanceProposal::new(
-            id,
-            description,
+    ) -> GovernanceAction {
+        GovernanceAction::new(
             self.to_generic(),
-            total_voters,
-            chrono::Duration::hours(delay_hours),
+            description,
+            "did:arkhe:system".to_string(),
+            std::time::Duration::from_secs((delay_hours * 3600) as u64),
+            [0u8; 32],
         )
     }
 }

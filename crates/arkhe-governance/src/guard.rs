@@ -1,85 +1,147 @@
-use std::sync::Mutex;
-use crate::invariants::{GovernanceProposal, GovernanceInvariantChecker, AdministrativeAction, ExecutedProposal, GovernanceViolation};
+//! GovernanceGuard — enforce do I_gov^v2 no ciclo de vida das propostas.
+//!
+//! # Design Choice: Síncrono
+//!
+//! O GovernanceGuard usa std::sync::Mutex por design — o TCB (Trusted
+//! Computing Base) deve ser mínimo e não depende de runtime async.
+//! Para uso em contexto Tokio/async, envolva as chamadas em
+//! tokio::task::spawn_blocking ou use AsyncGovernanceGuard.
+//!
+//! # AsyncGovernanceGuard
+//!
+//! Veja crate::async_guard::AsyncGovernanceGuard para versão async.
 
-#[derive(Debug, Clone)]
-#[derive(serde::Serialize, serde::Deserialize)]
-pub enum ExecutionResult {
-    Success,
-    Rejected(String),
-    Cancelled,
-}
+use std::sync::Mutex;
+use crate::invariants::{GovernanceAction, ExecutedAction, ExecutionResult, GovernanceInvariantChecker};
+use crate::safe_core::SafeCoreHook;
 
 #[derive(Debug, thiserror::Error, Clone)]
 pub enum GuardError {
     #[error("Execution failed: {0}")]
     ExecutionFailed(String),
+
     #[error("Cancellation denied: {0}")]
     CancellationDenied(String),
+
     #[error("Not found: {0}")]
     NotFound(String),
 }
 
 pub struct GovernanceGuard {
     checker: Mutex<GovernanceInvariantChecker>,
-    pending: Mutex<Vec<GovernanceProposal>>,
-    executed: Mutex<Vec<ExecutedProposal>>,
+    pending: Mutex<Vec<GovernanceAction>>,
+    executed: Mutex<Vec<ExecutedAction>>,
+    hooks: Mutex<Vec<Box<dyn SafeCoreHook>>>,
 }
 
 impl GovernanceGuard {
     pub fn new() -> Self {
         Self {
-            checker: Mutex::new(GovernanceInvariantChecker::default()),
+            checker: Mutex::new(GovernanceInvariantChecker::default()),  // ✅ P1
             pending: Mutex::new(Vec::new()),
             executed: Mutex::new(Vec::new()),
+            hooks: Mutex::new(Vec::new()),
         }
     }
 
-    pub fn submit(&self, proposal: GovernanceProposal) -> Result<(), GovernanceViolation> {
-        let mut pending = self.pending.lock().unwrap();
-        pending.push(proposal);
-        Ok(())
+    pub fn with_checker(checker: GovernanceInvariantChecker) -> Self {
+        Self {
+            checker: Mutex::new(checker), // ✅ P1
+            pending: Mutex::new(Vec::new()),
+            executed: Mutex::new(Vec::new()),
+            hooks: Mutex::new(Vec::new()),
+        }
     }
 
-    pub fn execute<F>(&self, proposal_id: &str, action: F) -> Result<ExecutionResult, GuardError>
+    pub fn submit(&self, action: GovernanceAction) -> Result<String, GuardError> {
+        self.run_pre_submit_hooks(&action)?;
+        let id_str = hex::encode(action.id);
+        self.pending.lock().unwrap().push(action);
+        Ok(id_str)
+    }
+
+    pub fn execute<F, R>(
+        &self,
+        proposal_id: &str,
+        action: F,
+    ) -> Result<R, GuardError>
     where
-        F: FnOnce(&GovernanceProposal) -> Result<(), Box<dyn std::error::Error + Send + Sync>>,
+        F: FnOnce(&GovernanceAction) -> Result<R, String>,
     {
         let proposal = {
             let pending = self.pending.lock().unwrap();
-            pending.iter().find(|p| p.id == proposal_id).cloned()
+            pending.iter()
+                .find(|p| hex::encode(p.id) == proposal_id)
+                .cloned()
+                .ok_or_else(|| GuardError::NotFound(proposal_id.to_string()))?
         };
 
-        if let Some(prop) = proposal {
-            let action_result = action(&prop);
-            let success = action_result.is_ok();
-            let execution_result = if success {
-                ExecutionResult::Success
-            } else {
-                ExecutionResult::Rejected(action_result.as_ref().unwrap_err().to_string())
-            };
-            self.executed.lock().unwrap().push(ExecutedProposal {
-                proposal: prop,
-                result: execution_result.clone()
-            });
-            action_result.map_err(|e| GuardError::ExecutionFailed(e.to_string()))?;
-            return Ok(execution_result);
+        // Executar
+        let action_result = action(&proposal); let err_val = if !action_result.is_ok() { action_result.as_ref().err().unwrap().clone() } else { "".to_string() };
+        let success = action_result.is_ok();
+        let execution_result = if success {
+            ExecutionResult::Success
+        } else {
+            ExecutionResult::Rejected(
+                err_val  // ✅ P2: erro real
+            )
+        };
+
+        // Registrar execução
+        {
+            let mut checker = self.checker.lock().unwrap();
+            checker.record_execution(&proposal, execution_result.clone());
         }
-        Err(GuardError::NotFound(proposal_id.to_string()))
+        self.executed.lock().unwrap().push(ExecutedAction {
+            id: proposal.id,
+            class: proposal.class,
+            executed_at: chrono::Utc::now(),
+            action_hash: proposal.action_hash,
+            result: execution_result,
+        });
+
+        action_result.map_err(GuardError::ExecutionFailed)  // ✅ P2: retorna Result<R, _>
     }
 
-    pub fn cancel(&self, _proposal_id: &str, _cancellation: &GovernanceProposal) -> Result<(), GuardError> {
+    pub fn cancel(
+        &self,
+        proposal_id: &str,
+        cancellation: &GovernanceAction,
+    ) -> Result<(), GuardError> {
+        // Verificar que o cancelamento também satisfaz I_gov
+        let check = self.checker.lock().unwrap().check(cancellation);  // ✅ P1
+        if !check.satisfied {
+            return Err(GuardError::CancellationDenied(check.summary()));
+        }
+
+        let mut pending = self.pending.lock().unwrap();
+        let pos = pending
+            .iter()
+            .position(|p| hex::encode(p.id) == proposal_id)
+            .ok_or_else(|| GuardError::NotFound(proposal_id.to_string()))?;
+
+        let target = &pending[pos];
+
+        // ✅ P3: Verificar revogabilidade da ação alvo
+        if let Err(e) = self.checker.lock().unwrap().check_revocation(target) {
+            return Err(GuardError::CancellationDenied(e.to_string()));
+        }
+
+        let _removed = pending.remove(pos);
         Ok(())
     }
 
-    pub fn pending_proposals(&self) -> Vec<GovernanceProposal> {
-        self.pending.lock().unwrap().clone()
+    pub fn checker(&self) -> std::sync::MutexGuard<GovernanceInvariantChecker> {
+        self.checker.lock().unwrap()
     }
 
-    pub fn executed_proposals(&self) -> Vec<ExecutedProposal> {
-        self.executed.lock().unwrap().clone()
-    }
-
-    pub fn audit_hash(&self) -> [u8; 32] {
-        [0u8; 32]
+    fn run_pre_submit_hooks(&self, action: &GovernanceAction) -> Result<(), GuardError> {
+        let hooks = self.hooks.lock().unwrap();
+        for hook in hooks.iter() {
+            if let Err(e) = hook.pre_submit(action) {
+                return Err(GuardError::CancellationDenied(e.to_string()));
+            }
+        }
+        Ok(())
     }
 }
