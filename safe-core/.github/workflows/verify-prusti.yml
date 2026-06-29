@@ -1,0 +1,19 @@
+name: Verify Prusti
+on:
+  schedule:
+    - cron: '0 3 * * *' # Nightly
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Java (for Prusti)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install Prusti
+        run: cargo install prusti-assistant
+      - name: Run Prusti
+        run: cargo prusti
