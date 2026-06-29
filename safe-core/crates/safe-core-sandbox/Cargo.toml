@@ -1,0 +1,11 @@
+[package]
+name = "safe-core-sandbox"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+safe-core-policy = { path = "../safe-core-policy" }
+safe-core-memory = { path = "../safe-core-memory" }

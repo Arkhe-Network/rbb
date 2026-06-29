@@ -1,4 +1,0 @@
-sed -i 's/chrono::Local::now().with_day(10).unwrap_or_else(|| chrono::Local::now()).with_hour(10).unwrap().with_minute(0).unwrap()/chrono::Local.with_ymd_and_hms(2023, 10, 10, 10, 0, 0).unwrap()/g' crates/arkhe-governance/src/safe_core.rs
-sed -i 's/chrono::Local::now().with_day(1).unwrap_or_else(|| chrono::Local::now()).with_hour(20).unwrap().with_minute(0).unwrap()/chrono::Local.with_ymd_and_hms(2023, 10, 8, 20, 0, 0).unwrap()/g' crates/arkhe-governance/src/safe_core.rs
-sed -i 's/chrono::Local::now().with_day(10).unwrap_or_else(|| chrono::Local::now()).with_hour(5).unwrap().with_minute(0).unwrap()/chrono::Local.with_ymd_and_hms(2023, 10, 10, 5, 0, 0).unwrap()/g' crates/arkhe-governance/src/safe_core.rs
-sed -i 's/chrono::Local::now().with_day(1).unwrap_or_else(|| chrono::Local::now()).with_hour(20).unwrap().with_minute(0).unwrap()/chrono::Local.with_ymd_and_hms(2023, 10, 8, 20, 0, 0).unwrap()/g' crates/arkhe-governance/src/safe_core.rs

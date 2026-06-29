@@ -1,0 +1,12 @@
+[package]
+name = "safe-core-mcp"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+safe-core-policy = { path = "../safe-core-policy" }
+safe-core-interface = { path = "../safe-core-interface" }
+safe-core-crypto = { path = "../safe-core-crypto" }
