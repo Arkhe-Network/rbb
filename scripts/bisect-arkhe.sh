@@ -17,7 +17,7 @@ fi
 
 # 3. Executar testes críticos de regressão (SSRF, Orquestração, Memória)
 # Modifique os filtros '-p' e '--test' conforme o bug que você está caçando.
-if cargo test -p cathedral-identity -p cathedral-orchestrator --quiet; then
+if cargo test -p arkhe-ssrf-guard -p arkhe-orchestrator --quiet; then
     echo "✅ Teste passou — commit BOM"
     exit 0
 else

@@ -1,0 +1,11 @@
+[package]
+name = "safe-core-consensus"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+safe-core-crypto = { path = "../safe-core-crypto" }
+safe-core-policy = { path = "../safe-core-policy" }
