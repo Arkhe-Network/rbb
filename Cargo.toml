@@ -27,7 +27,7 @@ members = [
     "native/desktop", "crates/cathedral-taproot-bridge",
     "crates/arkhe-parsing",
     "crates/arkhe-nexus-governance",
-    "crates/arkhe-governance",
+    "crates/arkhe-governance", "safe-core-sus",
 ]
 resolver = "2"
 
