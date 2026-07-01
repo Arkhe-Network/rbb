@@ -28,6 +28,9 @@ members = [
     "crates/arkhe-parsing",
     "crates/arkhe-nexus-governance",
     "crates/arkhe-governance", "safe-core-sus",
+    "crates/arkhe-hash-blake3",
+    "crates/arkhe-oats",
+    "crates/arkhe-merkle",
 ]
 resolver = "2"
 
