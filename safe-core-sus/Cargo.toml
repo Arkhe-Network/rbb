@@ -1,0 +1,25 @@
+[package]
+name = "safe-core-sus"
+version = "2.1.0"
+edition = "2021"
+description = "Camada de governança ética e compliance para o SUS"
+
+[dependencies]
+rhai = { version = "1.20", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+regex = "1.11"
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+tokio = { version = "1", features = ["full"] }
+chrono = { version = "0.4", features = ["clock", "serde"] }
+uuid = { version = "1.10", features = ["v4", "serde"] }
+tracing = "0.1"
+thiserror = "1.0"
+
+[dev-dependencies]
+wiremock = "0.6"
+criterion = "0.5"
+
+[[bench]]
+name = "engine_benchmark"
+harness = false
