@@ -1,6 +1,8 @@
-use std::collections::BTreeMap;
-use serde::{Deserialize, Serialize};
+//! Rastreabilidade IC16 para workflows científicos DeSciOS
+
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 use tracing::info;
 
 use crate::error::{DesciError, Result};
@@ -85,7 +87,9 @@ impl WorkflowStep {
     }
 
     pub fn fail(&mut self, error: impl Into<String>) {
-        self.status = StepStatus::Failed { error: error.into() };
+        self.status = StepStatus::Failed {
+            error: error.into(),
+        };
         self.completed_at = Some(Utc::now());
     }
 
@@ -95,10 +99,17 @@ impl WorkflowStep {
         map.insert("name", serde_json::Value::String(self.name.clone()));
         map.insert("tool", serde_json::Value::String(self.tool.clone()));
         map.insert("parameters", self.parameters.clone());
-        map.insert("inputs", serde_json::to_value(&self.inputs).unwrap_or_default());
-        map.insert("outputs", serde_json::to_value(&self.outputs).unwrap_or_default());
+        map.insert(
+            "inputs",
+            serde_json::to_value(&self.inputs).unwrap_or_default(),
+        );
+        map.insert(
+            "outputs",
+            serde_json::to_value(&self.outputs).unwrap_or_default(),
+        );
 
         let canonical = serde_json::to_string(&map).unwrap_or_default();
+
         let hash = blake3::hash(canonical.as_bytes());
         hash.to_string()
     }
@@ -126,9 +137,9 @@ pub enum WorkflowType {
 
 impl ScientificWorkflowTrace {
     pub fn new(workflow_name: &str, workflow_type: WorkflowType) -> Self {
-        let trace_id = blake3::hash(
-            format!("{}:{}", workflow_name, Utc::now().timestamp_millis()).as_bytes()
-        ).to_string();
+        let trace_id =
+            blake3::hash(format!("{}:{}", workflow_name, Utc::now().timestamp_millis()).as_bytes())
+                .to_string();
 
         Self {
             trace_id,
@@ -144,9 +155,10 @@ impl ScientificWorkflowTrace {
 
     pub fn add_step(&mut self, mut step: WorkflowStep) -> Result<()> {
         if self.steps.iter().any(|s| s.id == step.id) {
-            return Err(DesciError::PluginValidation(
-                format!("Duplicate step id: {}", step.id)
-            ));
+            return Err(DesciError::PluginValidation(format!(
+                "Duplicate step id: {}",
+                step.id
+            )));
         }
 
         step.hash = Some(step.compute_hash());
@@ -161,9 +173,7 @@ impl ScientificWorkflowTrace {
 
         for step in &self.steps {
             let step_hash = step.hash.as_deref().unwrap_or("");
-            chain = blake3::hash(
-                format!("{}:{}", chain, step_hash).as_bytes()
-            ).to_string();
+            chain = blake3::hash(format!("{}:{}", chain, step_hash).as_bytes()).to_string();
         }
 
         self.causal_chain = chain;
@@ -185,9 +195,7 @@ impl ScientificWorkflowTrace {
             }
 
             let step_hash = step.hash.as_deref().unwrap_or("");
-            chain = blake3::hash(
-                format!("{}:{}", chain, step_hash).as_bytes()
-            ).to_string();
+            chain = blake3::hash(format!("{}:{}", chain, step_hash).as_bytes()).to_string();
         }
 
         let verified = chain == self.causal_chain;
@@ -210,7 +218,10 @@ impl ScientificWorkflowTrace {
     }
 
     pub fn completed_count(&self) -> usize {
-        self.steps.iter().filter(|s| matches!(s.status, StepStatus::Completed)).count()
+        self.steps
+            .iter()
+            .filter(|s| matches!(s.status, StepStatus::Completed))
+            .count()
     }
 
     pub fn total_count(&self) -> usize {
@@ -241,7 +252,8 @@ impl NextflowTraceExt for ScientificWorkflowTrace {
 
         if let Some(processes) = v["processes"].as_array() {
             for (i, proc) in processes.iter().enumerate() {
-                let name = proc.get("name")
+                let name = proc
+                    .get("name")
                     .and_then(|n| n.as_str())
                     .unwrap_or("unknown");
 
@@ -258,14 +270,20 @@ impl NextflowTraceExt for ScientificWorkflowTrace {
                 if let Some(status) = proc.get("status").and_then(|s| s.as_str()) {
                     match status {
                         "COMPLETED" => {
-                            let outputs: Vec<String> = proc.get("out")
+                            let outputs: Vec<String> = proc
+                                .get("out")
                                 .and_then(|o| o.as_array())
-                                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                                .map(|arr| {
+                                    arr.iter()
+                                        .filter_map(|v| v.as_str().map(String::from))
+                                        .collect()
+                                })
                                 .unwrap_or_default();
                             step.complete(outputs);
                         }
                         "FAILED" => {
-                            let err = proc.get("error")
+                            let err = proc
+                                .get("error")
                                 .and_then(|e| e.as_str())
                                 .unwrap_or("Unknown error");
                             step.fail(err);
@@ -279,5 +297,97 @@ impl NextflowTraceExt for ScientificWorkflowTrace {
         }
 
         Ok(trace)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_step_hash_deterministic() {
+        let step1 = WorkflowStep::new("s1", "Align", "blastn")
+            .with_parameters(serde_json::json!({"db": "nr", "evalue": "1e-5"}))
+            .with_inputs(vec!["CID_input_001".to_string()]);
+
+        let step2 = WorkflowStep::new("s1", "Align", "blastn")
+            .with_parameters(serde_json::json!({"db": "nr", "evalue": "1e-5"}))
+            .with_inputs(vec!["CID_input_001".to_string()]);
+
+        assert_eq!(step1.compute_hash(), step2.compute_hash());
+    }
+
+    #[test]
+    fn test_step_hash_differs_on_change() {
+        let step1 = WorkflowStep::new("s1", "Align", "blastn")
+            .with_parameters(serde_json::json!({"evalue": "1e-5"}));
+
+        let step2 = WorkflowStep::new("s1", "Align", "blastn")
+            .with_parameters(serde_json::json!({"evalue": "1e-10"}));
+
+        assert_ne!(step1.compute_hash(), step2.compute_hash());
+    }
+
+    #[test]
+    fn test_trace_verify_valid() {
+        let mut trace = ScientificWorkflowTrace::new("test-wf", WorkflowType::Nextflow);
+
+        let mut step = WorkflowStep::new("s1", "Download", "wget")
+            .with_inputs(vec!["https://example.com/data.fasta".to_string()]);
+        step.start();
+        step.complete(vec!["data.fasta".to_string()]);
+        trace.add_step(step).unwrap();
+
+        let mut step2 =
+            WorkflowStep::new("s2", "Align", "blastn").with_inputs(vec!["data.fasta".to_string()]);
+        step2.start();
+        step2.complete(vec!["results.tsv".to_string()]);
+        trace.add_step(step2).unwrap();
+
+        assert!(trace.verify());
+        assert_eq!(trace.total_count(), 2);
+        assert_eq!(trace.completed_count(), 2);
+    }
+
+    #[test]
+    fn test_trace_verify_tampered() {
+        let mut trace = ScientificWorkflowTrace::new("test-wf", WorkflowType::Nextflow);
+
+        let mut step = WorkflowStep::new("s1", "Download", "wget");
+        step.start();
+        step.complete(vec!["data.fasta".to_string()]);
+        trace.add_step(step).unwrap();
+
+        trace.steps[0].name = "TAMPERED".to_string();
+
+        assert!(!trace.verify());
+    }
+
+    #[test]
+    fn test_duplicate_step_id_rejected() {
+        let mut trace = ScientificWorkflowTrace::new("test-wf", WorkflowType::Nextflow);
+
+        let step1 = WorkflowStep::new("s1", "Step 1", "tool");
+        let step2 = WorkflowStep::new("s1", "Step 2", "tool");
+
+        trace.add_step(step1).unwrap();
+        assert!(trace.add_step(step2).is_err());
+    }
+
+    #[test]
+    fn test_from_nextflow_execution() {
+        let json = r#"{
+            "workflow": {"name": "rna-seq-pipeline"},
+            "processes": [
+                {"name": "FASTQC", "process": "fastqc", "status": "COMPLETED", "out": ["qc_report.html"]},
+                {"name": "ALIGN", "process": "hisat2", "status": "FAILED", "error": "Reference not found"}
+            ]
+        }"#;
+
+        let trace = ScientificWorkflowTrace::from_nextflow_execution(json).unwrap();
+        assert_eq!(trace.workflow_name, "rna-seq-pipeline");
+        assert_eq!(trace.total_count(), 2);
+        assert_eq!(trace.completed_count(), 1);
+        assert!(trace.verify());
     }
 }

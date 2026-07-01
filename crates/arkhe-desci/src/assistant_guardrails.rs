@@ -1,32 +1,45 @@
-use std::sync::Arc;
+//! Guardrails para o assistente de IA do DeSciOS
+
 use serde::{Deserialize, Serialize};
-use tracing::{info, warn, error};
+use std::str::FromStr;
+use tracing::{info, warn};
 
 use crate::error::{DesciError, Result};
-use regex::Regex;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum GuardrailError {
-    InvariantViolation { invariant_id: String, detail: String },
-    PiiDetected { pii_types: Vec<String> },
-    ContentBlocked { category: String, reason: String },
-    LlmUnavailable { detail: String },
-    Timeout { seconds: u64 },
+    InvariantViolation {
+        invariant_id: String,
+        detail: String,
+    },
+    PiiDetected {
+        pii_types: Vec<String>,
+    },
+    ContentBlocked {
+        category: String,
+        reason: String,
+    },
+    LlmUnavailable {
+        detail: String,
+    },
+    Timeout {
+        seconds: u64,
+    },
 }
 
 impl std::fmt::Display for GuardrailError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::InvariantViolation { invariant_id, detail } =>
-                write!(f, "Invariant {} violated: {}", invariant_id, detail),
-            Self::PiiDetected { pii_types } =>
-                write!(f, "PII detected: {}", pii_types.join(", ")),
-            Self::ContentBlocked { category, reason } =>
-                write!(f, "Content blocked [{}]: {}", category, reason),
-            Self::LlmUnavailable { detail } =>
-                write!(f, "LLM unavailable: {}", detail),
-            Self::Timeout { seconds } =>
-                write!(f, "Guardrail timeout after {}s", seconds),
+            Self::InvariantViolation {
+                invariant_id,
+                detail,
+            } => write!(f, "Invariant {} violated: {}", invariant_id, detail),
+            Self::PiiDetected { pii_types } => write!(f, "PII detected: {}", pii_types.join(", ")),
+            Self::ContentBlocked { category, reason } => {
+                write!(f, "Content blocked [{}]: {}", category, reason)
+            }
+            Self::LlmUnavailable { detail } => write!(f, "LLM unavailable: {}", detail),
+            Self::Timeout { seconds } => write!(f, "Guardrail timeout after {}s", seconds),
         }
     }
 }
@@ -100,30 +113,42 @@ pub struct PiiCheckResult {
 
 #[derive(Debug, Clone)]
 pub struct PiiMasker {
-    patterns: Vec<(PiiType, Regex, String)>,
+    patterns: Vec<(PiiType, regex::Regex, String)>,
 }
 
 impl PiiMasker {
     pub fn new() -> Self {
         let patterns = vec![
-            (PiiType::Email,
-             Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}").unwrap(),
-             "[EMAIL_REDACTED]".to_string()),
-            (PiiType::Cpf,
-             Regex::new(r"\b\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2}\b").unwrap(),
-             "[CPF_REDACTED]".to_string()),
-            (PiiType::PhoneNumber,
-             Regex::new(r"\(?\d{2}\)?\s?\d{4,5}[-.]?\d{4}").unwrap(),
-             "[PHONE_REDACTED]".to_string()),
-            (PiiType::CreditCard,
-             Regex::new(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b").unwrap(),
-             "[CC_REDACTED]".to_string()),
-            (PiiType::IpAddress,
-             Regex::new(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b").unwrap(),
-             "[IP_REDACTED]".to_string()),
-            (PiiType::Ssn,
-             Regex::new(r"\b\d{3}-\d{2}-\d{4}\b").unwrap(),
-             "[SSN_REDACTED]".to_string()),
+            (
+                PiiType::Email,
+                regex::Regex::new(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}").unwrap(),
+                "[EMAIL_REDACTED]".to_string(),
+            ),
+            (
+                PiiType::Cpf,
+                regex::Regex::new(r"\b\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2}\b").unwrap(),
+                "[CPF_REDACTED]".to_string(),
+            ),
+            (
+                PiiType::PhoneNumber,
+                regex::Regex::new(r"\(?\d{2}\)?\s?\d{4,5}[-.]?\d{4}").unwrap(),
+                "[PHONE_REDACTED]".to_string(),
+            ),
+            (
+                PiiType::CreditCard,
+                regex::Regex::new(r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b").unwrap(),
+                "[CC_REDACTED]".to_string(),
+            ),
+            (
+                PiiType::IpAddress,
+                regex::Regex::new(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b").unwrap(),
+                "[IP_REDACTED]".to_string(),
+            ),
+            (
+                PiiType::Ssn,
+                regex::Regex::new(r"\b\d{3}-\d{2}-\d{4}\b").unwrap(),
+                "[SSN_REDACTED]".to_string(),
+            ),
         ];
         Self { patterns }
     }
@@ -154,7 +179,6 @@ impl PiiMasker {
         }
 
         redactions.reverse();
-
         let has_pii = !redactions.is_empty();
 
         PiiCheckResult {
@@ -240,7 +264,7 @@ impl Default for GuardrailConfig {
 pub struct DeSciAssistantGuardrails {
     config: GuardrailConfig,
     pii_masker: PiiMasker,
-    blocked_regexes: Vec<Regex>,
+    blocked_regexes: Vec<regex::Regex>,
 }
 
 impl DeSciAssistantGuardrails {
@@ -249,10 +273,10 @@ impl DeSciAssistantGuardrails {
     }
 
     pub fn with_config(config: GuardrailConfig) -> Self {
-        let blocked_regexes: Vec<Regex> = config
+        let blocked_regexes: Vec<regex::Regex> = config
             .blocked_patterns
             .iter()
-            .filter_map(|p| Regex::new(p).ok())
+            .filter_map(|p| regex::Regex::new(p).ok())
             .collect();
 
         Self {
@@ -301,7 +325,10 @@ impl DeSciAssistantGuardrails {
             GuardrailCheckResult {
                 safe: false,
                 category: Some(GuardrailCategory::HarmfulContent),
-                reason: Some(format!("Risk score {:.2} exceeds threshold {:.2}", risk_score, self.config.risk_threshold)),
+                reason: Some(format!(
+                    "Risk score {:.2} exceeds threshold {:.2}",
+                    risk_score, self.config.risk_threshold
+                )),
                 risk_score,
             }
         } else {
@@ -317,8 +344,8 @@ impl DeSciAssistantGuardrails {
     }
 
     pub fn check_url(&self, url: &str) -> Result<GuardrailCheckResult> {
-        let parsed = url::Url::parse(url)
-            .map_err(|e| DesciError::Parse(format!("Invalid URL: {}", e)))?;
+        let parsed =
+            url::Url::parse(url).map_err(|e| DesciError::Parse(format!("Invalid URL: {}", e)))?;
 
         let host = parsed.host_str().unwrap_or("");
         let blocked_hosts = ["localhost", "127.0.0.1", "0.0.0.0", "::1"];
@@ -332,7 +359,7 @@ impl DeSciAssistantGuardrails {
             });
         }
 
-        if let Ok(addr) = host.parse::<std::net::IpAddr>() {
+        if let Ok(addr) = std::net::IpAddr::from_str(host) {
             if is_private_ip(&addr) {
                 return Ok(GuardrailCheckResult {
                     safe: false,
@@ -382,9 +409,19 @@ impl DeSciAssistantGuardrails {
         }
 
         let sci_context: &[&str] = &[
-            "gene", "protein", "sequence", "alignment", "blast",
-            "genome", "transcript", "expression", "pathway",
-            "jupyter", "notebook", "analysis", "dataset",
+            "gene",
+            "protein",
+            "sequence",
+            "alignment",
+            "blast",
+            "genome",
+            "transcript",
+            "expression",
+            "pathway",
+            "jupyter",
+            "notebook",
+            "analysis",
+            "dataset",
         ];
 
         let sci_count = sci_context.iter().filter(|s| lower.contains(*s)).count();
@@ -404,11 +441,107 @@ impl Default for DeSciAssistantGuardrails {
 
 fn is_private_ip(addr: &std::net::IpAddr) -> bool {
     match addr {
-        std::net::IpAddr::V4(v4) => {
-            v4.is_private() || v4.is_loopback() || v4.is_link_local()
-        }
-        std::net::IpAddr::V6(v6) => {
-            v6.is_loopback()
-        }
+        std::net::IpAddr::V4(v4) => v4.is_private() || v4.is_loopback() || v4.is_link_local(),
+        std::net::IpAddr::V6(v6) => v6.is_loopback(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pii_masker_email() {
+        let masker = PiiMasker::new();
+        let result = masker.mask("Contact user@example.com for details");
+        assert!(result.has_pii);
+        assert_eq!(result.redactions.len(), 1);
+        assert!(result.masked_text.contains("[EMAIL_REDACTED]"));
+        assert_eq!(result.redactions[0].pii_type, PiiType::Email);
+    }
+
+    #[test]
+    fn test_pii_masker_cpf() {
+        let masker = PiiMasker::new();
+        let result = masker.mask("CPF: 123.456.789-00");
+        assert!(result.has_pii);
+        assert!(result.masked_text.contains("[CPF_REDACTED]"));
+    }
+
+    #[test]
+    fn test_pii_masker_no_pii() {
+        let masker = PiiMasker::new();
+        let result = masker.mask("Run BLAST alignment on the protein sequence");
+        assert!(!result.has_pii);
+        assert_eq!(result.redactions.len(), 0);
+    }
+
+    #[test]
+    fn test_guardrail_blocks_rm_rf() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let ctx = AssistantContext::default();
+        let (processed, result) = guardrails
+            .check_message("rm -rf /home/user/data", &ctx)
+            .unwrap();
+        assert!(!result.safe);
+        assert_eq!(result.category, Some(GuardrailCategory::SystemExploitation));
+        assert_eq!(processed, "[CONTENT_BLOCKED]");
+    }
+
+    #[test]
+    fn test_guardrail_allows_scientific_query() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let ctx = AssistantContext::default();
+        let (processed, result) = guardrails
+            .check_message("Run BLAST on the BRCA1 gene sequence", &ctx)
+            .unwrap();
+        assert!(result.safe);
+        assert_eq!(processed, "Run BLAST on the BRCA1 gene sequence");
+    }
+
+    #[test]
+    fn test_guardrail_masks_pii_in_query() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let ctx = AssistantContext::default();
+        let (processed, result) = guardrails
+            .check_message("Send results to user@example.com", &ctx)
+            .unwrap();
+        assert!(result.safe);
+        assert!(processed.contains("[EMAIL_REDACTED]"));
+    }
+
+    #[test]
+    fn test_ssrf_prevention_localhost() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let result = guardrails
+            .check_url("http://localhost:5001/api/v0/add")
+            .unwrap();
+        assert!(!result.safe);
+        assert_eq!(result.category, Some(GuardrailCategory::UnauthorizedAccess));
+    }
+
+    #[test]
+    fn test_ssrf_prevention_private_ip() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let result = guardrails.check_url("http://10.0.0.1/admin").unwrap();
+        assert!(!result.safe);
+    }
+
+    #[test]
+    fn test_ssrf_allows_external() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let result = guardrails
+            .check_url("https://ncbi.nlm.nih.gov/blast")
+            .unwrap();
+        assert!(result.safe);
+    }
+
+    #[test]
+    fn test_guardrail_fail_closed_no_crash_on_empty() {
+        let guardrails = DeSciAssistantGuardrails::new();
+        let ctx = AssistantContext::default();
+        let (processed, result) = guardrails.check_message("", &ctx).unwrap();
+        assert!(result.safe);
+        assert_eq!(processed, "");
     }
 }

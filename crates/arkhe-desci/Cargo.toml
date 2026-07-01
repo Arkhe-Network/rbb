@@ -1,29 +1,30 @@
 [package]
 name = "arkhe-desci"
-version = "12.0.0"
+version = "11.0.0"
 edition = "2021"
-description = "Integração ARKHE × DeSciOS — governança, segurança e rastreabilidade"
+authors = ["ARKHE Team <team@arkhe.io>"]
 license = "MIT OR Apache-2.0"
+description = "Integração ARKHE × DeSciOS — governança, guardrails e rastreabilidade"
+repository = "https://github.com/arkhe/agi-monorepo"
 
 [dependencies]
 arkhe-core = { path = "../arkhe-core" }
-arkhe-governance = { path = "../arkhe-governance" }
-cathedral-analysis = { path = "../cathedral-analysis" }
-cathedral-core = { path = "../cathedral-core" }
+arkhe-invariants = { path = "../arkhe-invariants" }
 
-serde = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
+serde_yaml = "0.9"
 thiserror = { workspace = true }
+anyhow = { workspace = true }
 tracing = { workspace = true }
-chrono = { workspace = true }
-blake3 = "1.5"
+chrono = { workspace = true, features = ["serde"] }
+blake3 = "1"
+tokio = { workspace = true, features = ["full"] }
 async-trait = { workspace = true }
 regex = { workspace = true }
-url = "2.5"
-uuid = { workspace = true }
-
-# Opcionais
-reqwest = { workspace = true, optional = true }
+url = "2"
+uuid = { workspace = true, features = ["v4"] }
+reqwest = { workspace = true, features = ["multipart", "json"], optional = true }
 
 [features]
 default = []
@@ -31,5 +32,5 @@ ipfs = ["dep:reqwest"]
 chainlink = ["dep:reqwest"]
 
 [dev-dependencies]
-tempfile = "3.10"
-tokio = { workspace = true }
+tempfile = "3"
+tokio = { workspace = true, features = ["full", "rt-multi-thread"] }

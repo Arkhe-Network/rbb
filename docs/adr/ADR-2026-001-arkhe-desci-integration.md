@@ -93,17 +93,23 @@ O DeSciOS é uma plataforma desktop containerizada para ciência descentralizada
 ## Alternatives Considered
 
 ### Alternativa A: Integração via API REST (rejeitada)
+
 DeSciOS chamaria ARKHE via API REST para validação.
+
 - **Prós:** Menos acoplamento
 - **Contras:** Latência, dependência de rede, sem verificação em tempo de build
 
 ### Alternativa B: Fork do DeSciOS (rejeitada)
+
 Criar um fork do DeSciOS com as modificações embutidas.
+
 - **Prós:** Controle total
 - **Contras:** Manutenção do fork, divergência do upstream
 
 ### Alternativa C: Plugin específico para ARKHE no DeSciOS (rejeitada)
+
 Criar um plugin no DeSciOS que chama o ARKHE.
+
 - **Prós:** Mais flexível
 - **Contras:** Plugin seria complexo, não compilado com o restante
 

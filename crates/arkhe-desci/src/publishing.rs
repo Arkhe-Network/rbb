@@ -1,5 +1,8 @@
+//! Publicação descentralizada de datasets científicos
+
 use serde::{Deserialize, Serialize};
-use tracing::{info, warn};
+use tracing::info;
+
 use crate::error::{DesciError, Result};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -50,18 +53,21 @@ impl IpfsClient {
 
     #[cfg(feature = "ipfs")]
     pub async fn add_file(&self, path: &str) -> Result<IpfsPublishResult> {
-        let file_bytes = tokio::fs::read(path).await
-            .map_err(|e| DesciError::Io(e))?;
+        let file_bytes = tokio::fs::read(path).await.map_err(|e| DesciError::Io(e))?;
 
-        let form = reqwest::multipart::Form::new()
-            .part("file", reqwest::multipart::Part::bytes(file_bytes.clone())
-                .file_name(std::path::Path::new(path)
+        let form = reqwest::multipart::Form::new().part(
+            "file",
+            reqwest::multipart::Part::bytes(file_bytes.clone()).file_name(
+                std::path::Path::new(path)
                     .file_name()
                     .and_then(|n| n.to_str())
                     .unwrap_or("data")
-                    .to_string()));
+                    .to_string(),
+            ),
+        );
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(format!("{}/add", self.api_url))
             .multipart(form)
             .send()
@@ -78,9 +84,7 @@ impl IpfsClient {
             .ok_or_else(|| DesciError::IpfsError("No CID in response".to_string()))?
             .to_string();
 
-        let size = response["Size"]
-            .as_u64()
-            .unwrap_or(file_bytes.len() as u64);
+        let size = response["Size"].as_u64().unwrap_or(file_bytes.len() as u64);
 
         info!(cid = %cid, size = size, "File added to IPFS");
 
@@ -93,11 +97,13 @@ impl IpfsClient {
 
     #[cfg(feature = "ipfs")]
     pub async fn add_bytes(&self, data: &[u8], filename: &str) -> Result<IpfsPublishResult> {
-        let form = reqwest::multipart::Form::new()
-            .part("file", reqwest::multipart::Part::bytes(data.to_vec())
-                .file_name(filename.to_string()));
+        let form = reqwest::multipart::Form::new().part(
+            "file",
+            reqwest::multipart::Part::bytes(data.to_vec()).file_name(filename.to_string()),
+        );
 
-        let response = self.http_client
+        let response = self
+            .http_client
             .post(format!("{}/add", self.api_url))
             .multipart(form)
             .send()
@@ -114,9 +120,7 @@ impl IpfsClient {
             .ok_or_else(|| DesciError::IpfsError("No CID in response".to_string()))?
             .to_string();
 
-        let size = response["Size"]
-            .as_u64()
-            .unwrap_or(data.len() as u64);
+        let size = response["Size"].as_u64().unwrap_or(data.len() as u64);
 
         Ok(IpfsPublishResult {
             cid: cid.clone(),
@@ -151,8 +155,15 @@ impl WormGraphNotifier {
         metadata: &DatasetMetadata,
     ) -> Result<String> {
         let notification_id = blake3::hash(
-            format!("{}:{}:{}", cid, metadata.name, chrono::Utc::now().timestamp_millis()).as_bytes()
-        ).to_string();
+            format!(
+                "{}:{}:{}",
+                cid,
+                metadata.name,
+                chrono::Utc::now().timestamp_millis()
+            )
+            .as_bytes(),
+        )
+        .to_string();
 
         info!(
             notification_id = %notification_id,
@@ -193,7 +204,9 @@ impl DeSciPublisher {
         metadata: DatasetMetadata,
     ) -> Result<PublishResult> {
         let ipfs_result = self.ipfs_client.add_file(file_path).await?;
-        let notification_id = self.wormgraph
+
+        let notification_id = self
+            .wormgraph
             .notify_publication(&ipfs_result.cid, &metadata)
             .await?;
 
@@ -221,7 +234,8 @@ impl DeSciPublisher {
     ) -> Result<PublishResult> {
         let ipfs_result = self.ipfs_client.add_bytes(data, filename).await?;
 
-        let notification_id = self.wormgraph
+        let notification_id = self
+            .wormgraph
             .notify_publication(&ipfs_result.cid, &metadata)
             .await?;
 
@@ -261,8 +275,80 @@ impl CcipClient {
 
     pub async fn send_message(&self, _payload: &[u8]) -> Result<String> {
         Err(DesciError::NotImplemented(
-            "CCIP integration requires ethers-rs/alloy + smart contract deployment. \
-             See ADR-026 Section 4: use WormGraph gRPC for internal ARKHE notifications.".to_string()
+            "CCIP integration requires ethers-rs/alloy + smart contract deployment.".to_string(),
         ))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn sample_metadata() -> DatasetMetadata {
+        DatasetMetadata {
+            name: "BRCA1 Variant Dataset".to_string(),
+            description: "Curated variants of BRCA1 gene".to_string(),
+            format: "vcf".to_string(),
+            version: "1.0.0".to_string(),
+            author_did: "did:arkhe:researcher-001".to_string(),
+            license: "CC-BY-4.0".to_string(),
+            tags: vec!["genomics".into(), "brca1".into(), "cancer".into()],
+            created_at: "2026-07-01T12:00:00Z".to_string(),
+            checksum_sha256: "abc123".to_string(),
+        }
+    }
+
+    #[test]
+    fn test_dataset_metadata_serialization() {
+        let meta = sample_metadata();
+        let json = serde_json::to_string(&meta).unwrap();
+        let deserialized: DatasetMetadata = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.name, meta.name);
+        assert_eq!(deserialized.author_did, meta.author_did);
+    }
+
+    #[test]
+    fn test_ipfs_client_local_urls() {
+        let client = IpfsClient::local();
+        assert_eq!(client.api_url(), "http://127.0.0.1:5001/api/v0");
+        assert!(client.gateway_url().contains("8080"));
+    }
+
+    #[test]
+    fn test_ipfs_client_custom_urls() {
+        let client = IpfsClient::new(
+            "http://10.0.0.1:5001/api/v0",
+            "https://gateway.example.com/ipfs",
+        );
+        assert_eq!(client.api_url(), "http://10.0.0.1:5001/api/v0");
+        assert_eq!(client.gateway_url(), "https://gateway.example.com/ipfs");
+    }
+
+    #[test]
+    fn test_ccip_stub_returns_not_implemented() {
+        let client = CcipClient::new("0x...", 1);
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        let result = rt.block_on(client.send_message(&[]));
+        assert!(result.is_err());
+        match result.unwrap_err() {
+            DesciError::NotImplemented(msg) => {
+                assert!(msg.contains("ethers-rs"));
+            }
+            other => panic!("Expected NotImplemented, got: {}", other),
+        }
+    }
+
+    #[test]
+    fn test_publish_result_serialization() {
+        let result = PublishResult {
+            cid: "QmTest".to_string(),
+            gateway_url: "http://localhost:8080/ipfs/QmTest".to_string(),
+            size_bytes: 1024,
+            notification_id: "notif-123".to_string(),
+            metadata: sample_metadata(),
+        };
+        let json = serde_json::to_string_pretty(&result).unwrap();
+        assert!(json.contains("QmTest"));
+        assert!(json.contains("BRCA1"));
     }
 }
