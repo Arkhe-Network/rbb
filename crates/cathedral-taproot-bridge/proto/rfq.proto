@@ -103,9 +103,10 @@ message AssetSpecifier {
 //
 // The relationship between the fractional representation and its fixed-point
 // representation is expressed as:
-// ```
-// V = F_c / (10^F_s)
-// ```
+// ```text
+// This is pseudo-code:
+// let V = F_c / (10^F_s);
+// ```text
 // where:
 //
 // * `V` is the fractional value.
