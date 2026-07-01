@@ -31,6 +31,10 @@ members = [
     "crates/arkhe-hash-blake3",
     "crates/arkhe-oats",
     "crates/arkhe-merkle",
+    "crates/arkhe-invariants",
+    "crates/asi-governance",
+    "crates/arkhe-causal",
+    "crates/arkhe-desci",
 ]
 resolver = "2"
 
