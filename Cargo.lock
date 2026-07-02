@@ -140,6 +140,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "arkhe-loop"
+version = "0.1.0"
+dependencies = [
+ "arkhe-core",
+ "serde",
+ "serde_json",
+ "tracing",
+]
+
+[[package]]
 name = "arkhe-merkle"
 version = "0.1.0"
 dependencies = [
@@ -163,6 +173,16 @@ version = "0.1.0"
 dependencies = [
  "arkhe-core",
  "async-trait",
+]
+
+[[package]]
+name = "arkhe-ontology"
+version = "0.1.0"
+dependencies = [
+ "arkhe-core",
+ "serde",
+ "serde_json",
+ "tracing",
 ]
 
 [[package]]

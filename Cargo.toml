@@ -35,6 +35,8 @@ members = [
     "crates/asi-governance",
     "crates/arkhe-causal",
     "crates/arkhe-desci",
+    "crates/arkhe-loop",
+    "crates/arkhe-ontology",
 ]
 resolver = "2"
 
