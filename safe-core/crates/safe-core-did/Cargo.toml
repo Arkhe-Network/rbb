@@ -1,0 +1,13 @@
+[package]
+name = "safe-core-did"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+safe-core-crypto = { path = "../safe-core-crypto" }
+
+[dev-dependencies]
+#kani.workspace = true

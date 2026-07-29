@@ -4,3 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+tokio = { workspace = true }
+tonic = "0.12"
+tracing = { workspace = true }
+cathedral-nostr = { path = "../cathedral-nostr" }
+cathedral-wormgraph = { path = "../cathedral-wormgraph" }
+cathedral-zk-circuits = { path = "../cathedral-zk-circuits" }
+cathedral-zk-risc0 = { path = "../cathedral-zk-risc0" }
+serde_json = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+blake3 = "1.5"
+nostr-sdk = "0.33"

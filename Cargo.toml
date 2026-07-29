@@ -25,7 +25,19 @@ members = [
     "crates/cathedral-kernel",
     "crates/cathedral-llm-core",
     "apps/native/src-tauri",
-    "native/desktop",
+    "native/desktop", "crates/cathedral-taproot-bridge",
+    "crates/arkhe-parsing",
+    "crates/arkhe-nexus-governance",
+    "crates/arkhe-governance", "safe-core-sus",
+    "crates/arkhe-hash-blake3",
+    "crates/arkhe-oats",
+    "crates/arkhe-merkle",
+    "crates/arkhe-invariants",
+    "crates/asi-governance",
+    "crates/arkhe-causal",
+    "crates/arkhe-desci",
+    "crates/arkhe-loop",
+    "crates/arkhe-ontology",
 ]
 resolver = "2"
 

@@ -1,0 +1,40 @@
+[package]
+name = "cathedral-taproot-bridge"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tonic = { version = "0.12", features = ["tls", "tls-roots"] }
+prost = "0.13"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "signal", "time", "sync"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Utils
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+hex = "0.4"
+blake3 = "1.5"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1.0", features = ["v4"] }
+url = "2.5"
+
+# Crypto
+sha2 = "0.10"
+
+cathedral-identity = { path = "../cathedral-identity" }
+cathedral-wormgraph = { path = "../cathedral-wormgraph" }
+
+[build-dependencies]
+tonic-build = "0.12"
+
+[dev-dependencies]
+criterion = "0.5"
+rand = "0.8"
+
+[[bench]]
+name = "bridge_benchmarks"
+harness = false
