@@ -1,0 +1,9 @@
+[package]
+name = "cathedral-llm-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+llama-cpp-2 = "0.1.150"
+tracing = "0.1"
+encoding_rs = "0.8.34"

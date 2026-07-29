@@ -23,6 +23,7 @@ members = [
     "crates/cathedral-server",
     "crates/cathedral-cli",
     "crates/cathedral-kernel",
+    "crates/cathedral-llm-core",
     "apps/native/src-tauri",
     "native/desktop", "crates/cathedral-taproot-bridge",
     "crates/arkhe-parsing",
