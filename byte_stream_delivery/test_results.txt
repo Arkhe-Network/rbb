@@ -1,0 +1,8 @@
+Test Result: Pass
+
+Report Content:
+Scanned: /tmp
+Directories: 8
+Files: 14
+Total Size: 37730 bytes
+Largest File: /tmp/test_x11 (16000 bytes)
