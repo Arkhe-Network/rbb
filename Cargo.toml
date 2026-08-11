@@ -37,7 +37,7 @@ members = [
     "crates/arkhe-causal",
     "crates/arkhe-desci",
     "crates/arkhe-loop",
-    "crates/arkhe-ontology",
+    "crates/arkhe-ontology", "crates/arkhe-inertia",
 ]
 resolver = "2"
 
