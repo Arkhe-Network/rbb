@@ -1,0 +1,10 @@
+{
+  "id": "arkhe-bridge",
+  "name": "Arkhe Bridge",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Bridge between BLOCK 11 and Obsidian Vault for hash and seal generation.",
+  "author": "Arkhe",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
