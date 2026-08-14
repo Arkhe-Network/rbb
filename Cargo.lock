@@ -149,6 +149,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "arkhe-haselgrove"
+version = "0.1.0"
+dependencies = [
+ "num-complex",
+]
+
+[[package]]
 name = "arkhe-hash-blake3"
 version = "0.1.0"
 dependencies = [
