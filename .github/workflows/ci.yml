@@ -16,6 +16,8 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: 1.91.0
+      - name: Install Protoc
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
       - name: Check MSRV
         run: cargo check --workspace --all-targets --all-features
         env:
