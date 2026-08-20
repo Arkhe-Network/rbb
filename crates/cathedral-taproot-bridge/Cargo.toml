@@ -35,6 +35,3 @@ tonic-build = "0.12"
 criterion = "0.5"
 rand = "0.8"
 
-[[bench]]
-name = "bridge_benchmarks"
-harness = false

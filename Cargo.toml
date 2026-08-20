@@ -39,12 +39,14 @@ members = [
     "crates/arkhe-loop",
     "crates/arkhe-ontology", "crates/arkhe-inertia",
     "crates/arkhe-quantum-auth", "crates/arkhe-haselgrove",
+    "crates/cathedral-xtask",
 ]
 resolver = "2"
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.91.0"
 authors = ["Cathedral OS Team"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/cathedral/cathedral-os"
