@@ -1,12 +1,12 @@
+pub mod did;
+pub mod error;
+pub mod iban;
 pub mod regex;
 pub mod validators;
-pub mod did;
-pub mod iban;
-pub mod error;
 
+pub use did::Did;
+pub use error::{ParseError, ParseResult};
+pub use iban::Iban;
+pub use once_cell::sync::Lazy;
 pub use regex::SafeRegex;
 pub use validators::*;
-pub use did::Did;
-pub use iban::Iban;
-pub use error::{ParseError, ParseResult};
-pub use once_cell::sync::Lazy;

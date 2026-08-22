@@ -1,30 +1,22 @@
-use tonic::transport::{Channel, ClientTlsConfig};
-use tonic::{Request, metadata::MetadataValue};
 use std::fs;
 use std::path::Path;
-use tracing::warn;
 use std::str::FromStr;
+use tonic::transport::{Channel, ClientTlsConfig};
+use tonic::{metadata::MetadataValue, Request};
+use tracing::warn;
 
 use crate::proto::taprpc::{
-    taproot_assets_client::TaprootAssetsClient,
-    GetInfoRequest, GetInfoResponse,
-    ListAssetRequest, ListAssetResponse,
-    ListBalancesRequest, ListBalancesResponse,
-    NewAddrRequest, Addr,
+    taproot_assets_client::TaprootAssetsClient, Addr, AssetGroup, GetInfoRequest, GetInfoResponse,
+    ListAssetRequest, ListAssetResponse, ListBalancesRequest, ListBalancesResponse, NewAddrRequest,
     SendAssetRequest, SendAssetResponse,
-    AssetGroup,
 };
 
-use crate::proto::assetwalletrpc::{
-    asset_wallet_client::AssetWalletClient,
-};
+use crate::proto::assetwalletrpc::asset_wallet_client::AssetWalletClient;
 
-use crate::proto::universerpc::{
-    universe_client::UniverseClient,
-};
+use crate::proto::universerpc::universe_client::UniverseClient;
 
-use crate::error::BridgeError;
 use crate::auth::Macaroon;
+use crate::error::BridgeError;
 
 /// Cliente avançado para o Taproot Assets Daemon (tapd).
 #[derive(Clone)]
@@ -146,7 +138,10 @@ impl TaprootClient {
         _amount: u64,
     ) -> Result<SendAssetResponse, BridgeError> {
         let req = SendAssetRequest {
-            tap_addrs: vec![asset_id.into_iter().map(|b| b.to_string()).collect::<String>()], // Simplification for compilation, the real API expects valid addresses here
+            tap_addrs: vec![asset_id
+                .into_iter()
+                .map(|b| b.to_string())
+                .collect::<String>()], // Simplification for compilation, the real API expects valid addresses here
             ..Default::default()
         };
         let request = self.add_auth(Request::new(req));

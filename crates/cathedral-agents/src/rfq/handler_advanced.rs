@@ -1,10 +1,12 @@
-use crate::rfq::pricing_engine::{PricingStrategy, PricingContext, OrderSide};
-use crate::rfq::order_book_advanced::{OrderBookAdvanced, Execution, ExecutionPolicy, Order, OrderStatus};
+use crate::rfq::order_book_advanced::{
+    Execution, ExecutionPolicy, Order, OrderBookAdvanced, OrderStatus,
+};
+use crate::rfq::pricing_engine::{OrderSide, PricingContext, PricingStrategy};
 use cathedral_taproot_bridge::TaprootClient;
 use cathedral_wormgraph::Wormgraph;
-use std::sync::Arc;
+use chrono::{Duration, Utc};
 use std::collections::HashMap;
-use chrono::{Utc, Duration};
+use std::sync::Arc;
 
 pub struct RfqRequest {
     pub id: String,
@@ -49,7 +51,10 @@ impl RfqHandlerAdvanced {
         }
     }
 
-    pub async fn handle_rfq(&self, request: RfqRequest) -> Result<RfqResponse, Box<dyn std::error::Error>> {
+    pub async fn handle_rfq(
+        &self,
+        request: RfqRequest,
+    ) -> Result<RfqResponse, Box<dyn std::error::Error>> {
         // Implementação simplificada
         let context = PricingContext {
             market_price: 1.0,

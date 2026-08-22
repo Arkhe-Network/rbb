@@ -18,8 +18,12 @@ impl AssetRef {
 
     pub fn to_did(&self) -> Did {
         match self {
-            AssetRef::AssetId(id) => Did { id: format!("did:cathedral:asset:{}", id) },
-            AssetRef::GroupKey(key) => Did { id: format!("did:cathedral:group:{}", key) },
+            AssetRef::AssetId(id) => Did {
+                id: format!("did:cathedral:asset:{}", id),
+            },
+            AssetRef::GroupKey(key) => Did {
+                id: format!("did:cathedral:group:{}", key),
+            },
         }
     }
 

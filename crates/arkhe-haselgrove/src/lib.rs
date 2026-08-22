@@ -33,8 +33,8 @@ pub trait MagneticField {
 // ============================================================
 
 pub struct DipolarMagneticField {
-    pub b0: f64,        // intensidade no equador [T]
-    pub r_earth: f64,   // raio da Terra [m]
+    pub b0: f64,      // intensidade no equador [T]
+    pub r_earth: f64, // raio da Terra [m]
 }
 
 impl DipolarMagneticField {
@@ -69,10 +69,10 @@ pub trait DensityProfile {
 // ============================================================
 
 pub struct ChapmanProfile {
-    pub f0: f64,          // frequência de plasma de pico [Hz]
-    pub hm: f64,          // altitude de pico [m]
-    pub scale_height: f64,// altura de escala [m]
-    pub r_earth: f64,     // raio da Terra [m]
+    pub f0: f64,           // frequência de plasma de pico [Hz]
+    pub hm: f64,           // altitude de pico [m]
+    pub scale_height: f64, // altura de escala [m]
+    pub r_earth: f64,      // raio da Terra [m]
 }
 
 impl ChapmanProfile {
@@ -179,7 +179,11 @@ pub fn group_velocity(
         return (C, 0.0);
     }
 
-    let dω = if delta_omega > 0.0 { delta_omega } else { 1e-6 * omega };
+    let dω = if delta_omega > 0.0 {
+        delta_omega
+    } else {
+        1e-6 * omega
+    };
 
     let n_plus = appleton_hartree_n(omega_p, omega + dω, omega_c, nu, theta, mode);
     let n_minus = appleton_hartree_n(omega_p, omega - dω, omega_c, nu, theta, mode);
@@ -203,14 +207,14 @@ pub fn group_velocity(
 /// Estado do raio em coordenadas esféricas
 #[derive(Debug, Clone, Copy)]
 pub struct RayState {
-    pub r: f64,         // raio [m]
-    pub theta: f64,     // ângulo polar [rad]
-    pub phi: f64,       // ângulo azimutal [rad]
-    pub kr: f64,        // momento canônico radial [rad/m]
-    pub ktheta: f64,    // momento canônico polar [rad/m]
-    pub kphi: f64,      // momento canônico azimutal [rad/m]
-    pub time: f64,      // tempo de grupo [s]
-    pub path: f64,      // comprimento do caminho [m]
+    pub r: f64,           // raio [m]
+    pub theta: f64,       // ângulo polar [rad]
+    pub phi: f64,         // ângulo azimutal [rad]
+    pub kr: f64,          // momento canônico radial [rad/m]
+    pub ktheta: f64,      // momento canônico polar [rad/m]
+    pub kphi: f64,        // momento canônico azimutal [rad/m]
+    pub time: f64,        // tempo de grupo [s]
+    pub path: f64,        // comprimento do caminho [m]
     pub attenuation: f64, // atenuação acumulada [nepers]
 }
 
@@ -218,7 +222,11 @@ impl RayState {
     /// Componentes físicas do vetor de onda
     pub fn k_physical(&self) -> (f64, f64, f64) {
         let kr = self.kr;
-        let ktheta = if self.r > 0.0 { self.ktheta / self.r } else { 0.0 };
+        let ktheta = if self.r > 0.0 {
+            self.ktheta / self.r
+        } else {
+            0.0
+        };
         let kphi = if self.r > 0.0 && self.theta.sin() > 0.0 {
             self.kphi / (self.r * self.theta.sin())
         } else {
@@ -242,12 +250,12 @@ where
 {
     pub profile: D,
     pub field: M,
-    pub omega: f64,           // frequência da onda [rad/s]
-    pub mode: i8,             // +1 O, -1 X
+    pub omega: f64, // frequência da onda [rad/s]
+    pub mode: i8,   // +1 O, -1 X
     pub max_steps: usize,
-    pub ds: f64,              // passo de arco [m]
+    pub ds: f64, // passo de arco [m]
     pub include_absorption: bool,
-    pub h_monitor: bool,      // monitorar Hamiltoniano
+    pub h_monitor: bool, // monitorar Hamiltoniano
 }
 
 impl<D, M> HaselgroveTracer<D, M>
@@ -272,7 +280,9 @@ where
     pub fn refractive_index(&self, state: &RayState) -> Complex64 {
         let omega_p = self.profile.omega_p(state.r, state.theta, state.phi);
         let omega_c = self.field.omega_c(state.r, state.theta, state.phi);
-        let nu = self.profile.collision_frequency(state.r, state.theta, state.phi);
+        let nu = self
+            .profile
+            .collision_frequency(state.r, state.theta, state.phi);
 
         // Ângulo entre k e B usando componentes físicas
         let (kr, kth, kph) = state.k_physical();
@@ -354,7 +364,11 @@ where
 
         (
             if dn2_dr.is_finite() { dn2_dr } else { 0.0 },
-            if dn2_dtheta.is_finite() { dn2_dtheta } else { 0.0 },
+            if dn2_dtheta.is_finite() {
+                dn2_dtheta
+            } else {
+                0.0
+            },
         )
     }
 
@@ -389,17 +403,17 @@ where
 
         // dkr/ds = (c²/ω²)(kθ²/r³ + kφ²/(r³ sin²θ)) + ½ ∂n²/∂r
         let dkr = if r > 0.0 {
-            factor * (state.ktheta * state.ktheta / (r * r * r)
-                + state.kphi * state.kphi / (r * r * r * sin2_theta))
-            + 0.5 * dn2_dr
+            factor
+                * (state.ktheta * state.ktheta / (r * r * r)
+                    + state.kphi * state.kphi / (r * r * r * sin2_theta))
+                + 0.5 * dn2_dr
         } else {
             0.0
         };
 
         // dkθ/ds = (c²/ω²)(kφ² cosθ / (r² sin³θ)) + ½ ∂n²/∂θ
         let dktheta = if r > 0.0 && sin_theta > 0.0 {
-            factor * state.kphi * state.kphi * cos_theta / (r * r * sin3_theta)
-            + 0.5 * dn2_dtheta
+            factor * state.kphi * state.kphi * cos_theta / (r * r * sin3_theta) + 0.5 * dn2_dtheta
         } else {
             0.0
         };
@@ -468,7 +482,8 @@ where
             self.profile.omega_p(state.r, state.theta, state.phi),
             self.omega,
             self.field.omega_c(state.r, state.theta, state.phi),
-            self.profile.collision_frequency(state.r, state.theta, state.phi),
+            self.profile
+                .collision_frequency(state.r, state.theta, state.phi),
             state.theta,
             self.mode,
             1e-6 * self.omega,
@@ -535,8 +550,12 @@ mod tests {
     fn test_homogeneous_medium() {
         struct VacuumProfile;
         impl DensityProfile for VacuumProfile {
-            fn omega_p(&self, _r: f64, _theta: f64, _phi: f64) -> f64 { 0.0 }
-            fn collision_frequency(&self, _r: f64, _theta: f64, _phi: f64) -> f64 { 0.0 }
+            fn omega_p(&self, _r: f64, _theta: f64, _phi: f64) -> f64 {
+                0.0
+            }
+            fn collision_frequency(&self, _r: f64, _theta: f64, _phi: f64) -> f64 {
+                0.0
+            }
         }
 
         struct VacuumField;
@@ -548,9 +567,7 @@ mod tests {
 
         let profile = VacuumProfile;
         let field = VacuumField;
-        let tracer = HaselgroveTracer::new(
-            profile, field, 1.0, 1, 1000.0, 1000
-        );
+        let tracer = HaselgroveTracer::new(profile, field, 1.0, 1, 1000.0, 1000);
 
         let initial = RayState {
             r: 6.371e6 + 300.0e3,
@@ -593,9 +610,7 @@ mod tests {
         let profile = ChapmanProfile::new(5.0e6, 300.0e3, 50.0e3);
         let field = DipolarMagneticField::new();
 
-        let tracer = HaselgroveTracer::new(
-            profile, field, 10.0e6, 1, 1000.0, 5000
-        );
+        let tracer = HaselgroveTracer::new(profile, field, 10.0e6, 1, 1000.0, 5000);
 
         let initial = RayState {
             r: 6.371e6 + 100.0e3,

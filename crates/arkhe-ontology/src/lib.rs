@@ -24,7 +24,9 @@ pub struct CognitiveOntology {
 }
 
 impl CognitiveOntology {
-    pub fn new() -> Self { Self::default() }
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     pub fn add_node(&mut self, node: OntologyNode) {
         self.nodes.push(node);

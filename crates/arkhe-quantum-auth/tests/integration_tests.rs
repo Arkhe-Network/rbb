@@ -49,7 +49,12 @@ fn setup_node(did_prefix: u8) -> Node {
     };
 
     let stack = QuantumAuthStack::new(fast, slow, policy, context);
-    Node { stack, did, kem_sk, kem_pk }
+    Node {
+        stack,
+        did,
+        kem_sk,
+        kem_pk,
+    }
 }
 
 #[test]
@@ -61,7 +66,10 @@ fn test_full_link_establishment_and_herald_exchange() {
 
     let bob_kem_pk = bob.kem_pk.clone();
     // encapsulate uses bob's pk!
-    let (encap_msg, alice_ss) = alice.stack.slow.bootstrap_encapsulate(&bob_kem_pk, &mut OsRng);
+    let (encap_msg, alice_ss) = alice
+        .stack
+        .slow
+        .bootstrap_encapsulate(&bob_kem_pk, &mut OsRng);
 
     let mut buf = alloc::vec::Vec::new();
     match &encap_msg {
@@ -80,7 +88,11 @@ fn test_full_link_establishment_and_herald_exchange() {
 
     // bob uses his own sk
     let bob_kem_sk = bob.kem_sk.clone();
-    let (mut bob_ss, _peer_pk) = bob.stack.slow.bootstrap_decapsulate(&decap_msg, &bob_kem_sk).unwrap();
+    let (mut bob_ss, _peer_pk) = bob
+        .stack
+        .slow
+        .bootstrap_decapsulate(&decap_msg, &bob_kem_sk)
+        .unwrap();
 
     assert_eq!(alice_ss, bob_ss);
 }

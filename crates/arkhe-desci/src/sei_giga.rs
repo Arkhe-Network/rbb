@@ -10,7 +10,6 @@
 
 use serde::{Deserialize, Serialize};
 
-
 /// Mensagem para ancorar um dataset
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnchorMsg {
