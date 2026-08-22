@@ -40,7 +40,7 @@ members = [
     "crates/arkhe-ontology", "crates/arkhe-inertia",
     "crates/arkhe-quantum-auth", "crates/arkhe-haselgrove",
     "crates/cathedral-xtask",
-    "crates/safe-core-utils",
+    "crates/arkhe-vision",
 ]
 resolver = "2"
 
