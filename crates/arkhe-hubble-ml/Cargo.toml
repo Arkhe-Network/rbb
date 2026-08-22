@@ -1,0 +1,31 @@
+[package]
+name = "arkhe-hubble-ml"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+# Core async
+tokio = { version = "1.40", features = ["rt-multi-thread", "sync", "time", "macros"] }
+
+# FFT for phonon mode analysis
+rustfft = { version = "6.2" }
+num-complex = { version = "0.4" }
+
+# Array processing
+ndarray = { version = "0.16" }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+
+# Error handling
+thiserror = "2.0"
+
+# Logging
+tracing = "0.1"
+
+# Math utilities
+num-traits = "0.2"
+
+[dev-dependencies]
+tokio-test = "0.4"
+approx = "0.5"

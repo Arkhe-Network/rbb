@@ -41,6 +41,7 @@ members = [
     "crates/arkhe-quantum-auth", "crates/arkhe-haselgrove",
     "crates/cathedral-xtask",
     "crates/arkhe-vision",
+    "crates/arkhe-hubble-ml",
 ]
 resolver = "2"
 
