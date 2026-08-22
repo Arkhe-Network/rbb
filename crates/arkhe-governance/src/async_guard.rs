@@ -3,7 +3,7 @@
 //! ✅ P9: Fornece alternativa async para contextos Tokio.
 
 use crate::guard::{GovernanceGuard, GuardError};
-use crate::invariants::{GovernanceAction};
+use crate::invariants::GovernanceAction;
 
 /// Versão async do GovernanceGuard.
 pub struct AsyncGovernanceGuard {
@@ -22,11 +22,7 @@ impl AsyncGovernanceGuard {
         guard.submit(action)
     }
 
-    pub async fn execute<F, R>(
-        &self,
-        proposal_id: &str,
-        action: F,
-    ) -> Result<R, GuardError>
+    pub async fn execute<F, R>(&self, proposal_id: &str, action: F) -> Result<R, GuardError>
     where
         F: FnOnce(&GovernanceAction) -> Result<R, String>,
     {

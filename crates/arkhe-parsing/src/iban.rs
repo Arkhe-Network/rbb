@@ -1,10 +1,5 @@
-use nom::{
-    IResult,
-    bytes::complete::take_while_m_n,
-    sequence::tuple,
-    combinator::map,
-};
 use crate::error::{ParseError, ParseResult};
+use nom::{bytes::complete::take_while_m_n, combinator::map, sequence::tuple, IResult};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Iban {
@@ -21,14 +16,23 @@ impl Iban {
 
     pub fn formatted(&self) -> String {
         let raw = format!("{}{}{}", self.country_code, self.check_digits, self.bban);
-        raw.chars().collect::<Vec<_>>().chunks(4).map(|c| c.iter().collect::<String>()).collect::<Vec<_>>().join(" ")
+        raw.chars()
+            .collect::<Vec<_>>()
+            .chunks(4)
+            .map(|c| c.iter().collect::<String>())
+            .collect::<Vec<_>>()
+            .join(" ")
     }
 }
 
 fn parse_iban(input: &str) -> IResult<&str, Iban> {
     map(
         tuple((parse_country_code, parse_check_digits, parse_bban)),
-        |(cc, cd, bban)| Iban { country_code: cc.to_string(), check_digits: cd.to_string(), bban: bban.to_string() },
+        |(cc, cd, bban)| Iban {
+            country_code: cc.to_string(),
+            check_digits: cd.to_string(),
+            bban: bban.to_string(),
+        },
     )(input)
 }
 

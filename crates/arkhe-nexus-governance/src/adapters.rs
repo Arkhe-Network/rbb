@@ -1,6 +1,6 @@
 //! Adaptadores para integrar GovernanceGuard no NEXUS/Safe Core.
 use arkhe_governance::{
-    ActionClass, GovernanceAction, ExecutedAction, ExecutionResult, GovernanceGuard, GuardError,
+    ActionClass, ExecutedAction, ExecutionResult, GovernanceAction, GovernanceGuard, GuardError,
 };
 use chrono::Duration;
 
@@ -8,7 +8,7 @@ use chrono::Duration;
 ///
 /// Uso: Substituir o SafeCoreGuard existente por esta struct.
 pub struct NexusGovernanceAdapter {
-    guard: std::sync::Arc<GovernanceGuard>
+    guard: std::sync::Arc<GovernanceGuard>,
 }
 
 impl NexusGovernanceAdapter {
@@ -37,11 +37,15 @@ impl NexusGovernanceAdapter {
         F: FnOnce(&GovernanceAction) -> Result<(), String>,
     {
         // Passo 1: Submit (verifica I_gov no momento da submissão)
-        let id_str = self.guard.submit(proposal.clone())
+        let id_str = self
+            .guard
+            .submit(proposal.clone())
             .map_err(NexusGovernanceError::GovernanceViolation)?;
 
         // Passo 2: Execute (re-verifica I_gov + timelock no momento da execução)
-        let _ = self.guard.execute(&id_str, action)
+        let _ = self
+            .guard
+            .execute(&id_str, action)
             .map_err(NexusGovernanceError::GovernanceError)?;
 
         Ok(ExecutionResult::Success)
@@ -55,7 +59,8 @@ impl NexusGovernanceAdapter {
         proposal_id: &str,
         cancellation_proposal: &GovernanceAction,
     ) -> Result<(), NexusGovernanceError> {
-        self.guard.cancel(proposal_id, cancellation_proposal)
+        self.guard
+            .cancel(proposal_id, cancellation_proposal)
             .map_err(NexusGovernanceError::GovernanceError)
     }
 

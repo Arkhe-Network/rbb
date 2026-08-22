@@ -1,5 +1,5 @@
+use chrono::{DateTime, Utc};
 use std::collections::HashMap;
-use chrono::{Utc, DateTime};
 
 #[derive(Clone, Debug)]
 pub enum OrderSide {
@@ -22,12 +22,12 @@ pub struct PricingContext {
     pub liquidity: u64,
     pub volatility: f64,
     pub timestamp: DateTime<Utc>,
-    pub peer_reputation: f64,  // 0.0 - 1.0
+    pub peer_reputation: f64, // 0.0 - 1.0
 }
 
 pub struct MarketSpreadPricing {
-    spread_base: f64,          // spread base (ex: 0.01 = 1%)
-    spread_volatility_factor: f64,  // fator de volatilidade
+    spread_base: f64,              // spread base (ex: 0.01 = 1%)
+    spread_volatility_factor: f64, // fator de volatilidade
     min_spread: f64,
     max_spread: f64,
 }

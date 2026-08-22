@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 use std::sync::atomic::{AtomicU64, Ordering};
 
@@ -54,7 +54,7 @@ impl GovernanceAction {
         hasher.update(&action_hash);
 
         Self {
-            id: *hasher.finalize().as_bytes(),  // ✅ P7: ID único por ação
+            id: *hasher.finalize().as_bytes(), // ✅ P7: ID único por ação
             class,
             description,
             proposer_did,
@@ -68,7 +68,8 @@ impl GovernanceAction {
     }
 
     pub fn earliest_execution(&self) -> DateTime<Utc> {
-        let delay = chrono::Duration::from_std(self.requested_delay).expect("duration out of bounds");
+        let delay =
+            chrono::Duration::from_std(self.requested_delay).expect("duration out of bounds");
         self.created_at + delay
     }
 
@@ -111,16 +112,17 @@ impl GovernanceInvariantChecker {
     pub fn record_execution(&mut self, _proposal: &GovernanceAction, _result: ExecutionResult) {}
 
     pub fn check(&self, _action: &GovernanceAction) -> InvariantCheck {
-        InvariantCheck { satisfied: true, summary: "OK".into() }
+        InvariantCheck {
+            satisfied: true,
+            summary: "OK".into(),
+        }
     }
 
     pub fn check_revocation(&self, target: &GovernanceAction) -> Result<(), String> {
-        let elapsed = Utc::now()
-            .signed_duration_since(target.created_at)
-            ;
+        let elapsed = Utc::now().signed_duration_since(target.created_at);
 
         let revoke_window = chrono::Duration::from_std(REVOKE_WINDOW)
-            .expect("REVOKE_WINDOW must fit in i64 nanoseconds");  // ✅ P6
+            .expect("REVOKE_WINDOW must fit in i64 nanoseconds"); // ✅ P6
 
         if elapsed > revoke_window {
             return Err("Revocation window expired".into());

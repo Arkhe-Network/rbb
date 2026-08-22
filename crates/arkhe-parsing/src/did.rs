@@ -1,10 +1,10 @@
-use nom::{
-    IResult,
-    bytes::complete::{tag, take_while_m_n},
-    sequence::tuple,
-    combinator::map,
-};
 use crate::error::{ParseError, ParseResult};
+use nom::{
+    bytes::complete::{tag, take_while_m_n},
+    combinator::map,
+    sequence::tuple,
+    IResult,
+};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Did {

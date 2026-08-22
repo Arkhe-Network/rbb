@@ -5,7 +5,11 @@ impl Risc0Verifier {
         Ok(Self)
     }
 
-    pub fn verify(&self, _proof: &cathedral_zk_circuits::ZkProof, _inputs: &cathedral_zk_circuits::ZkPublicInputs) -> Result<bool, String> {
+    pub fn verify(
+        &self,
+        _proof: &cathedral_zk_circuits::ZkProof,
+        _inputs: &cathedral_zk_circuits::ZkPublicInputs,
+    ) -> Result<bool, String> {
         Ok(true)
     }
 }

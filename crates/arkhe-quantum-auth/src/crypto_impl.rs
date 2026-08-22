@@ -1,26 +1,21 @@
-use pqcrypto_traits::kem::SharedSecret;
 use alloc::vec::Vec;
+use pqcrypto_traits::kem::SharedSecret;
 use rand_core::CryptoRngCore;
 
 use crate::error::{AuthError, AuthResult};
 use crate::types::{FastAead, PqKem, PqSignature};
 
 use aes_gcm_siv::{
-    aead::{AeadInPlace, KeyInit, generic_array::GenericArray},
+    aead::{generic_array::GenericArray, AeadInPlace, KeyInit},
     AesGcmSiv, Nonce, Tag,
 };
 
 pub struct Aes256GcmSivAead;
 
 impl FastAead for Aes256GcmSivAead {
-    fn seal(
-        &self,
-        key: &[u8; 32],
-        nonce: &[u8; 12],
-        aad: &[u8],
-        plaintext: &mut [u8],
-    ) -> [u8; 16] {
-        let key = GenericArray::<u8, aes_gcm_siv::aead::generic_array::typenum::U32>::from_slice(key);
+    fn seal(&self, key: &[u8; 32], nonce: &[u8; 12], aad: &[u8], plaintext: &mut [u8]) -> [u8; 16] {
+        let key =
+            GenericArray::<u8, aes_gcm_siv::aead::generic_array::typenum::U32>::from_slice(key);
         let cipher = aes_gcm_siv::Aes256GcmSiv::new(key);
         let nonce = Nonce::from_slice(nonce);
 
@@ -41,7 +36,8 @@ impl FastAead for Aes256GcmSivAead {
         ciphertext: &mut [u8],
         tag: &[u8; 16],
     ) -> AuthResult<()> {
-        let key = GenericArray::<u8, aes_gcm_siv::aead::generic_array::typenum::U32>::from_slice(key);
+        let key =
+            GenericArray::<u8, aes_gcm_siv::aead::generic_array::typenum::U32>::from_slice(key);
         let cipher = aes_gcm_siv::Aes256GcmSiv::new(key);
         let nonce = Nonce::from_slice(nonce);
         let tag = Tag::from_slice(tag);
@@ -53,7 +49,9 @@ impl FastAead for Aes256GcmSivAead {
 }
 
 use pqcrypto_dilithium::dilithium3 as dilithium;
-use pqcrypto_traits::sign::{PublicKey as PqPublicKey, SecretKey as PqSecretKey, DetachedSignature};
+use pqcrypto_traits::sign::{
+    DetachedSignature, PublicKey as PqPublicKey, SecretKey as PqSecretKey,
+};
 
 pub struct MlDsa65;
 
@@ -82,7 +80,10 @@ impl PqSignature for MlDsa65 {
 }
 
 use pqcrypto_kyber::kyber768;
-use pqcrypto_traits::kem::{PublicKey as KemPublicKey, SecretKey as KemSecretKey, Ciphertext as KemCiphertext, SharedSecret as KemSharedSecret};
+use pqcrypto_traits::kem::{
+    Ciphertext as KemCiphertext, PublicKey as KemPublicKey, SecretKey as KemSecretKey,
+    SharedSecret as KemSharedSecret,
+};
 use x25519_dalek::{PublicKey as X25519PublicKey, StaticSecret as X25519StaticSecret};
 
 pub struct XWingKem;
@@ -116,8 +117,8 @@ impl PqKem for XWingKem {
         let kyber_pk_bytes = &pk[..KYBER_PK_LEN];
         let x25519_pk_bytes = &pk[KYBER_PK_LEN..KYBER_PK_LEN + X25519_PK_LEN];
 
-        let kyber_pk = kyber768::PublicKey::from_bytes(kyber_pk_bytes)
-            .expect("invalid Kyber768 public key");
+        let kyber_pk =
+            kyber768::PublicKey::from_bytes(kyber_pk_bytes).expect("invalid Kyber768 public key");
 
         let (kyber_ct, kyber_ss) = kyber768::encapsulate(&kyber_pk);
 
@@ -153,7 +154,8 @@ impl PqKem for XWingKem {
         let kyber_sk = kyber768::SecretKey::from_bytes(&sk[..KYBER_SK_LEN])
             .map_err(|_| AuthError::InvalidKey)?;
         let kyber_ss = kyber768::decapsulate(
-            &kyber768::Ciphertext::from_bytes(kyber_ct_bytes).map_err(|_| AuthError::KemDecapsulation)?,
+            &kyber768::Ciphertext::from_bytes(kyber_ct_bytes)
+                .map_err(|_| AuthError::KemDecapsulation)?,
             &kyber_sk,
         );
 
@@ -161,9 +163,8 @@ impl PqKem for XWingKem {
             .try_into()
             .map_err(|_| AuthError::InvalidKey)?;
         let x25519_sk = X25519StaticSecret::from(x25519_sk_bytes);
-        let x25519_eph_pk = X25519PublicKey::from(
-            x25519_eph_pk_bytes.try_into().unwrap_or([0u8; 32])
-        );
+        let x25519_eph_pk =
+            X25519PublicKey::from(x25519_eph_pk_bytes.try_into().unwrap_or([0u8; 32]));
         let x25519_ss = x25519_sk.diffie_hellman(&x25519_eph_pk);
 
         let mut ss = [0u8; 32];

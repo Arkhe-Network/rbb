@@ -1,2 +1,2 @@
-pub mod zk;
 pub mod nostr;
+pub mod zk;

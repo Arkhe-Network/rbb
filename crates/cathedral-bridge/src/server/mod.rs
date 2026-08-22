@@ -1,8 +1,8 @@
+use cathedral_nostr::NostrReplicator;
+use cathedral_wormgraph::Wormgraph;
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use cathedral_wormgraph::Wormgraph;
-use cathedral_nostr::NostrReplicator;
 
 #[derive(Clone)]
 pub struct VerificationKey {

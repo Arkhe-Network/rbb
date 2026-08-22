@@ -18,15 +18,15 @@ pub struct InertiaCertificate {
     pub on_line_achieved: bool,
     pub simple_achieved: bool,
     pub distinct_achieved: bool,
-    pub c_eff: f64,                 // Constante efetiva (Montgomery-Taylor)
-    pub window_lambda: f64,         // Parâmetro de janela ótimo
+    pub c_eff: f64,         // Constante efetiva (Montgomery-Taylor)
+    pub window_lambda: f64, // Parâmetro de janela ótimo
 }
 
 pub struct InertiaCertifier {
-    pub threshold_on_line: f64,   // 2/3
-    pub threshold_simple: f64,    // 2/3
-    pub threshold_distinct: f64,  // 5/6
-    pub window_lambda: f64,       // λ para otimização da janela
+    pub threshold_on_line: f64,  // 2/3
+    pub threshold_simple: f64,   // 2/3
+    pub threshold_distinct: f64, // 5/6
+    pub window_lambda: f64,      // λ para otimização da janela
 }
 
 impl InertiaCertifier {
@@ -81,7 +81,7 @@ impl InertiaCertifier {
     pub fn optimize_window(&self, v: &mut Vec<f64>) -> f64 {
         // v é a distribuição de confiabilidade
         let sum_v: f64 = v.iter().sum();
-        let sum_v2: f64 = v.iter().map(|x| x*x).sum();
+        let sum_v2: f64 = v.iter().map(|x| x * x).sum();
         let n = v.len() as f64;
 
         // Aproximação da integral dupla
@@ -116,7 +116,12 @@ impl DerivativeCertifier {
     }
 
     /// Certifica a derivada da matriz de coerência
-    pub fn certify_derivative(&self, matrix: &DMatrix<f64>, matrix_prev: &DMatrix<f64>, dt: f64) -> DerivativeCertificate {
+    pub fn certify_derivative(
+        &self,
+        matrix: &DMatrix<f64>,
+        matrix_prev: &DMatrix<f64>,
+        dt: f64,
+    ) -> DerivativeCertificate {
         let deriv = (matrix - matrix_prev) / dt;
         let eigen = SymmetricEigen::new(deriv.clone());
         let vals = eigen.eigenvalues;
@@ -144,15 +149,15 @@ pub struct DerivativeCertificate {
 }
 
 pub struct WindowOptimizer {
-    pub lambda: f64,          // parâmetro de janela (análogo à constante de Montgomery)
-    pub v: Vec<f64>,          // distribuição de confiabilidade (normalizada)
+    pub lambda: f64, // parâmetro de janela (análogo à constante de Montgomery)
+    pub v: Vec<f64>, // distribuição de confiabilidade (normalizada)
 }
 
 impl WindowOptimizer {
     /// Calcula o funcional c(v) e sua derivada para otimização
     pub fn functional(&self) -> f64 {
         let sum_v: f64 = self.v.iter().sum();
-        let sum_v2: f64 = self.v.iter().map(|x| x*x).sum();
+        let sum_v2: f64 = self.v.iter().map(|x| x * x).sum();
         let _n = self.v.len() as f64;
         // Aproximação do termo integral duplo
         let integral = self.compute_double_integral();
@@ -174,7 +179,7 @@ impl WindowOptimizer {
 
     fn compute_gradient(&self) -> Vec<f64> {
         let sum_v: f64 = self.v.iter().sum();
-        let sum_v2: f64 = self.v.iter().map(|x| x*x).sum();
+        let sum_v2: f64 = self.v.iter().map(|x| x * x).sum();
         let n = self.v.len() as f64;
         let integral = self.compute_double_integral();
 
@@ -210,11 +215,15 @@ impl WindowOptimizer {
         let grad = self.compute_gradient();
         for i in 0..self.v.len() {
             self.v[i] += lr * grad[i];
-            if self.v[i] < 0.0 { self.v[i] = 0.0; }
+            if self.v[i] < 0.0 {
+                self.v[i] = 0.0;
+            }
         }
         // Normaliza
         let sum: f64 = self.v.iter().sum();
-        for x in &mut self.v { *x /= sum; }
+        for x in &mut self.v {
+            *x /= sum;
+        }
     }
 
     /// Atualiza o parâmetro λ para o valor ótimo (Montgomery-Taylor)

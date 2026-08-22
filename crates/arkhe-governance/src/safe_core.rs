@@ -1,4 +1,4 @@
-use chrono::{Timelike, Datelike, TimeZone};
+use chrono::{Datelike, TimeZone, Timelike};
 
 /// Erro de hook do Safe Core.
 #[derive(Debug, thiserror::Error, Clone)]
@@ -57,7 +57,9 @@ impl SafeCoreHook for BusinessHoursHook {
         if !self.is_allowed_at(now) {
             return Err(HookError::Blocked(format!(
                 "Fora do horário de expediente ({}h, precisa {}h-{}h)",
-                now.hour(), self.start_hour, self.end_hour
+                now.hour(),
+                self.start_hour,
+                self.end_hour
             )));
         }
         Ok(())
@@ -76,21 +78,27 @@ mod tests {
     #[test]
     fn test_business_hours_allows_weekday_10h() {
         let hook = BusinessHoursHook::weekday_9_to_18();
-        let tuesday_10h = chrono::Local.with_ymd_and_hms(2023, 10, 10, 10, 0, 0).unwrap();
+        let tuesday_10h = chrono::Local
+            .with_ymd_and_hms(2023, 10, 10, 10, 0, 0)
+            .unwrap();
         assert!(hook.is_allowed_at(tuesday_10h));
     }
 
     #[test]
     fn test_business_hours_blocks_sunday_20h() {
         let hook = BusinessHoursHook::weekday_9_to_18();
-        let sunday_20h = chrono::Local.with_ymd_and_hms(2023, 10, 8, 20, 0, 0).unwrap();
+        let sunday_20h = chrono::Local
+            .with_ymd_and_hms(2023, 10, 8, 20, 0, 0)
+            .unwrap();
         assert!(!hook.is_allowed_at(sunday_20h));
     }
 
     #[test]
     fn test_business_hours_blocks_tuesday_5h() {
         let hook = BusinessHoursHook::weekday_9_to_18();
-        let tuesday_5h = chrono::Local.with_ymd_and_hms(2023, 10, 10, 5, 0, 0).unwrap();
+        let tuesday_5h = chrono::Local
+            .with_ymd_and_hms(2023, 10, 10, 5, 0, 0)
+            .unwrap();
         assert!(!hook.is_allowed_at(tuesday_5h));
     }
 

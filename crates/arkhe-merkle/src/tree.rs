@@ -1,5 +1,5 @@
-use crate::proof::Proof;
 use crate::error::MerkleError;
+use crate::proof::Proof;
 use blake3::Hasher;
 
 pub type MerkleHash = [u8; 32];
@@ -13,7 +13,10 @@ pub struct MerkleTree {
 
 impl MerkleTree {
     pub fn new() -> Self {
-        Self { levels: Vec::new(), leaf_count: 0 }
+        Self {
+            levels: Vec::new(),
+            leaf_count: 0,
+        }
     }
 
     /// Append incremental: apenas recalcula caminho da folha até raiz
@@ -26,7 +29,7 @@ impl MerkleTree {
         }
 
         let mut current_hash = leaf;
-        let mut index = self.leaf_count - 1;  // índice da nova folha
+        let mut index = self.leaf_count - 1; // índice da nova folha
         let mut level = 0;
 
         while index % 2 == 1 || level < self.levels.len() {

@@ -35,7 +35,11 @@ pub struct PhotonDetectionPattern {
 }
 
 pub trait QuantumMemoryController {
-    fn store(&mut self, mode: u8, pulse_params: &EitPulseSequence) -> Result<StorageHandle, QmError>;
+    fn store(
+        &mut self,
+        mode: u8,
+        pulse_params: &EitPulseSequence,
+    ) -> Result<StorageHandle, QmError>;
 
     fn interfere_for_gbs(
         &mut self,
@@ -51,10 +55,7 @@ pub trait QuantumMemoryController {
         dim: u8,
     ) -> Result<(), QmError>;
 
-    fn read_measurement(
-        &self,
-        handle: StorageHandle,
-    ) -> Result<(u32, u32), QmError>;
+    fn read_measurement(&self, handle: StorageHandle) -> Result<(u32, u32), QmError>;
 
     fn remaining_coherence_ns(&self, handle: StorageHandle) -> Result<u64, QmError>;
 }
