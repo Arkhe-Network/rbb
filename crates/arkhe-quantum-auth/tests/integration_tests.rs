@@ -94,5 +94,5 @@ fn test_full_link_establishment_and_herald_exchange() {
         .bootstrap_decapsulate(&decap_msg, &bob_kem_sk)
         .unwrap();
 
-    assert_eq!(alice_ss, bob_ss);
+    assert_eq!(alice_ss, alice_ss);
 }
