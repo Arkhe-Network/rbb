@@ -1,5 +1,5 @@
-use alloc::string::String;
 use alloc::format;
+use alloc::string::String;
 
 use crate::fast_path::HeraldMessage;
 use crate::slow_path::SlowPathMessage;
@@ -32,7 +32,7 @@ impl Default for PolicyContext {
             last_rotation_ns: 0,
             anomaly_score: 0.0,
             max_mode_idx: 10,
-            clock_skew_tolerance_ns: 1_000_000, // 1 ms
+            clock_skew_tolerance_ns: 1_000_000,       // 1 ms
             min_rotation_interval_ns: 60_000_000_000, // 60 s
         }
     }
@@ -67,7 +67,8 @@ impl PolicyEngine for QuantumLinkPolicy {
         if msg.mode_idx > ctx.max_mode_idx {
             log::warn!(
                 "policy reject: mode_idx={} > max={}",
-                msg.mode_idx, ctx.max_mode_idx
+                msg.mode_idx,
+                ctx.max_mode_idx
             );
             return PolicyDecision::Reject {
                 reason: format!("invalid_mode_idx:{}", msg.mode_idx),
@@ -78,7 +79,8 @@ impl PolicyEngine for QuantumLinkPolicy {
         if msg.timestamp_ns > now.saturating_add(ctx.clock_skew_tolerance_ns) {
             log::warn!(
                 "policy reject: future timestamp {} > now {} + tolerance",
-                msg.timestamp_ns, now
+                msg.timestamp_ns,
+                now
             );
             return PolicyDecision::Reject {
                 reason: "future_timestamp".into(),
@@ -106,7 +108,9 @@ impl PolicyEngine for QuantumLinkPolicy {
         if elapsed < ctx.min_rotation_interval_ns {
             let remaining = ctx.min_rotation_interval_ns - elapsed;
             log::debug!("slow path rate-limit: {}ns remaining", remaining);
-            return PolicyDecision::RateLimit { delay_ns: remaining };
+            return PolicyDecision::RateLimit {
+                delay_ns: remaining,
+            };
         }
         PolicyDecision::Allow
     }

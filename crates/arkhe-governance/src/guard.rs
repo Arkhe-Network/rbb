@@ -11,9 +11,11 @@
 //!
 //! Veja crate::async_guard::AsyncGovernanceGuard para versão async.
 
-use std::sync::Mutex;
-use crate::invariants::{GovernanceAction, ExecutedAction, ExecutionResult, GovernanceInvariantChecker};
+use crate::invariants::{
+    ExecutedAction, ExecutionResult, GovernanceAction, GovernanceInvariantChecker,
+};
 use crate::safe_core::SafeCoreHook;
+use std::sync::Mutex;
 
 #[derive(Debug, thiserror::Error, Clone)]
 pub enum GuardError {
@@ -37,7 +39,7 @@ pub struct GovernanceGuard {
 impl GovernanceGuard {
     pub fn new() -> Self {
         Self {
-            checker: Mutex::new(GovernanceInvariantChecker::default()),  // ✅ P1
+            checker: Mutex::new(GovernanceInvariantChecker::default()), // ✅ P1
             pending: Mutex::new(Vec::new()),
             executed: Mutex::new(Vec::new()),
             hooks: Mutex::new(Vec::new()),
@@ -60,30 +62,32 @@ impl GovernanceGuard {
         Ok(id_str)
     }
 
-    pub fn execute<F, R>(
-        &self,
-        proposal_id: &str,
-        action: F,
-    ) -> Result<R, GuardError>
+    pub fn execute<F, R>(&self, proposal_id: &str, action: F) -> Result<R, GuardError>
     where
         F: FnOnce(&GovernanceAction) -> Result<R, String>,
     {
         let proposal = {
             let pending = self.pending.lock().unwrap();
-            pending.iter()
+            pending
+                .iter()
                 .find(|p| hex::encode(p.id) == proposal_id)
                 .cloned()
                 .ok_or_else(|| GuardError::NotFound(proposal_id.to_string()))?
         };
 
         // Executar
-        let action_result = action(&proposal); let err_val = if !action_result.is_ok() { action_result.as_ref().err().unwrap().clone() } else { "".to_string() };
+        let action_result = action(&proposal);
+        let err_val = if !action_result.is_ok() {
+            action_result.as_ref().err().unwrap().clone()
+        } else {
+            "".to_string()
+        };
         let success = action_result.is_ok();
         let execution_result = if success {
             ExecutionResult::Success
         } else {
             ExecutionResult::Rejected(
-                err_val  // ✅ P2: erro real
+                err_val, // ✅ P2: erro real
             )
         };
 
@@ -100,7 +104,7 @@ impl GovernanceGuard {
             result: execution_result,
         });
 
-        action_result.map_err(GuardError::ExecutionFailed)  // ✅ P2: retorna Result<R, _>
+        action_result.map_err(GuardError::ExecutionFailed) // ✅ P2: retorna Result<R, _>
     }
 
     pub fn cancel(
@@ -109,7 +113,7 @@ impl GovernanceGuard {
         cancellation: &GovernanceAction,
     ) -> Result<(), GuardError> {
         // Verificar que o cancelamento também satisfaz I_gov
-        let check = self.checker.lock().unwrap().check(cancellation);  // ✅ P1
+        let check = self.checker.lock().unwrap().check(cancellation); // ✅ P1
         if !check.satisfied {
             return Err(GuardError::CancellationDenied(check.summary()));
         }

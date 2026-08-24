@@ -41,7 +41,10 @@ fn main() -> Result<()> {
         Commands::CheckTools => check_tools()?,
     }
 
-    println!("\n{}", "✅ Todas as verificações concluídas com sucesso!".green());
+    println!(
+        "\n{}",
+        "✅ Todas as verificações concluídas com sucesso!".green()
+    );
     println!("⏱️  Tempo total: {:.2}s", start.elapsed().as_secs_f64());
     Ok(())
 }
@@ -56,11 +59,20 @@ fn pre_commit() -> Result<()> {
     check_tools()?;
 
     run("cargo fmt --all -- --check", "Formatação")?;
-    run("cargo check --workspace --all-targets --all-features", "MSRV e sintaxe")?;
-    run("cargo clippy --workspace --all-targets --all-features -- -D warnings", "Lints (clippy)")?;
+    run(
+        "cargo check --workspace --all-targets --all-features",
+        "MSRV e sintaxe",
+    )?;
+    run(
+        "cargo clippy --workspace --all-targets --all-features -- -D warnings",
+        "Lints (clippy)",
+    )?;
     run("cargo deny check", "Dependências (deny)")?;
     run("cargo audit --deny-warnings", "Vulnerabilidades (audit)")?;
-    run("cargo llvm-cov --workspace --lib --lcov --output-path target/lcov-unit.info", "Cobertura unitária")?;
+    run(
+        "cargo llvm-cov --workspace --lib --lcov --output-path target/lcov-unit.info",
+        "Cobertura unitária",
+    )?;
 
     Ok(())
 }
@@ -71,11 +83,23 @@ fn ci() -> Result<()> {
     pre_commit()?;
 
     run("cargo test --workspace", "Testes de integração")?;
-    run("cargo semver-checks --workspace --baseline-rev HEAD~1", "Compatibilidade SemVer")?;
-    run("cargo llvm-cov --workspace --lcov --output-path lcov.info", "Cobertura (llvm-cov)")?;
+    run(
+        "cargo semver-checks --workspace --baseline-rev HEAD~1",
+        "Compatibilidade SemVer",
+    )?;
+    run(
+        "cargo llvm-cov --workspace --lcov --output-path lcov.info",
+        "Cobertura (llvm-cov)",
+    )?;
     run("cargo bench", "Benchmarks")?;
-    run("cargo doc --workspace --no-deps --document-private-items", "Documentação")?;
-    run("cargo insta test --workspace --review", "Snapshot tests (insta)")?;
+    run(
+        "cargo doc --workspace --no-deps --document-private-items",
+        "Documentação",
+    )?;
+    run(
+        "cargo insta test --workspace --review",
+        "Snapshot tests (insta)",
+    )?;
 
     // Verifica se a cobertura está acima de 80% (simplificado)
     check_coverage_threshold()?;
@@ -89,7 +113,10 @@ fn full_audit() -> Result<()> {
     ci()?;
 
     run("cargo deadlinks", "Links quebrados")?;
-    run("cargo check --workspace --all-targets --all-features --ignore-rust-version", "MSRV check")?;
+    run(
+        "cargo check --workspace --all-targets --all-features --ignore-rust-version",
+        "MSRV check",
+    )?;
     run("cargo sbom", "SBOM")?;
 
     Ok(())

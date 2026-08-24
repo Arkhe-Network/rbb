@@ -9,7 +9,11 @@ impl InferenceEngine {
         Self
     }
 
-    pub fn infer(&self, ontology: &CognitiveOntology, query: &str) -> Result<InferenceResult, String> {
+    pub fn infer(
+        &self,
+        ontology: &CognitiveOntology,
+        query: &str,
+    ) -> Result<InferenceResult, String> {
         let mut relevant_nodes = Vec::new();
         for node in &ontology.nodes {
             if node.label.to_lowercase().contains(&query.to_lowercase()) {
@@ -17,8 +21,15 @@ impl InferenceEngine {
             }
         }
 
-        let new_facts: Vec<String> = relevant_nodes.iter()
-            .map(|n| format!("{}: {}", n.label, n.properties.get("definition").unwrap_or(&"".to_string())))
+        let new_facts: Vec<String> = relevant_nodes
+            .iter()
+            .map(|n| {
+                format!(
+                    "{}: {}",
+                    n.label,
+                    n.properties.get("definition").unwrap_or(&"".to_string())
+                )
+            })
             .collect();
 
         Ok(InferenceResult {

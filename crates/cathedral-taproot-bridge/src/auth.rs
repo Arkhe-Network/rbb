@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use thiserror::Error;
 use std::fs;
+use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum AuthError {

@@ -1,10 +1,10 @@
 //! Implementação real do modelo usando llama-cpp-2 (crate corrigida).
 
 use llama_cpp_2::{
+    context::params::LlamaContextParams,
     llama_backend::LlamaBackend,
     llama_batch::LlamaBatch,
     model::{params::LlamaModelParams, AddBos, LlamaModel},
-    context::params::LlamaContextParams,
     sampling::LlamaSampler,
 };
 use std::num::NonZeroU32;
@@ -42,8 +42,7 @@ impl LlamaEngine {
         let backend = LlamaBackend::init().map_err(|e| e.to_string())?;
         let backend = Arc::new(backend);
 
-        let model_params = LlamaModelParams::default()
-            .with_n_gpu_layers(config.n_gpu_layers);
+        let model_params = LlamaModelParams::default().with_n_gpu_layers(config.n_gpu_layers);
 
         let model = LlamaModel::load_from_file(&backend, &config.model_path, &model_params)
             .map_err(|e| e.to_string())?;
@@ -58,22 +57,27 @@ impl LlamaEngine {
     /// Gera uma resposta a partir de um prompt.
     pub fn generate(&self, prompt: &str, max_tokens: usize) -> Result<String, String> {
         let ctx_params = LlamaContextParams::default()
-            .with_n_ctx(Some(NonZeroU32::new(self.config.n_ctx).unwrap_or(NonZeroU32::new(4096).unwrap())))
+            .with_n_ctx(Some(
+                NonZeroU32::new(self.config.n_ctx).unwrap_or(NonZeroU32::new(4096).unwrap()),
+            ))
             .with_n_batch(512);
 
-        let mut ctx = self.model
+        let mut ctx = self
+            .model
             .new_context(&self.backend, ctx_params)
             .map_err(|e| e.to_string())?;
 
         // Tokeniza o prompt
-        let tokens = self.model
+        let tokens = self
+            .model
             .str_to_token(prompt, AddBos::Always)
             .map_err(|e| e.to_string())?;
 
         let n_tokens = tokens.len();
         let mut batch = LlamaBatch::new(n_tokens + max_tokens, 1);
         for (i, &tok) in tokens.iter().enumerate() {
-            batch.add(tok, i as i32, &[0], i == tokens.len() - 1)
+            batch
+                .add(tok, i as i32, &[0], i == tokens.len() - 1)
                 .map_err(|e| e.to_string())?;
         }
         ctx.decode(&mut batch).map_err(|e| e.to_string())?;
@@ -101,7 +105,8 @@ impl LlamaEngine {
             }
 
             // ✅ CORREÇÃO: token_to_piece com 4 parâmetros
-            let piece = self.model
+            let piece = self
+                .model
                 .token_to_piece(token, &mut decoder, false, None)
                 .map_err(|e| e.to_string())?;
 
@@ -109,7 +114,8 @@ impl LlamaEngine {
             generated += 1;
 
             let mut next_batch = LlamaBatch::new(1, 1);
-            next_batch.add(token, 0, &[0], true)
+            next_batch
+                .add(token, 0, &[0], true)
                 .map_err(|e| e.to_string())?;
             ctx.decode(&mut next_batch).map_err(|e| e.to_string())?;
         }

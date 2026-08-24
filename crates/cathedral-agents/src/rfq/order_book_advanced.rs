@@ -1,7 +1,7 @@
+use crate::rfq::pricing_engine::OrderSide;
+use chrono::{DateTime, Utc};
 use std::collections::{HashMap, VecDeque};
 use tokio::sync::Mutex;
-use chrono::{Utc, DateTime};
-use crate::rfq::pricing_engine::OrderSide;
 
 #[derive(Clone, Debug)]
 pub struct Order {
@@ -63,14 +63,16 @@ impl OrderBookAdvanced {
         match side {
             OrderSide::Buy => {
                 orders.sort_by(|a, b| {
-                    b.price.partial_cmp(&a.price)
+                    b.price
+                        .partial_cmp(&a.price)
                         .unwrap()
                         .then(a.created_at.cmp(&b.created_at))
                 });
             }
             OrderSide::Sell => {
                 orders.sort_by(|a, b| {
-                    a.price.partial_cmp(&b.price)
+                    a.price
+                        .partial_cmp(&b.price)
                         .unwrap()
                         .then(a.created_at.cmp(&b.created_at))
                 });

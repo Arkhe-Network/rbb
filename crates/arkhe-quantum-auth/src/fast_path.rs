@@ -41,8 +41,16 @@ impl HeraldMessage {
         let mut tag = [0u8; 16];
         tag.copy_from_slice(&buf[80..96]);
         Ok(Self {
-            src_did: NodeId(buf[0..33].try_into().map_err(|_| crate::error::AuthError::Deserialization)?),
-            dst_did: NodeId(buf[33..66].try_into().map_err(|_| crate::error::AuthError::Deserialization)?),
+            src_did: NodeId(
+                buf[0..33]
+                    .try_into()
+                    .map_err(|_| crate::error::AuthError::Deserialization)?,
+            ),
+            dst_did: NodeId(
+                buf[33..66]
+                    .try_into()
+                    .map_err(|_| crate::error::AuthError::Deserialization)?,
+            ),
             timestamp_ns: u64::from_le_bytes(ts),
             mode_idx: buf[74],
             herald_outcome: buf[75],
@@ -84,19 +92,19 @@ pub struct FastPathAuth<A: FastAead> {
 
 impl<A: FastAead> FastPathAuth<A> {
     pub fn new(key_hierarchy: KeyHierarchy, aead: A) -> Self {
-        Self { key_hierarchy, aead }
+        Self {
+            key_hierarchy,
+            aead,
+        }
     }
 
     pub fn seal_herald(&mut self, msg: &mut HeraldMessage) -> AuthResult<()> {
         let nonce = self.key_hierarchy.tick()?;
         let aad = msg.aad();
         let mut plaintext = [];
-        let tag = self.aead.seal(
-            self.key_hierarchy.burst_key(),
-            &nonce,
-            &aad,
-            &mut plaintext,
-        );
+        let tag = self
+            .aead
+            .seal(self.key_hierarchy.burst_key(), &nonce, &aad, &mut plaintext);
         msg.auth_tag = tag;
         Ok(())
     }

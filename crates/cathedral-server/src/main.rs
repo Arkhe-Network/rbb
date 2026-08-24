@@ -1,8 +1,7 @@
 use axum::{
-    routing::{get, post},
-    Router,
     response::IntoResponse,
-    Json,
+    routing::{get, post},
+    Json, Router,
 };
 use std::net::SocketAddr;
 use tracing::info;
