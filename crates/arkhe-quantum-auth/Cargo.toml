@@ -13,6 +13,7 @@ rust-version = "1.75"
 [features]
 default = ["std"]
 std = [
+
     "alloc",
     "aes-gcm-siv/std",
     "rand/std",
@@ -23,7 +24,8 @@ std = [
 ]
 alloc = []
 # no_std production build: disable std, enable alloc + heapless AEAD
-no_std = ["alloc", "aes-gcm-siv/heapless"]
+no_std = [
+    "alloc", "aes-gcm-siv/heapless"]
 # Integration with Arkhe workspace crates
 arkhe-pea = [] # Removed "dep:arkhe-pea" for now unless we add it
 arkhe-core = [] # Removed "dep:arkhe-core" for now
