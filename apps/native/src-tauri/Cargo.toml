@@ -1,5 +1,6 @@
 [package]
 name = "cathedral-tauri"
+license = "MIT OR Apache-2.0"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,6 +8,7 @@ edition = "2021"
 
 [package.metadata.bundle]
 name = "Cathedral OS"
+license = "MIT OR Apache-2.0"
 identifier = "com.cathedral.os"
 icon = ["icons/icon.icns", "icons/icon.ico"]
 copyright = "Copyright © 2026 Cathedral OS Team"

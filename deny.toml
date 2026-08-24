@@ -1,0 +1,82 @@
+[advisories]
+ignore = [
+    "RUSTSEC-2026-0243",
+    "RUSTSEC-2024-0436",
+    "RUSTSEC-2024-0380",
+    "RUSTSEC-2026-0163",
+    "RUSTSEC-2024-0381",
+    "RUSTSEC-2026-0162",
+    "RUSTSEC-2024-0437",
+    "RUSTSEC-2025-0134",
+    "RUSTSEC-2026-0249",
+    "RUSTSEC-2026-0229",
+    "RUSTSEC-2026-0230",
+    "RUSTSEC-2026-0224",
+    "RUSTSEC-2026-0231",
+    "RUSTSEC-2026-0232",
+    "RUSTSEC-2026-0225",
+    "RUSTSEC-2026-0226",
+    "RUSTSEC-2026-0227",
+    "RUSTSEC-2026-0228",
+    "RUSTSEC-2026-0216",
+    "RUSTSEC-2026-0219",
+    "RUSTSEC-2024-0384",
+    "RUSTSEC-2026-0258"
+]
+
+[licenses]
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "ISC",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "Zlib",
+    "Unicode-DFS-2016",
+    "Unicode-3.0",
+    "OpenSSL",
+    "BSL-1.0",
+    "CC0-1.0",
+    "GPL-1.0-only",
+    "GPL-1.0-or-later",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "GPL-3.0-or-later",
+    "AGPL-1.0-only",
+    "AGPL-1.0-or-later",
+    "AGPL-3.0-only",
+    "AGPL-3.0-or-later",
+    "LGPL-2.0-only",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-only",
+    "LGPL-3.0-or-later",
+    "Unlicense",
+    "MPL-2.0",
+    "CDLA-Permissive-2.0",
+    "MITNFA"
+]
+
+[licenses.private]
+ignore = true
+
+[bans]
+multiple-versions = "allow"
+wildcards = "allow"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+
+[[bans.deny]]
+name = "failure"
+
+[[bans.deny]]
+name = "rustc-serialize"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []

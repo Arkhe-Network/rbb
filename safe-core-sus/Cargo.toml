@@ -1,5 +1,6 @@
 [package]
 name = "safe-core-sus"
+license = "MIT OR Apache-2.0"
 version = "2.1.0"
 edition = "2021"
 description = "Camada de governança ética e compliance para o SUS"
@@ -22,4 +23,5 @@ criterion = "0.5"
 
 [[bench]]
 name = "engine_benchmark"
+license = "MIT OR Apache-2.0"
 harness = false
