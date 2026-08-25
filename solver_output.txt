@@ -1,0 +1,2852 @@
+======================================================================
+ ARKHE-χ: Grad-Shafranov + Two-Temperature Acoplado
+ FEniCSx + PETSc (AMG/Aitken/Gmsh)
+======================================================================
+
+[1] Inicializando solver Grad-Shafranov...
+[GS] Carregando malha: mesh.msh
+======================================================================
+ ARKHE-χ: Grad-Shafranov + Two-Temperature Acoplado
+ FEniCSx + PETSc (AMG/Aitken/Gmsh)
+======================================================================
+
+[1] Inicializando solver Grad-Shafranov...
+[GS] Carregando malha: mesh.msh
+Info    : Reading 'mesh.msh'...
+Info    : 9 entities
+Info    : 98 nodes
+Info    : 194 elements
+Info    : Done reading 'mesh.msh'
+  Refinando malha próximo ao eixo magnético...
+  Refinamento adaptativo requer geração de malha com campo de refinamento no Gmsh.
+  (Utilize o campo 'BackgroundMesh' no Gmsh para refinar perto do eixo.)
+  Refinando malha próximo ao eixo magnético...
+  Refinamento adaptativo requer geração de malha com campo de refinamento no Gmsh.
+  (Utilize o campo 'BackgroundMesh' no Gmsh para refinar perto do eixo.)
+[PETSc] Usando Hypre BoomerAMG (AMG)
+
+[2] Inicializando modelo 0D...
+[PETSc] Usando Hypre BoomerAMG (AMG)
+
+[2] Inicializando modelo 0D...
+
+[3] Resolvendo equilíbrio inicial (Ti=Te=5 keV)...
+
+[3] Resolvendo equilíbrio inicial (Ti=Te=5 keV)...[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/5
+
+  Picard iter 1/5
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/5
+
+  Picard iter 2/5
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 1: ||F|| = 2.165616e-01
+  SNES iter 1: ||F|| = 2.165616e-01
+  SNES iter 2: ||F|| = 3.387344e-02
+  SNES iter 2: ||F|| = 3.387344e-02
+  SNES iter 3: ||F|| = 6.193351e-03
+  SNES iter 3: ||F|| = 6.193351e-03
+  SNES iter 4: ||F|| = 2.100245e-03
+  SNES iter 4: ||F|| = 2.100245e-03
+  SNES iter 5: ||F|| = 8.211573e-04
+  SNES iter 5: ||F|| = 8.211573e-04
+  SNES iter 6: ||F|| = 3.319729e-04
+  SNES iter 6: ||F|| = 3.319729e-04
+  SNES iter 7: ||F|| = 1.358215e-04
+  SNES iter 7: ||F|| = 1.358215e-04
+  SNES iter 8: ||F|| = 5.585052e-05
+  SNES iter 8: ||F|| = 5.585052e-05
+  SNES iter 9: ||F|| = 2.301953e-05
+  SNES iter 9: ||F|| = 2.301953e-05
+  SNES iter 10: ||F|| = 9.498620e-06
+  SNES iter 10: ||F|| = 9.498620e-06
+  SNES iter 11: ||F|| = 3.921712e-06
+  SNES iter 11: ||F|| = 3.921712e-06
+  SNES iter 12: ||F|| = 1.619659e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.619659e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/5
+
+  Picard iter 3/5
+  SNES iter 0: ||F|| = 5.479661e-01
+  SNES iter 0: ||F|| = 5.479661e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 4/5
+
+  Picard iter 4/5
+  SNES iter 0: ||F|| = 6.199930e+00
+  SNES iter 0: ||F|| = 6.199930e+00
+  SNES iter 1: ||F|| = 1.141464e+00
+  SNES iter 1: ||F|| = 1.141464e+00
+  SNES convergence reason: -6, iterations: 1
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 1
+  Newton não convergiu completamente.
+
+  Picard iter 5/5
+
+  Picard iter 5/5
+  SNES iter 0: ||F|| = 2.034681e+00
+  SNES iter 0: ||F|| = 2.034681e+00
+  SNES convergence reason: -3, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -3, iterations: 0
+  Newton não convergiu completamente.
+  Aitken melhorou a solução (dif=0.00e+00)
+  Aitken melhorou a solução (dif=0.00e+00)
+  Picard convergiu em 5 iterações (diff=0.00e+00)
+  Picard convergiu em 5 iterações (diff=0.00e+00)
+  ψ_max = 0.2834 Wb
+  ψ_max = 0.1780 Wb
+
+[4] Evolução temporal acoplada (0.1s, 50 passos)...
+
+[ACOPLAMENTO TEMPORAL]
+  dt = 0.1 s, n_steps = 50
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+[4] Evolução temporal acoplada (0.1s, 50 passos)...
+
+[ACOPLAMENTO TEMPORAL]
+  dt = 0.1 s, n_steps = 50
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 1: ||F|| = 2.165616e-01
+  SNES iter 1: ||F|| = 2.165616e-01
+  SNES iter 2: ||F|| = 3.387344e-02
+  SNES iter 2: ||F|| = 3.387344e-02
+  SNES iter 3: ||F|| = 6.193351e-03
+  SNES iter 3: ||F|| = 6.193351e-03
+  SNES iter 4: ||F|| = 2.100245e-03
+  SNES iter 4: ||F|| = 2.100245e-03
+  SNES iter 5: ||F|| = 8.211573e-04
+  SNES iter 5: ||F|| = 8.211573e-04
+  SNES iter 6: ||F|| = 3.319729e-04
+  SNES iter 6: ||F|| = 3.319729e-04
+  SNES iter 7: ||F|| = 1.358215e-04
+  SNES iter 7: ||F|| = 1.358215e-04
+  SNES iter 8: ||F|| = 5.585052e-05
+  SNES iter 8: ||F|| = 5.585052e-05
+  SNES iter 9: ||F|| = 2.301953e-05
+  SNES iter 9: ||F|| = 2.301953e-05
+  SNES iter 10: ||F|| = 9.498620e-06
+  SNES iter 10: ||F|| = 9.498620e-06
+  SNES iter 11: ||F|| = 3.921712e-06
+  SNES iter 11: ||F|| = 3.921712e-06
+  SNES iter 12: ||F|| = 1.619659e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.619659e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.479661e-01
+  SNES iter 0: ||F|| = 5.479661e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 1/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  step 1/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111329e+00
+  SNES iter 0: ||F|| = 2.111329e+00
+  SNES iter 1: ||F|| = 2.165548e-01
+  SNES iter 1: ||F|| = 2.165548e-01
+  SNES iter 2: ||F|| = 3.387369e-02
+  SNES iter 2: ||F|| = 3.387369e-02
+  SNES iter 3: ||F|| = 6.190309e-03
+  SNES iter 3: ||F|| = 6.190309e-03
+  SNES iter 4: ||F|| = 2.098556e-03
+  SNES iter 4: ||F|| = 2.098556e-03
+  SNES iter 5: ||F|| = 8.204173e-04
+  SNES iter 5: ||F|| = 8.204173e-04
+  SNES iter 6: ||F|| = 3.316497e-04
+  SNES iter 6: ||F|| = 3.316497e-04
+  SNES iter 7: ||F|| = 1.356833e-04
+  SNES iter 7: ||F|| = 1.356833e-04
+  SNES iter 8: ||F|| = 5.579217e-05
+  SNES iter 8: ||F|| = 5.579217e-05
+  SNES iter 9: ||F|| = 2.299505e-05
+  SNES iter 9: ||F|| = 2.299505e-05
+  SNES iter 10: ||F|| = 9.488377e-06
+  SNES iter 10: ||F|| = 9.488377e-06
+  SNES iter 11: ||F|| = 3.917431e-06
+  SNES iter 11: ||F|| = 3.917431e-06
+  SNES iter 12: ||F|| = 1.617872e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.617872e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.480866e-01
+  SNES iter 0: ||F|| = 5.480866e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165333e-01
+  SNES iter 1: ||F|| = 2.165333e-01
+  SNES iter 2: ||F|| = 3.387259e-02
+  SNES iter 2: ||F|| = 3.387259e-02
+  SNES iter 3: ||F|| = 6.183229e-03
+  SNES iter 3: ||F|| = 6.183229e-03
+  SNES iter 4: ||F|| = 2.094744e-03
+  SNES iter 4: ||F|| = 2.094744e-03
+  SNES iter 5: ||F|| = 8.187885e-04
+  SNES iter 5: ||F|| = 8.187885e-04
+  SNES iter 6: ||F|| = 3.309409e-04
+  SNES iter 6: ||F|| = 3.309409e-04
+  SNES iter 7: ||F|| = 1.353799e-04
+  SNES iter 7: ||F|| = 1.353799e-04
+  SNES iter 8: ||F|| = 5.566383e-05
+  SNES iter 8: ||F|| = 5.566383e-05
+  SNES iter 9: ||F|| = 2.294106e-05
+  SNES iter 9: ||F|| = 2.294106e-05
+  SNES iter 10: ||F|| = 9.465722e-06
+  SNES iter 10: ||F|| = 9.465722e-06
+  SNES iter 11: ||F|| = 3.907937e-06
+  SNES iter 11: ||F|| = 3.907937e-06
+  SNES iter 12: ||F|| = 1.613895e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613895e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483865e-01
+  SNES iter 0: ||F|| = 5.483865e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165327e-01
+  SNES iter 1: ||F|| = 2.165327e-01
+  SNES iter 2: ||F|| = 3.387253e-02
+  SNES iter 2: ||F|| = 3.387253e-02
+  SNES iter 3: ||F|| = 6.183081e-03
+  SNES iter 3: ||F|| = 6.183081e-03
+  SNES iter 4: ||F|| = 2.094665e-03
+  SNES iter 4: ||F|| = 2.094665e-03
+  SNES iter 5: ||F|| = 8.187550e-04
+  SNES iter 5: ||F|| = 8.187550e-04
+  SNES iter 6: ||F|| = 3.309264e-04
+  SNES iter 6: ||F|| = 3.309264e-04
+  SNES iter 7: ||F|| = 1.353737e-04
+  SNES iter 7: ||F|| = 1.353737e-04
+  SNES iter 8: ||F|| = 5.566119e-05
+  SNES iter 8: ||F|| = 5.566119e-05
+  SNES iter 9: ||F|| = 2.293994e-05
+  SNES iter 9: ||F|| = 2.293994e-05
+  SNES iter 10: ||F|| = 9.465255e-06
+  SNES iter 10: ||F|| = 9.465255e-06
+  SNES iter 11: ||F|| = 3.907741e-06
+  SNES iter 11: ||F|| = 3.907741e-06
+  SNES iter 12: ||F|| = 1.613813e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613813e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483930e-01
+  SNES iter 0: ||F|| = 5.483930e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165326e-01
+  SNES iter 1: ||F|| = 2.165326e-01
+  SNES iter 2: ||F|| = 3.387249e-02
+  SNES iter 2: ||F|| = 3.387249e-02
+  SNES iter 3: ||F|| = 6.183098e-03
+  SNES iter 3: ||F|| = 6.183098e-03
+  SNES iter 4: ||F|| = 2.094684e-03
+  SNES iter 4: ||F|| = 2.094684e-03
+  SNES iter 5: ||F|| = 8.187656e-04
+  SNES iter 5: ||F|| = 8.187656e-04
+  SNES iter 6: ||F|| = 3.309311e-04
+  SNES iter 6: ||F|| = 3.309311e-04
+  SNES iter 7: ||F|| = 1.353757e-04
+  SNES iter 7: ||F|| = 1.353757e-04
+  SNES iter 8: ||F|| = 5.566202e-05
+  SNES iter 8: ||F|| = 5.566202e-05
+  SNES iter 9: ||F|| = 2.294028e-05
+  SNES iter 9: ||F|| = 2.294028e-05
+  SNES iter 10: ||F|| = 9.465392e-06
+  SNES iter 10: ||F|| = 9.465392e-06
+  SNES iter 11: ||F|| = 3.907797e-06
+  SNES iter 11: ||F|| = 3.907797e-06
+  SNES iter 12: ||F|| = 1.613836e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613836e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483933e-01
+  SNES iter 0: ||F|| = 5.483933e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165326e-01
+  SNES iter 1: ||F|| = 2.165326e-01
+  SNES iter 2: ||F|| = 3.387255e-02
+  SNES iter 2: ||F|| = 3.387255e-02
+  SNES iter 3: ||F|| = 6.183030e-03
+  SNES iter 3: ||F|| = 6.183030e-03
+  SNES iter 4: ||F|| = 2.094636e-03
+  SNES iter 4: ||F|| = 2.094636e-03
+  SNES iter 5: ||F|| = 8.187420e-04
+  SNES iter 5: ||F|| = 8.187420e-04
+  SNES iter 6: ||F|| = 3.309207e-04
+  SNES iter 6: ||F|| = 3.309207e-04
+  SNES iter 7: ||F|| = 1.353713e-04
+  SNES iter 7: ||F|| = 1.353713e-04
+  SNES iter 8: ||F|| = 5.566017e-05
+  SNES iter 8: ||F|| = 5.566017e-05
+  SNES iter 9: ||F|| = 2.293952e-05
+  SNES iter 9: ||F|| = 2.293952e-05
+  SNES iter 10: ||F|| = 9.465076e-06
+  SNES iter 10: ||F|| = 9.465076e-06
+  SNES iter 11: ||F|| = 3.907666e-06
+  SNES iter 11: ||F|| = 3.907666e-06
+  SNES iter 12: ||F|| = 1.613782e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613782e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483951e-01
+  SNES iter 0: ||F|| = 5.483951e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111361e+00
+  SNES iter 0: ||F|| = 2.111361e+00
+  SNES iter 1: ||F|| = 2.165147e-01
+  SNES iter 1: ||F|| = 2.165147e-01
+  SNES iter 2: ||F|| = 3.387279e-02
+  SNES iter 2: ||F|| = 3.387279e-02
+  SNES iter 3: ||F|| = 6.175843e-03
+  SNES iter 3: ||F|| = 6.175843e-03
+  SNES iter 4: ||F|| = 2.090494e-03
+  SNES iter 4: ||F|| = 2.090494e-03
+  SNES iter 5: ||F|| = 8.169443e-04
+  SNES iter 5: ||F|| = 8.169443e-04
+  SNES iter 6: ||F|| = 3.301368e-04
+  SNES iter 6: ||F|| = 3.301368e-04
+  SNES iter 7: ||F|| = 1.350360e-04
+  SNES iter 7: ||F|| = 1.350360e-04
+  SNES iter 8: ||F|| = 5.551848e-05
+  SNES iter 8: ||F|| = 5.551848e-05
+  SNES iter 9: ||F|| = 2.288000e-05
+  SNES iter 9: ||F|| = 2.288000e-05
+  SNES iter 10: ||F|| = 9.440138e-06
+  SNES iter 10: ||F|| = 9.440138e-06
+  SNES iter 11: ||F|| = 3.897231e-06
+  SNES iter 11: ||F|| = 3.897231e-06
+  SNES iter 12: ||F|| = 1.609417e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.609417e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.487016e-01
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.487016e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111404e+00
+  SNES iter 0: ||F|| = 2.111404e+00
+  SNES iter 1: ||F|| = 2.165118e-01
+  SNES iter 1: ||F|| = 2.165118e-01
+  SNES iter 2: ||F|| = 3.387214e-02
+  SNES iter 2: ||F|| = 3.387214e-02
+  SNES iter 3: ||F|| = 6.175144e-03
+  SNES iter 3: ||F|| = 6.175144e-03
+  SNES iter 4: ||F|| = 2.090194e-03
+  SNES iter 4: ||F|| = 2.090194e-03
+  SNES iter 5: ||F|| = 8.168453e-04
+  SNES iter 5: ||F|| = 8.168453e-04
+  SNES iter 6: ||F|| = 3.300958e-04
+  SNES iter 6: ||F|| = 3.300958e-04
+  SNES iter 7: ||F|| = 1.350182e-04
+  SNES iter 7: ||F|| = 1.350182e-04
+  SNES iter 8: ||F|| = 5.551077e-05
+  SNES iter 8: ||F|| = 5.551077e-05
+  SNES iter 9: ||F|| = 2.287665e-05
+  SNES iter 9: ||F|| = 2.287665e-05
+  SNES iter 10: ||F|| = 9.438690e-06
+  SNES iter 10: ||F|| = 9.438690e-06
+  SNES iter 11: ||F|| = 3.896605e-06
+  SNES iter 11: ||F|| = 3.896605e-06
+  SNES iter 12: ||F|| = 1.609148e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.609148e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.487460e-01
+  SNES iter 0: ||F|| = 5.487460e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 2: ||F|| = 3.387271e-02
+  SNES iter 2: ||F|| = 3.387271e-02
+  SNES iter 3: ||F|| = 6.183493e-03
+  SNES iter 3: ||F|| = 6.183493e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 10: ||F|| = 9.466507e-06
+  SNES iter 10: ||F|| = 9.466507e-06
+  SNES iter 11: ||F|| = 3.908268e-06
+  SNES iter 11: ||F|| = 3.908268e-06
+  SNES iter 12: ||F|| = 1.614035e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614035e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483743e-01
+  SNES iter 0: ||F|| = 5.483743e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 2: ||F|| = 3.387274e-02
+  SNES iter 2: ||F|| = 3.387274e-02
+  SNES iter 3: ||F|| = 6.183498e-03
+  SNES iter 3: ||F|| = 6.183498e-03
+  SNES iter 4: ||F|| = 2.094881e-03
+  SNES iter 4: ||F|| = 2.094881e-03
+  SNES iter 5: ||F|| = 8.188444e-04
+  SNES iter 5: ||F|| = 8.188444e-04
+  SNES iter 6: ||F|| = 3.309651e-04
+  SNES iter 6: ||F|| = 3.309651e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 8: ||F|| = 5.566826e-05
+  SNES iter 8: ||F|| = 5.566826e-05
+  SNES iter 9: ||F|| = 2.294293e-05
+  SNES iter 9: ||F|| = 2.294293e-05
+  SNES iter 10: ||F|| = 9.466514e-06
+  SNES iter 10: ||F|| = 9.466514e-06
+  SNES iter 11: ||F|| = 3.908271e-06
+  SNES iter 11: ||F|| = 3.908271e-06
+  SNES iter 12: ||F|| = 1.614036e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614036e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483742e-01
+  SNES iter 0: ||F|| = 5.483742e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 2: ||F|| = 3.387268e-02
+  SNES iter 2: ||F|| = 3.387268e-02
+  SNES iter 3: ||F|| = 6.183472e-03
+  SNES iter 3: ||F|| = 6.183472e-03
+  SNES iter 4: ||F|| = 2.094870e-03
+  SNES iter 4: ||F|| = 2.094870e-03
+  SNES iter 5: ||F|| = 8.188406e-04
+  SNES iter 5: ||F|| = 8.188406e-04
+  SNES iter 6: ||F|| = 3.309635e-04
+  SNES iter 6: ||F|| = 3.309635e-04
+  SNES iter 7: ||F|| = 1.353896e-04
+  SNES iter 7: ||F|| = 1.353896e-04
+  SNES iter 8: ||F|| = 5.566795e-05
+  SNES iter 8: ||F|| = 5.566795e-05
+  SNES iter 9: ||F|| = 2.294280e-05
+  SNES iter 9: ||F|| = 2.294280e-05
+  SNES iter 10: ||F|| = 9.466457e-06
+  SNES iter 10: ||F|| = 9.466457e-06
+  SNES iter 11: ||F|| = 3.908247e-06
+  SNES iter 11: ||F|| = 3.908247e-06
+  SNES iter 12: ||F|| = 1.614025e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614025e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483754e-01
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483754e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 11/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 11/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111311e+00
+  SNES iter 0: ||F|| = 2.111311e+00
+  SNES iter 1: ||F|| = 2.165603e-01
+  SNES iter 1: ||F|| = 2.165603e-01
+  SNES iter 2: ||F|| = 3.387310e-02
+  SNES iter 2: ||F|| = 3.387310e-02
+  SNES iter 3: ||F|| = 6.193626e-03
+  SNES iter 3: ||F|| = 6.193626e-03
+  SNES iter 4: ||F|| = 2.100365e-03
+  SNES iter 4: ||F|| = 2.100365e-03
+  SNES iter 5: ||F|| = 8.211996e-04
+  SNES iter 5: ||F|| = 8.211996e-04
+  SNES iter 6: ||F|| = 3.319917e-04
+  SNES iter 6: ||F|| = 3.319917e-04
+  SNES iter 7: ||F|| = 1.358301e-04
+  SNES iter 7: ||F|| = 1.358301e-04
+  SNES iter 8: ||F|| = 5.585442e-05
+  SNES iter 8: ||F|| = 5.585442e-05
+  SNES iter 9: ||F|| = 2.302128e-05
+  SNES iter 9: ||F|| = 2.302128e-05
+  SNES iter 10: ||F|| = 9.499405e-06
+  SNES iter 10: ||F|| = 9.499405e-06
+  SNES iter 11: ||F|| = 3.922061e-06
+  SNES iter 11: ||F|| = 3.922061e-06
+  SNES iter 12: ||F|| = 1.619814e-06
+  SNES iter 12: ||F|| = 1.619814e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.479483e-01
+  SNES iter 0: ||F|| = 5.479483e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165325e-01
+  SNES iter 1: ||F|| = 2.165325e-01
+  SNES iter 2: ||F|| = 3.387251e-02
+  SNES iter 2: ||F|| = 3.387251e-02
+  SNES iter 3: ||F|| = 6.183054e-03
+  SNES iter 3: ||F|| = 6.183054e-03
+  SNES iter 4: ||F|| = 2.094654e-03
+  SNES iter 4: ||F|| = 2.094654e-03
+  SNES iter 5: ||F|| = 8.187514e-04
+  SNES iter 5: ||F|| = 8.187514e-04
+  SNES iter 6: ||F|| = 3.309249e-04
+  SNES iter 6: ||F|| = 3.309249e-04
+  SNES iter 7: ||F|| = 1.353731e-04
+  SNES iter 7: ||F|| = 1.353731e-04
+  SNES iter 8: ||F|| = 5.566091e-05
+  SNES iter 8: ||F|| = 5.566091e-05
+  SNES iter 9: ||F|| = 2.293982e-05
+  SNES iter 9: ||F|| = 2.293982e-05
+  SNES iter 10: ||F|| = 9.465200e-06
+  SNES iter 10: ||F|| = 9.465200e-06
+  SNES iter 11: ||F|| = 3.907717e-06
+  SNES iter 11: ||F|| = 3.907717e-06
+  SNES iter 12: ||F|| = 1.613803e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613803e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483946e-01
+  SNES iter 0: ||F|| = 5.483946e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111304e+00
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111304e+00
+  SNES iter 1: ||F|| = 2.165630e-01
+  SNES iter 1: ||F|| = 2.165630e-01
+  SNES iter 2: ||F|| = 3.387384e-02
+  SNES iter 2: ||F|| = 3.387384e-02
+  SNES iter 3: ||F|| = 6.193723e-03
+  SNES iter 3: ||F|| = 6.193723e-03
+  SNES iter 4: ||F|| = 2.100359e-03
+  SNES iter 4: ||F|| = 2.100359e-03
+  SNES iter 5: ||F|| = 8.211854e-04
+  SNES iter 5: ||F|| = 8.211854e-04
+  SNES iter 6: ||F|| = 3.319842e-04
+  SNES iter 6: ||F|| = 3.319842e-04
+  SNES iter 7: ||F|| = 1.358266e-04
+  SNES iter 7: ||F|| = 1.358266e-04
+  SNES iter 8: ||F|| = 5.585290e-05
+  SNES iter 8: ||F|| = 5.585290e-05
+  SNES iter 9: ||F|| = 2.302063e-05
+  SNES iter 9: ||F|| = 2.302063e-05
+  SNES iter 10: ||F|| = 9.499123e-06
+  SNES iter 10: ||F|| = 9.499123e-06
+  SNES iter 11: ||F|| = 3.921940e-06
+  SNES iter 11: ||F|| = 3.921940e-06
+  SNES iter 12: ||F|| = 1.619762e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.619762e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.479425e-01
+  SNES iter 0: ||F|| = 5.479425e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165329e-01
+  SNES iter 1: ||F|| = 2.165329e-01
+  SNES iter 2: ||F|| = 3.387260e-02
+  SNES iter 2: ||F|| = 3.387260e-02
+  SNES iter 3: ||F|| = 6.183094e-03
+  SNES iter 3: ||F|| = 6.183094e-03
+  SNES iter 4: ||F|| = 2.094663e-03
+  SNES iter 4: ||F|| = 2.094663e-03
+  SNES iter 5: ||F|| = 8.187518e-04
+  SNES iter 5: ||F|| = 8.187518e-04
+  SNES iter 6: ||F|| = 3.309249e-04
+  SNES iter 6: ||F|| = 3.309249e-04
+  SNES iter 7: ||F|| = 1.353731e-04
+  SNES iter 7: ||F|| = 1.353731e-04
+  SNES iter 8: ||F|| = 5.566095e-05
+  SNES iter 8: ||F|| = 5.566095e-05
+  SNES iter 9: ||F|| = 2.293985e-05
+  SNES iter 9: ||F|| = 2.293985e-05
+  SNES iter 10: ||F|| = 9.465221e-06
+  SNES iter 10: ||F|| = 9.465221e-06
+  SNES iter 11: ||F|| = 3.907728e-06
+  SNES iter 11: ||F|| = 3.907728e-06
+  SNES iter 12: ||F|| = 1.613808e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613808e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483917e-01
+  SNES iter 0: ||F|| = 5.483917e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165331e-01
+  SNES iter 1: ||F|| = 2.165331e-01
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 3: ||F|| = 6.183140e-03
+  SNES iter 3: ||F|| = 6.183140e-03
+  SNES iter 4: ||F|| = 2.094685e-03
+  SNES iter 4: ||F|| = 2.094685e-03
+  SNES iter 5: ||F|| = 8.187611e-04
+  SNES iter 5: ||F|| = 8.187611e-04
+  SNES iter 6: ||F|| = 3.309289e-04
+  SNES iter 6: ||F|| = 3.309289e-04
+  SNES iter 7: ||F|| = 1.353748e-04
+  SNES iter 7: ||F|| = 1.353748e-04
+  SNES iter 8: ||F|| = 5.566168e-05
+  SNES iter 8: ||F|| = 5.566168e-05
+  SNES iter 9: ||F|| = 2.294016e-05
+  SNES iter 9: ||F|| = 2.294016e-05
+  SNES iter 10: ||F|| = 9.465349e-06
+  SNES iter 10: ||F|| = 9.465349e-06
+  SNES iter 11: ||F|| = 3.907782e-06
+  SNES iter 11: ||F|| = 3.907782e-06
+  SNES iter 12: ||F|| = 1.613831e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613831e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483898e-01
+  SNES iter 0: ||F|| = 5.483898e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165324e-01
+  SNES iter 1: ||F|| = 2.165324e-01
+  SNES iter 2: ||F|| = 3.387250e-02
+  SNES iter 2: ||F|| = 3.387250e-02
+  SNES iter 3: ||F|| = 6.183007e-03
+  SNES iter 3: ||F|| = 6.183007e-03
+  SNES iter 4: ||F|| = 2.094628e-03
+  SNES iter 4: ||F|| = 2.094628e-03
+  SNES iter 5: ||F|| = 8.187401e-04
+  SNES iter 5: ||F|| = 8.187401e-04
+  SNES iter 6: ||F|| = 3.309200e-04
+  SNES iter 6: ||F|| = 3.309200e-04
+  SNES iter 7: ||F|| = 1.353710e-04
+  SNES iter 7: ||F|| = 1.353710e-04
+  SNES iter 8: ||F|| = 5.566002e-05
+  SNES iter 8: ||F|| = 5.566002e-05
+  SNES iter 9: ||F|| = 2.293945e-05
+  SNES iter 9: ||F|| = 2.293945e-05
+  SNES iter 10: ||F|| = 9.465045e-06
+  SNES iter 10: ||F|| = 9.465045e-06
+  SNES iter 11: ||F|| = 3.907652e-06
+  SNES iter 11: ||F|| = 3.907652e-06
+  SNES iter 12: ||F|| = 1.613775e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613775e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483965e-01
+  SNES iter 0: ||F|| = 5.483965e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111357e+00
+  SNES iter 0: ||F|| = 2.111357e+00
+  SNES iter 1: ||F|| = 2.165325e-01
+  SNES iter 1: ||F|| = 2.165325e-01
+  SNES iter 2: ||F|| = 3.387256e-02
+  SNES iter 2: ||F|| = 3.387256e-02
+  SNES iter 3: ||F|| = 6.182619e-03
+  SNES iter 3: ||F|| = 6.182619e-03
+  SNES iter 4: ||F|| = 2.094440e-03
+  SNES iter 4: ||F|| = 2.094440e-03
+  SNES iter 5: ||F|| = 8.186690e-04
+  SNES iter 5: ||F|| = 8.186690e-04
+  SNES iter 6: ||F|| = 3.308893e-04
+  SNES iter 6: ||F|| = 3.308893e-04
+  SNES iter 7: ||F|| = 1.353576e-04
+  SNES iter 7: ||F|| = 1.353576e-04
+  SNES iter 8: ||F|| = 5.565424e-05
+  SNES iter 8: ||F|| = 5.565424e-05
+  SNES iter 9: ||F|| = 2.293696e-05
+  SNES iter 9: ||F|| = 2.293696e-05
+  SNES iter 10: ||F|| = 9.463977e-06
+  SNES iter 10: ||F|| = 9.463977e-06
+  SNES iter 11: ||F|| = 3.907194e-06
+  SNES iter 11: ||F|| = 3.907194e-06
+  SNES iter 12: ||F|| = 1.613580e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613580e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.484196e-01
+  SNES iter 0: ||F|| = 5.484196e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165340e-01
+  SNES iter 1: ||F|| = 2.165340e-01
+  SNES iter 2: ||F|| = 3.387266e-02
+  SNES iter 2: ||F|| = 3.387266e-02
+  SNES iter 3: ||F|| = 6.183440e-03
+  SNES iter 3: ||F|| = 6.183440e-03
+  SNES iter 4: ||F|| = 2.094857e-03
+  SNES iter 4: ||F|| = 2.094857e-03
+  SNES iter 5: ||F|| = 8.188357e-04
+  SNES iter 5: ||F|| = 8.188357e-04
+  SNES iter 6: ||F|| = 3.309614e-04
+  SNES iter 6: ||F|| = 3.309614e-04
+  SNES iter 7: ||F|| = 1.353887e-04
+  SNES iter 7: ||F|| = 1.353887e-04
+  SNES iter 8: ||F|| = 5.566756e-05
+  SNES iter 8: ||F|| = 5.566756e-05
+  SNES iter 9: ||F|| = 2.294263e-05
+  SNES iter 9: ||F|| = 2.294263e-05
+  SNES iter 10: ||F|| = 9.466385e-06
+  SNES iter 10: ||F|| = 9.466385e-06
+  SNES iter 11: ||F|| = 3.908216e-06
+  SNES iter 11: ||F|| = 3.908216e-06
+  SNES iter 12: ||F|| = 1.614012e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614012e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483772e-01
+  SNES iter 0: ||F|| = 5.483772e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165334e-01
+  SNES iter 1: ||F|| = 2.165334e-01
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 3: ||F|| = 6.183224e-03
+  SNES iter 3: ||F|| = 6.183224e-03
+  SNES iter 4: ||F|| = 2.094737e-03
+  SNES iter 4: ||F|| = 2.094737e-03
+  SNES iter 5: ||F|| = 8.187835e-04
+  SNES iter 5: ||F|| = 8.187835e-04
+  SNES iter 6: ||F|| = 3.309387e-04
+  SNES iter 6: ||F|| = 3.309387e-04
+  SNES iter 7: ||F|| = 1.353790e-04
+  SNES iter 7: ||F|| = 1.353790e-04
+  SNES iter 8: ||F|| = 5.566345e-05
+  SNES iter 8: ||F|| = 5.566345e-05
+  SNES iter 9: ||F|| = 2.294090e-05
+  SNES iter 9: ||F|| = 2.294090e-05
+  SNES iter 10: ||F|| = 9.465661e-06
+  SNES iter 10: ||F|| = 9.465661e-06
+  SNES iter 11: ||F|| = 3.907913e-06
+  SNES iter 11: ||F|| = 3.907913e-06
+  SNES iter 12: ||F|| = 1.613886e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613886e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483859e-01
+  SNES iter 0: ||F|| = 5.483859e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 0: ||F|| = 2.111336e+00
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 2: ||F|| = 3.387272e-02
+  SNES iter 2: ||F|| = 3.387272e-02
+  SNES iter 3: ||F|| = 6.183525e-03
+  SNES iter 3: ||F|| = 6.183525e-03
+  SNES iter 4: ||F|| = 2.094894e-03
+  SNES iter 4: ||F|| = 2.094894e-03
+  SNES iter 5: ||F|| = 8.188497e-04
+  SNES iter 5: ||F|| = 8.188497e-04
+  SNES iter 6: ||F|| = 3.309674e-04
+  SNES iter 6: ||F|| = 3.309674e-04
+  SNES iter 7: ||F|| = 1.353913e-04
+  SNES iter 7: ||F|| = 1.353913e-04
+  SNES iter 8: ||F|| = 5.566868e-05
+  SNES iter 8: ||F|| = 5.566868e-05
+  SNES iter 9: ||F|| = 2.294311e-05
+  SNES iter 9: ||F|| = 2.294311e-05
+  SNES iter 10: ||F|| = 9.466590e-06
+  SNES iter 10: ||F|| = 9.466590e-06
+  SNES iter 11: ||F|| = 3.908303e-06
+  SNES iter 11: ||F|| = 3.908303e-06
+  SNES iter 12: ||F|| = 1.614050e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614050e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483727e-01
+  SNES iter 0: ||F|| = 5.483727e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 21/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  step 21/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111327e+00
+  SNES iter 0: ||F|| = 2.111327e+00
+  SNES iter 1: ||F|| = 2.165452e-01
+  SNES iter 1: ||F|| = 2.165452e-01
+  SNES iter 2: ||F|| = 3.387204e-02
+  SNES iter 2: ||F|| = 3.387204e-02
+  SNES iter 3: ||F|| = 6.188389e-03
+  SNES iter 3: ||F|| = 6.188389e-03
+  SNES iter 4: ||F|| = 2.097696e-03
+  SNES iter 4: ||F|| = 2.097696e-03
+  SNES iter 5: ||F|| = 8.200854e-04
+  SNES iter 5: ||F|| = 8.200854e-04
+  SNES iter 6: ||F|| = 3.315079e-04
+  SNES iter 6: ||F|| = 3.315079e-04
+  SNES iter 7: ||F|| = 1.356225e-04
+  SNES iter 7: ||F|| = 1.356225e-04
+  SNES iter 8: ||F|| = 5.576623e-05
+  SNES iter 8: ||F|| = 5.576623e-05
+  SNES iter 9: ||F|| = 2.298403e-05
+  SNES iter 9: ||F|| = 2.298403e-05
+  SNES iter 10: ||F|| = 9.483707e-06
+  SNES iter 10: ||F|| = 9.483707e-06
+  SNES iter 11: ||F|| = 3.915455e-06
+  SNES iter 11: ||F|| = 3.915455e-06
+  SNES iter 12: ||F|| = 1.617036e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.617036e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.481772e-01
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.481772e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 1: ||F|| = 2.165344e-01
+  SNES iter 2: ||F|| = 3.387271e-02
+  SNES iter 2: ||F|| = 3.387271e-02
+  SNES iter 3: ||F|| = 6.183508e-03
+  SNES iter 3: ||F|| = 6.183508e-03
+  SNES iter 4: ||F|| = 2.094887e-03
+  SNES iter 4: ||F|| = 2.094887e-03
+  SNES iter 5: ||F|| = 8.188475e-04
+  SNES iter 5: ||F|| = 8.188475e-04
+  SNES iter 6: ||F|| = 3.309665e-04
+  SNES iter 6: ||F|| = 3.309665e-04
+  SNES iter 7: ||F|| = 1.353909e-04
+  SNES iter 7: ||F|| = 1.353909e-04
+  SNES iter 8: ||F|| = 5.566849e-05
+  SNES iter 8: ||F|| = 5.566849e-05
+  SNES iter 9: ||F|| = 2.294303e-05
+  SNES iter 9: ||F|| = 2.294303e-05
+  SNES iter 10: ||F|| = 9.466554e-06
+  SNES iter 10: ||F|| = 9.466554e-06
+  SNES iter 11: ||F|| = 3.908287e-06
+  SNES iter 11: ||F|| = 3.908287e-06
+  SNES iter 12: ||F|| = 1.614043e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614043e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  Picard iter 3/3
+
+  SNES iter 0: ||F|| = 5.483741e-01
+  SNES iter 0: ||F|| = 5.483741e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111440e+00
+  SNES iter 0: ||F|| = 2.111440e+00
+  SNES iter 1: ||F|| = 2.165063e-01
+  SNES iter 1: ||F|| = 2.165063e-01
+  SNES iter 2: ||F|| = 3.387238e-02
+  SNES iter 2: ||F|| = 3.387238e-02
+  SNES iter 3: ||F|| = 6.172320e-03
+  SNES iter 3: ||F|| = 6.172320e-03
+  SNES iter 4: ||F|| = 2.088559e-03
+  SNES iter 4: ||F|| = 2.088559e-03
+  SNES iter 5: ||F|| = 8.161483e-04
+  SNES iter 5: ||F|| = 8.161483e-04
+  SNES iter 6: ||F|| = 3.297926e-04
+  SNES iter 6: ||F|| = 3.297926e-04
+  SNES iter 7: ||F|| = 1.348883e-04
+  SNES iter 7: ||F|| = 1.348883e-04
+  SNES iter 8: ||F|| = 5.545570e-05
+  SNES iter 8: ||F|| = 5.545570e-05
+  SNES iter 9: ||F|| = 2.285343e-05
+  SNES iter 9: ||F|| = 2.285343e-05
+  SNES iter 10: ||F|| = 9.428927e-06
+  SNES iter 10: ||F|| = 9.428927e-06
+  SNES iter 11: ||F|| = 3.892504e-06
+  SNES iter 11: ||F|| = 3.892504e-06
+  SNES iter 12: ||F|| = 1.607426e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.607426e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.488743e-01
+  SNES iter 0: ||F|| = 5.488743e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111341e+00
+  SNES iter 0: ||F|| = 2.111341e+00
+  SNES iter 1: ||F|| = 2.165292e-01
+  SNES iter 1: ||F|| = 2.165292e-01
+  SNES iter 2: ||F|| = 3.387301e-02
+  SNES iter 2: ||F|| = 3.387301e-02
+  SNES iter 3: ||F|| = 6.181382e-03
+  SNES iter 3: ||F|| = 6.181382e-03
+  SNES iter 4: ||F|| = 2.093619e-03
+  SNES iter 4: ||F|| = 2.093619e-03
+  SNES iter 5: ||F|| = 8.182798e-04
+  SNES iter 5: ||F|| = 8.182798e-04
+  SNES iter 6: ||F|| = 3.307180e-04
+  SNES iter 6: ||F|| = 3.307180e-04
+  SNES iter 7: ||F|| = 1.352849e-04
+  SNES iter 7: ||F|| = 1.352849e-04
+  SNES iter 8: ||F|| = 5.562390e-05
+  SNES iter 8: ||F|| = 5.562390e-05
+  SNES iter 9: ||F|| = 2.292439e-05
+  SNES iter 9: ||F|| = 2.292439e-05
+  SNES iter 10: ||F|| = 9.458783e-06
+  SNES iter 10: ||F|| = 9.458783e-06
+  SNES iter 11: ||F|| = 3.905052e-06
+  SNES iter 11: ||F|| = 3.905052e-06
+  SNES iter 12: ||F|| = 1.612696e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.612696e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.484559e-01
+  SNES iter 0: ||F|| = 5.484559e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165332e-01
+  SNES iter 1: ||F|| = 2.165332e-01
+  SNES iter 2: ||F|| = 3.387260e-02
+  SNES iter 2: ||F|| = 3.387260e-02
+  SNES iter 3: ||F|| = 6.183194e-03
+  SNES iter 3: ||F|| = 6.183194e-03
+  SNES iter 4: ||F|| = 2.094721e-03
+  SNES iter 4: ||F|| = 2.094721e-03
+  SNES iter 5: ||F|| = 8.187777e-04
+  SNES iter 5: ||F|| = 8.187777e-04
+  SNES iter 6: ||F|| = 3.309362e-04
+  SNES iter 6: ||F|| = 3.309362e-04
+  SNES iter 7: ||F|| = 1.353779e-04
+  SNES iter 7: ||F|| = 1.353779e-04
+  SNES iter 8: ||F|| = 5.566299e-05
+  SNES iter 8: ||F|| = 5.566299e-05
+  SNES iter 9: ||F|| = 2.294071e-05
+  SNES iter 9: ||F|| = 2.294071e-05
+  SNES iter 10: ||F|| = 9.465577e-06
+  SNES iter 10: ||F|| = 9.465577e-06
+  SNES iter 11: ||F|| = 3.907877e-06
+  SNES iter 11: ||F|| = 3.907877e-06
+  SNES iter 12: ||F|| = 1.613870e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613870e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483877e-01
+  SNES iter 0: ||F|| = 5.483877e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165322e-01
+  SNES iter 1: ||F|| = 2.165322e-01
+  SNES iter 2: ||F|| = 3.387248e-02
+  SNES iter 2: ||F|| = 3.387248e-02
+  SNES iter 3: ||F|| = 6.183008e-03
+  SNES iter 3: ||F|| = 6.183008e-03
+  SNES iter 4: ||F|| = 2.094633e-03
+  SNES iter 4: ||F|| = 2.094633e-03
+  SNES iter 5: ||F|| = 8.187428e-04
+  SNES iter 5: ||F|| = 8.187428e-04
+  SNES iter 6: ||F|| = 3.309212e-04
+  SNES iter 6: ||F|| = 3.309212e-04
+  SNES iter 7: ||F|| = 1.353715e-04
+  SNES iter 7: ||F|| = 1.353715e-04
+  SNES iter 8: ||F|| = 5.566023e-05
+  SNES iter 8: ||F|| = 5.566023e-05
+  SNES iter 9: ||F|| = 2.293953e-05
+  SNES iter 9: ||F|| = 2.293953e-05
+  SNES iter 10: ||F|| = 9.465078e-06
+  SNES iter 10: ||F|| = 9.465078e-06
+  SNES iter 11: ||F|| = 3.907665e-06
+  SNES iter 11: ||F|| = 3.907665e-06
+  SNES iter 12: ||F|| = 1.613781e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613781e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483969e-01
+  SNES iter 0: ||F|| = 5.483969e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165335e-01
+  SNES iter 1: ||F|| = 2.165335e-01
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 2: ||F|| = 3.387263e-02
+  SNES iter 3: ||F|| = 6.183276e-03
+  SNES iter 3: ||F|| = 6.183276e-03
+  SNES iter 4: ||F|| = 2.094765e-03
+  SNES iter 4: ||F|| = 2.094765e-03
+  SNES iter 5: ||F|| = 8.187964e-04
+  SNES iter 5: ||F|| = 8.187964e-04
+  SNES iter 6: ||F|| = 3.309443e-04
+  SNES iter 6: ||F|| = 3.309443e-04
+  SNES iter 7: ||F|| = 1.353814e-04
+  SNES iter 7: ||F|| = 1.353814e-04
+  SNES iter 8: ||F|| = 5.566446e-05
+  SNES iter 8: ||F|| = 5.566446e-05
+  SNES iter 9: ||F|| = 2.294132e-05
+  SNES iter 9: ||F|| = 2.294132e-05
+  SNES iter 10: ||F|| = 9.465837e-06
+  SNES iter 10: ||F|| = 9.465837e-06
+  SNES iter 11: ||F|| = 3.907986e-06
+  SNES iter 11: ||F|| = 3.907986e-06
+  SNES iter 12: ||F|| = 1.613916e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613916e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483842e-01
+  SNES iter 0: ||F|| = 5.483842e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165324e-01
+  SNES iter 1: ||F|| = 2.165324e-01
+  SNES iter 2: ||F|| = 3.387249e-02
+  SNES iter 2: ||F|| = 3.387249e-02
+  SNES iter 3: ||F|| = 6.183000e-03
+  SNES iter 3: ||F|| = 6.183000e-03
+  SNES iter 4: ||F|| = 2.094627e-03
+  SNES iter 4: ||F|| = 2.094627e-03
+  SNES iter 5: ||F|| = 8.187404e-04
+  SNES iter 5: ||F|| = 8.187404e-04
+  SNES iter 6: ||F|| = 3.309201e-04
+  SNES iter 6: ||F|| = 3.309201e-04
+  SNES iter 7: ||F|| = 1.353710e-04
+  SNES iter 7: ||F|| = 1.353710e-04
+  SNES iter 8: ||F|| = 5.566004e-05
+  SNES iter 8: ||F|| = 5.566004e-05
+  SNES iter 9: ||F|| = 2.293945e-05
+  SNES iter 9: ||F|| = 2.293945e-05
+  SNES iter 10: ||F|| = 9.465044e-06
+  SNES iter 10: ||F|| = 9.465044e-06
+  SNES iter 11: ||F|| = 3.907651e-06
+  SNES iter 11: ||F|| = 3.907651e-06
+  SNES iter 12: ||F|| = 1.613775e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.613775e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483973e-01
+  SNES iter 0: ||F|| = 5.483973e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111398e+00
+  SNES iter 0: ||F|| = 2.111398e+00
+  SNES iter 1: ||F|| = 2.165074e-01
+  SNES iter 1: ||F|| = 2.165074e-01
+  SNES iter 2: ||F|| = 3.387194e-02
+  SNES iter 2: ||F|| = 3.387194e-02
+  SNES iter 3: ||F|| = 6.174008e-03
+  SNES iter 3: ||F|| = 6.174008e-03
+  SNES iter 4: ||F|| = 2.089506e-03
+  SNES iter 4: ||F|| = 2.089506e-03
+  SNES iter 5: ||F|| = 8.165362e-04
+  SNES iter 5: ||F|| = 8.165362e-04
+  SNES iter 6: ||F|| = 3.299611e-04
+  SNES iter 6: ||F|| = 3.299611e-04
+  SNES iter 7: ||F|| = 1.349611e-04
+  SNES iter 7: ||F|| = 1.349611e-04
+  SNES iter 8: ||F|| = 5.548684e-05
+  SNES iter 8: ||F|| = 5.548684e-05
+  SNES iter 9: ||F|| = 2.286669e-05
+  SNES iter 9: ||F|| = 2.286669e-05
+  SNES iter 10: ||F|| = 9.434558e-06
+  SNES iter 10: ||F|| = 9.434558e-06
+  SNES iter 11: ||F|| = 3.894893e-06
+  SNES iter 11: ||F|| = 3.894893e-06
+  SNES iter 12: ||F|| = 1.608439e-06
+  SNES iter 12: ||F|| = 1.608439e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.487866e-01
+  SNES iter 0: ||F|| = 5.487866e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 0: ||F|| = 2.111321e+00
+  SNES iter 1: ||F|| = 2.165424e-01
+  SNES iter 1: ||F|| = 2.165424e-01
+  SNES iter 2: ||F|| = 3.387292e-02
+  SNES iter 2: ||F|| = 3.387292e-02
+  SNES iter 3: ||F|| = 6.186683e-03
+  SNES iter 3: ||F|| = 6.186683e-03
+  SNES iter 4: ||F|| = 2.096589e-03
+  SNES iter 4: ||F|| = 2.096589e-03
+  SNES iter 5: ||F|| = 8.195660e-04
+  SNES iter 5: ||F|| = 8.195660e-04
+  SNES iter 6: ||F|| = 3.312792e-04
+  SNES iter 6: ||F|| = 3.312792e-04
+  SNES iter 7: ||F|| = 1.355252e-04
+  SNES iter 7: ||F|| = 1.355252e-04
+  SNES iter 8: ||F|| = 5.572550e-05
+  SNES iter 8: ||F|| = 5.572550e-05
+  SNES iter 9: ||F|| = 2.296709e-05
+  SNES iter 9: ||F|| = 2.296709e-05
+  SNES iter 10: ||F|| = 9.476689e-06
+  SNES iter 10: ||F|| = 9.476689e-06
+  SNES iter 11: ||F|| = 3.912550e-06
+  SNES iter 11: ||F|| = 3.912550e-06
+  SNES iter 12: ||F|| = 1.615834e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.615834e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.482313e-01
+  SNES iter 0: ||F|| = 5.482313e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 31/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  step 31/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111314e+00
+  SNES iter 0: ||F|| = 2.111314e+00
+  SNES iter 1: ||F|| = 2.165617e-01
+  SNES iter 1: ||F|| = 2.165617e-01
+  SNES iter 2: ||F|| = 3.387316e-02
+  SNES iter 2: ||F|| = 3.387316e-02
+  SNES iter 3: ||F|| = 6.193664e-03
+  SNES iter 3: ||F|| = 6.193664e-03
+  SNES iter 4: ||F|| = 2.100451e-03
+  SNES iter 4: ||F|| = 2.100451e-03
+  SNES iter 5: ||F|| = 8.212540e-04
+  SNES iter 5: ||F|| = 8.212540e-04
+  SNES iter 6: ||F|| = 3.320157e-04
+  SNES iter 6: ||F|| = 3.320157e-04
+  SNES iter 7: ||F|| = 1.358398e-04
+  SNES iter 7: ||F|| = 1.358398e-04
+  SNES iter 8: ||F|| = 5.585819e-05
+  SNES iter 8: ||F|| = 5.585819e-05
+  SNES iter 9: ||F|| = 2.302273e-05
+  SNES iter 9: ||F|| = 2.302273e-05
+  SNES iter 10: ||F|| = 9.499951e-06
+  SNES iter 10: ||F|| = 9.499951e-06
+  SNES iter 11: ||F|| = 3.922265e-06
+  SNES iter 11: ||F|| = 3.922265e-06
+  SNES iter 12: ||F|| = 1.619889e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.619889e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.479559e-01
+  SNES iter 0: ||F|| = 5.479559e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 3: ||F|| = 6.183444e-03
+  SNES iter 3: ||F|| = 6.183444e-03
+  SNES iter 4: ||F|| = 2.094857e-03
+  SNES iter 4: ||F|| = 2.094857e-03
+  SNES iter 5: ||F|| = 8.188355e-04
+  SNES iter 5: ||F|| = 8.188355e-04
+  SNES iter 6: ||F|| = 3.309613e-04
+  SNES iter 6: ||F|| = 3.309613e-04
+  SNES iter 7: ||F|| = 1.353887e-04
+  SNES iter 7: ||F|| = 1.353887e-04
+  SNES iter 8: ||F|| = 5.566754e-05
+  SNES iter 8: ||F|| = 5.566754e-05
+  SNES iter 9: ||F|| = 2.294262e-05
+  SNES iter 9: ||F|| = 2.294262e-05
+  SNES iter 10: ||F|| = 9.466382e-06
+  SNES iter 10: ||F|| = 9.466382e-06
+  SNES iter 11: ||F|| = 3.908215e-06
+  SNES iter 11: ||F|| = 3.908215e-06
+  SNES iter 12: ||F|| = 1.614012e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614012e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483770e-01
+  SNES iter 0: ||F|| = 5.483770e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111276e+00
+  SNES iter 0: ||F|| = 2.111276e+00
+  SNES iter 1: ||F|| = 2.165843e-01
+  SNES iter 1: ||F|| = 2.165843e-01
+  SNES iter 2: ||F|| = 3.387353e-02
+  SNES iter 2: ||F|| = 3.387353e-02
+  SNES iter 3: ||F|| = 6.202616e-03
+  SNES iter 3: ||F|| = 6.202616e-03
+  SNES iter 4: ||F|| = 2.105125e-03
+  SNES iter 4: ||F|| = 2.105125e-03
+  SNES iter 5: ||F|| = 8.232561e-04
+  SNES iter 5: ||F|| = 8.232561e-04
+  SNES iter 6: ||F|| = 3.328880e-04
+  SNES iter 6: ||F|| = 3.328880e-04
+  SNES iter 7: ||F|| = 1.362133e-04
+  SNES iter 7: ||F|| = 1.362133e-04
+  SNES iter 8: ||F|| = 5.601630e-05
+  SNES iter 8: ||F|| = 5.601630e-05
+  SNES iter 9: ||F|| = 2.308926e-05
+  SNES iter 9: ||F|| = 2.308926e-05
+  SNES iter 10: ||F|| = 9.527870e-06
+  SNES iter 10: ||F|| = 9.527870e-06
+  SNES iter 11: ||F|| = 3.933966e-06
+  SNES iter 11: ||F|| = 3.933966e-06
+  SNES iter 12: ||F|| = 1.624790e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.624790e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.475887e-01
+  SNES iter 0: ||F|| = 5.475887e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 3: ||F|| = 6.183491e-03
+  SNES iter 3: ||F|| = 6.183491e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 7: ||F|| = 1.353903e-04
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 10: ||F|| = 9.466505e-06
+  SNES iter 10: ||F|| = 9.466505e-06
+  SNES iter 11: ||F|| = 3.908267e-06
+  SNES iter 11: ||F|| = 3.908267e-06
+  SNES iter 12: ||F|| = 1.614034e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614034e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483745e-01
+  SNES iter 0: ||F|| = 5.483745e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 3: ||F|| = 6.183455e-03
+  SNES iter 3: ||F|| = 6.183455e-03
+  SNES iter 4: ||F|| = 2.094861e-03
+  SNES iter 4: ||F|| = 2.094861e-03
+  SNES iter 5: ||F|| = 8.188366e-04
+  SNES iter 5: ||F|| = 8.188366e-04
+  SNES iter 6: ||F|| = 3.309618e-04
+  SNES iter 6: ||F|| = 3.309618e-04
+  SNES iter 7: ||F|| = 1.353889e-04
+  SNES iter 7: ||F|| = 1.353889e-04
+  SNES iter 8: ||F|| = 5.566764e-05
+  SNES iter 8: ||F|| = 5.566764e-05
+  SNES iter 9: ||F|| = 2.294267e-05
+  SNES iter 9: ||F|| = 2.294267e-05
+  SNES iter 10: ||F|| = 9.466402e-06
+  SNES iter 10: ||F|| = 9.466402e-06
+  SNES iter 11: ||F|| = 3.908224e-06
+  SNES iter 11: ||F|| = 3.908224e-06
+  SNES iter 12: ||F|| = 1.614016e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614016e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  Picard iter 3/3
+
+  SNES iter 0: ||F|| = 5.483763e-01
+  SNES iter 0: ||F|| = 5.483763e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111268e+00
+  SNES iter 0: ||F|| = 2.111268e+00
+  SNES iter 1: ||F|| = 2.165838e-01
+  SNES iter 1: ||F|| = 2.165838e-01
+  SNES iter 2: ||F|| = 3.387254e-02
+  SNES iter 2: ||F|| = 3.387254e-02
+  SNES iter 3: ||F|| = 6.203798e-03
+  SNES iter 3: ||F|| = 6.203798e-03
+  SNES iter 4: ||F|| = 2.105832e-03
+  SNES iter 4: ||F|| = 2.105832e-03
+  SNES iter 5: ||F|| = 8.235789e-04
+  SNES iter 5: ||F|| = 8.235789e-04
+  SNES iter 6: ||F|| = 3.330305e-04
+  SNES iter 6: ||F|| = 3.330305e-04
+  SNES iter 7: ||F|| = 1.362744e-04
+  SNES iter 7: ||F|| = 1.362744e-04
+  SNES iter 8: ||F|| = 5.604211e-05
+  SNES iter 8: ||F|| = 5.604211e-05
+  SNES iter 9: ||F|| = 2.310009e-05
+  SNES iter 9: ||F|| = 2.310009e-05
+  SNES iter 10: ||F|| = 9.532399e-06
+  SNES iter 10: ||F|| = 9.532399e-06
+  SNES iter 11: ||F|| = 3.935858e-06
+  SNES iter 11: ||F|| = 3.935858e-06
+  SNES iter 12: ||F|| = 1.625580e-06
+  SNES iter 12: ||F|| = 1.625580e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.475443e-01
+  SNES iter 0: ||F|| = 5.475443e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111379e+00
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111379e+00
+  SNES iter 1: ||F|| = 2.165180e-01
+  SNES iter 1: ||F|| = 2.165180e-01
+  SNES iter 2: ||F|| = 3.387298e-02
+  SNES iter 2: ||F|| = 3.387298e-02
+  SNES iter 3: ||F|| = 6.176580e-03
+  SNES iter 3: ||F|| = 6.176580e-03
+  SNES iter 4: ||F|| = 2.090938e-03
+  SNES iter 4: ||F|| = 2.090938e-03
+  SNES iter 5: ||F|| = 8.171443e-04
+  SNES iter 5: ||F|| = 8.171443e-04
+  SNES iter 6: ||F|| = 3.302240e-04
+  SNES iter 6: ||F|| = 3.302240e-04
+  SNES iter 7: ||F|| = 1.350730e-04
+  SNES iter 7: ||F|| = 1.350730e-04
+  SNES iter 8: ||F|| = 5.553399e-05
+  SNES iter 8: ||F|| = 5.553399e-05
+  SNES iter 9: ||F|| = 2.288645e-05
+  SNES iter 9: ||F|| = 2.288645e-05
+  SNES iter 10: ||F|| = 9.442815e-06
+  SNES iter 10: ||F|| = 9.442815e-06
+  SNES iter 11: ||F|| = 3.898340e-06
+  SNES iter 11: ||F|| = 3.898340e-06
+  SNES iter 12: ||F|| = 1.609877e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.609877e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.486760e-01
+  SNES iter 0: ||F|| = 5.486760e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 0: ||F|| = 2.111334e+00
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 1: ||F|| = 2.165341e-01
+  SNES iter 2: ||F|| = 3.387267e-02
+  SNES iter 2: ||F|| = 3.387267e-02
+  SNES iter 3: ||F|| = 6.183456e-03
+  SNES iter 3: ||F|| = 6.183456e-03
+  SNES iter 4: ||F|| = 2.094862e-03
+  SNES iter 4: ||F|| = 2.094862e-03
+  SNES iter 5: ||F|| = 8.188375e-04
+  SNES iter 5: ||F|| = 8.188375e-04
+  SNES iter 6: ||F|| = 3.309622e-04
+  SNES iter 6: ||F|| = 3.309622e-04
+  SNES iter 7: ||F|| = 1.353891e-04
+  SNES iter 7: ||F|| = 1.353891e-04
+  SNES iter 8: ||F|| = 5.566770e-05
+  SNES iter 8: ||F|| = 5.566770e-05
+  SNES iter 9: ||F|| = 2.294269e-05
+  SNES iter 9: ||F|| = 2.294269e-05
+  SNES iter 10: ||F|| = 9.466411e-06
+  SNES iter 10: ||F|| = 9.466411e-06
+  SNES iter 11: ||F|| = 3.908227e-06
+  SNES iter 11: ||F|| = 3.908227e-06
+  SNES iter 12: ||F|| = 1.614017e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614017e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483763e-01
+  SNES iter 0: ||F|| = 5.483763e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111407e+00
+  SNES iter 0: ||F|| = 2.111407e+00
+  SNES iter 1: ||F|| = 2.165120e-01
+  SNES iter 1: ||F|| = 2.165120e-01
+  SNES iter 2: ||F|| = 3.387264e-02
+  SNES iter 2: ||F|| = 3.387264e-02
+  SNES iter 3: ||F|| = 6.174436e-03
+  SNES iter 3: ||F|| = 6.174436e-03
+  SNES iter 4: ||F|| = 2.089753e-03
+  SNES iter 4: ||F|| = 2.089753e-03
+  SNES iter 5: ||F|| = 8.166504e-04
+  SNES iter 5: ||F|| = 8.166504e-04
+  SNES iter 6: ||F|| = 3.300102e-04
+  SNES iter 6: ||F|| = 3.300102e-04
+  SNES iter 7: ||F|| = 1.349815e-04
+  SNES iter 7: ||F|| = 1.349815e-04
+  SNES iter 8: ||F|| = 5.549518e-05
+  SNES iter 8: ||F|| = 5.549518e-05
+  SNES iter 9: ||F|| = 2.287008e-05
+  SNES iter 9: ||F|| = 2.287008e-05
+  SNES iter 10: ||F|| = 9.435927e-06
+  SNES iter 10: ||F|| = 9.435927e-06
+  SNES iter 11: ||F|| = 3.895445e-06
+  SNES iter 11: ||F|| = 3.895445e-06
+  SNES iter 12: ||F|| = 1.608661e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.608661e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.487771e-01
+  SNES iter 0: ||F|| = 5.487771e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111270e+00
+  SNES iter 0: ||F|| = 2.111270e+00
+  SNES iter 1: ||F|| = 2.165848e-01
+  SNES iter 1: ||F|| = 2.165848e-01
+  SNES iter 2: ||F|| = 3.387353e-02
+  SNES iter 2: ||F|| = 3.387353e-02
+  SNES iter 3: ||F|| = 6.203019e-03
+  SNES iter 3: ||F|| = 6.203019e-03
+  SNES iter 4: ||F|| = 2.105302e-03
+  SNES iter 4: ||F|| = 2.105302e-03
+  SNES iter 5: ||F|| = 8.233244e-04
+  SNES iter 5: ||F|| = 8.233244e-04
+  SNES iter 6: ||F|| = 3.329176e-04
+  SNES iter 6: ||F|| = 3.329176e-04
+  SNES iter 7: ||F|| = 1.362262e-04
+  SNES iter 7: ||F|| = 1.362262e-04
+  SNES iter 8: ||F|| = 5.602186e-05
+  SNES iter 8: ||F|| = 5.602186e-05
+  SNES iter 9: ||F|| = 2.309164e-05
+  SNES iter 9: ||F|| = 2.309164e-05
+  SNES iter 10: ||F|| = 9.528891e-06
+  SNES iter 10: ||F|| = 9.528891e-06
+  SNES iter 11: ||F|| = 3.934403e-06
+  SNES iter 11: ||F|| = 3.934403e-06
+  SNES iter 12: ||F|| = 1.624976e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.624976e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.475683e-01
+  SNES iter 0: ||F|| = 5.475683e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  step 41/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  step 41/50: Ti=5.00 keV, Te=5.00 keV
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111415e+00
+  SNES iter 0: ||F|| = 2.111415e+00
+  SNES iter 1: ||F|| = 2.164946e-01
+  SNES iter 1: ||F|| = 2.164946e-01
+  SNES iter 2: ||F|| = 3.387332e-02
+  SNES iter 2: ||F|| = 3.387332e-02
+  SNES iter 3: ||F|| = 6.167377e-03
+  SNES iter 3: ||F|| = 6.167377e-03
+  SNES iter 4: ||F|| = 2.085454e-03
+  SNES iter 4: ||F|| = 2.085454e-03
+  SNES iter 5: ||F|| = 8.147541e-04
+  SNES iter 5: ||F|| = 8.147541e-04
+  SNES iter 6: ||F|| = 3.291828e-04
+  SNES iter 6: ||F|| = 3.291828e-04
+  SNES iter 7: ||F|| = 1.346283e-04
+  SNES iter 7: ||F|| = 1.346283e-04
+  SNES iter 8: ||F|| = 5.534633e-05
+  SNES iter 8: ||F|| = 5.534633e-05
+  SNES iter 9: ||F|| = 2.280771e-05
+  SNES iter 9: ||F|| = 2.280771e-05
+  SNES iter 10: ||F|| = 9.409865e-06
+  SNES iter 10: ||F|| = 9.409865e-06
+  SNES iter 11: ||F|| = 3.884568e-06
+  SNES iter 11: ||F|| = 3.884568e-06
+  SNES iter 12: ||F|| = 1.604124e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.604124e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.490649e-01
+  SNES iter 0: ||F|| = 5.490649e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  Aitken melhorou a solução (dif=2.99e-09)
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165346e-01
+  SNES iter 1: ||F|| = 2.165346e-01
+  SNES iter 2: ||F|| = 3.387274e-02
+  SNES iter 2: ||F|| = 3.387274e-02
+  SNES iter 3: ||F|| = 6.183523e-03
+  SNES iter 3: ||F|| = 6.183523e-03
+  SNES iter 4: ||F|| = 2.094896e-03
+  SNES iter 4: ||F|| = 2.094896e-03
+  SNES iter 5: ||F|| = 8.188509e-04
+  SNES iter 5: ||F|| = 8.188509e-04
+  SNES iter 6: ||F|| = 3.309679e-04
+  SNES iter 6: ||F|| = 3.309679e-04
+  SNES iter 7: ||F|| = 1.353915e-04
+  SNES iter 7: ||F|| = 1.353915e-04
+  SNES iter 8: ||F|| = 5.566876e-05
+  SNES iter 8: ||F|| = 5.566876e-05
+  SNES iter 9: ||F|| = 2.294314e-05
+  SNES iter 9: ||F|| = 2.294314e-05
+  SNES iter 10: ||F|| = 9.466604e-06
+  SNES iter 10: ||F|| = 9.466604e-06
+  SNES iter 11: ||F|| = 3.908309e-06
+  SNES iter 11: ||F|| = 3.908309e-06
+  SNES iter 12: ||F|| = 1.614052e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614052e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483731e-01
+  SNES iter 0: ||F|| = 5.483731e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111314e+00
+  SNES iter 0: ||F|| = 2.111314e+00
+  SNES iter 1: ||F|| = 2.165634e-01
+  SNES iter 1: ||F|| = 2.165634e-01
+  SNES iter 2: ||F|| = 3.387240e-02
+  SNES iter 2: ||F|| = 3.387240e-02
+  SNES iter 3: ||F|| = 6.195477e-03
+  SNES iter 3: ||F|| = 6.195477e-03
+  SNES iter 4: ||F|| = 2.101488e-03
+  SNES iter 4: ||F|| = 2.101488e-03
+  SNES iter 5: ||F|| = 8.217142e-04
+  SNES iter 5: ||F|| = 8.217142e-04
+  SNES iter 6: ||F|| = 3.322177e-04
+  SNES iter 6: ||F|| = 3.322177e-04
+  SNES iter 7: ||F|| = 1.359264e-04
+  SNES iter 7: ||F|| = 1.359264e-04
+  SNES iter 8: ||F|| = 5.589485e-05
+  SNES iter 8: ||F|| = 5.589485e-05
+  SNES iter 9: ||F|| = 2.303814e-05
+  SNES iter 9: ||F|| = 2.303814e-05
+  SNES iter 10: ||F|| = 9.506414e-06
+  SNES iter 10: ||F|| = 9.506414e-06
+  SNES iter 11: ||F|| = 3.924971e-06
+  SNES iter 11: ||F|| = 3.924971e-06
+  SNES iter 12: ||F|| = 1.621021e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.621021e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.478843e-01
+  SNES iter 0: ||F|| = 5.478843e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165501e-01
+  SNES iter 1: ||F|| = 2.165501e-01
+  SNES iter 2: ||F|| = 3.387277e-02
+  SNES iter 2: ||F|| = 3.387277e-02
+  SNES iter 3: ||F|| = 6.189246e-03
+  SNES iter 3: ||F|| = 6.189246e-03
+  SNES iter 4: ||F|| = 2.098109e-03
+  SNES iter 4: ||F|| = 2.098109e-03
+  SNES iter 5: ||F|| = 8.202536e-04
+  SNES iter 5: ||F|| = 8.202536e-04
+  SNES iter 6: ||F|| = 3.315802e-04
+  SNES iter 6: ||F|| = 3.315802e-04
+  SNES iter 7: ||F|| = 1.356533e-04
+  SNES iter 7: ||F|| = 1.356533e-04
+  SNES iter 8: ||F|| = 5.577926e-05
+  SNES iter 8: ||F|| = 5.577926e-05
+  SNES iter 9: ||F|| = 2.298951e-05
+  SNES iter 9: ||F|| = 2.298951e-05
+  SNES iter 10: ||F|| = 9.486009e-06
+  SNES iter 10: ||F|| = 9.486009e-06
+  SNES iter 11: ||F|| = 3.916420e-06
+  SNES iter 11: ||F|| = 3.916420e-06
+  SNES iter 12: ||F|| = 1.617440e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.617440e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.481407e-01
+  SNES iter 0: ||F|| = 5.481407e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 1: ||F|| = 2.165342e-01
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 2: ||F|| = 3.387269e-02
+  SNES iter 3: ||F|| = 6.183492e-03
+  SNES iter 3: ||F|| = 6.183492e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 4: ||F|| = 2.094879e-03
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 5: ||F|| = 8.188439e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 6: ||F|| = 3.309649e-04
+  SNES iter 7: ||F|| = 1.353902e-04
+  SNES iter 7: ||F|| = 1.353902e-04
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 8: ||F|| = 5.566822e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 9: ||F|| = 2.294291e-05
+  SNES iter 10: ||F|| = 9.466505e-06
+  SNES iter 10: ||F|| = 9.466505e-06
+  SNES iter 11: ||F|| = 3.908267e-06
+  SNES iter 11: ||F|| = 3.908267e-06
+  SNES iter 12: ||F|| = 1.614034e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614034e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+  Picard iter 3/3
+
+  SNES iter 0: ||F|| = 5.483744e-01
+  SNES iter 0: ||F|| = 5.483744e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165348e-01
+  SNES iter 1: ||F|| = 2.165348e-01
+  SNES iter 2: ||F|| = 3.387280e-02
+  SNES iter 2: ||F|| = 3.387280e-02
+  SNES iter 3: ||F|| = 6.183587e-03
+  SNES iter 3: ||F|| = 6.183587e-03
+  SNES iter 4: ||F|| = 2.094925e-03
+  SNES iter 4: ||F|| = 2.094925e-03
+  SNES iter 5: ||F|| = 8.188621e-04
+  SNES iter 5: ||F|| = 8.188621e-04
+  SNES iter 6: ||F|| = 3.309727e-04
+  SNES iter 6: ||F|| = 3.309727e-04
+  SNES iter 7: ||F|| = 1.353936e-04
+  SNES iter 7: ||F|| = 1.353936e-04
+  SNES iter 8: ||F|| = 5.566965e-05
+  SNES iter 8: ||F|| = 5.566965e-05
+  SNES iter 9: ||F|| = 2.294352e-05
+  SNES iter 9: ||F|| = 2.294352e-05
+  SNES iter 10: ||F|| = 9.466763e-06
+  SNES iter 10: ||F|| = 9.466763e-06
+  SNES iter 11: ||F|| = 3.908376e-06
+  SNES iter 11: ||F|| = 3.908376e-06
+  SNES iter 12: ||F|| = 1.614080e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614080e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483702e-01
+  SNES iter 0: ||F|| = 5.483702e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165347e-01
+  SNES iter 1: ||F|| = 2.165347e-01
+  SNES iter 2: ||F|| = 3.387276e-02
+  SNES iter 2: ||F|| = 3.387276e-02
+  SNES iter 3: ||F|| = 6.183576e-03
+  SNES iter 3: ||F|| = 6.183576e-03
+  SNES iter 4: ||F|| = 2.094920e-03
+  SNES iter 4: ||F|| = 2.094920e-03
+  SNES iter 5: ||F|| = 8.188603e-04
+  SNES iter 5: ||F|| = 8.188603e-04
+  SNES iter 6: ||F|| = 3.309720e-04
+  SNES iter 6: ||F|| = 3.309720e-04
+  SNES iter 7: ||F|| = 1.353933e-04
+  SNES iter 7: ||F|| = 1.353933e-04
+  SNES iter 8: ||F|| = 5.566951e-05
+  SNES iter 8: ||F|| = 5.566951e-05
+  SNES iter 9: ||F|| = 2.294346e-05
+  SNES iter 9: ||F|| = 2.294346e-05
+  SNES iter 10: ||F|| = 9.466739e-06
+  SNES iter 10: ||F|| = 9.466739e-06
+  SNES iter 11: ||F|| = 3.908367e-06
+  SNES iter 11: ||F|| = 3.908367e-06
+  SNES iter 12: ||F|| = 1.614076e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614076e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483705e-01
+  SNES iter 0: ||F|| = 5.483705e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 0: ||F|| = 2.111335e+00
+  SNES iter 1: ||F|| = 2.165347e-01
+  SNES iter 1: ||F|| = 2.165347e-01
+  SNES iter 2: ||F|| = 3.387277e-02
+  SNES iter 2: ||F|| = 3.387277e-02
+  SNES iter 3: ||F|| = 6.183559e-03
+  SNES iter 3: ||F|| = 6.183559e-03
+  SNES iter 4: ||F|| = 2.094908e-03
+  SNES iter 4: ||F|| = 2.094908e-03
+  SNES iter 5: ||F|| = 8.188548e-04
+  SNES iter 5: ||F|| = 8.188548e-04
+  SNES iter 6: ||F|| = 3.309696e-04
+  SNES iter 6: ||F|| = 3.309696e-04
+  SNES iter 7: ||F|| = 1.353922e-04
+  SNES iter 7: ||F|| = 1.353922e-04
+  SNES iter 8: ||F|| = 5.566908e-05
+  SNES iter 8: ||F|| = 5.566908e-05
+  SNES iter 9: ||F|| = 2.294328e-05
+  SNES iter 9: ||F|| = 2.294328e-05
+  SNES iter 10: ||F|| = 9.466663e-06
+  SNES iter 10: ||F|| = 9.466663e-06
+  SNES iter 11: ||F|| = 3.908335e-06
+  SNES iter 11: ||F|| = 3.908335e-06
+  SNES iter 12: ||F|| = 1.614063e-06
+  SNES iter 12: ||F|| = 1.614063e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483712e-01
+  SNES iter 0: ||F|| = 5.483712e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+[GS] Perfis atualizados: Ti=5.0 keV, Te=5.0 keV, p0=1.60e+05 Pa
+
+  Picard iter 1/3
+
+  Picard iter 1/3
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES iter 0: ||F|| = 1.176802e+00
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+  Picard iter 2/3
+
+  Picard iter 2/3
+  SNES iter 0: ||F|| = 2.111332e+00
+  SNES iter 0: ||F|| = 2.111332e+00
+  SNES iter 1: ||F|| = 2.165340e-01
+  SNES iter 1: ||F|| = 2.165340e-01
+  SNES iter 2: ||F|| = 3.387264e-02
+  SNES iter 2: ||F|| = 3.387264e-02
+  SNES iter 3: ||F|| = 6.183431e-03
+  SNES iter 3: ||F|| = 6.183431e-03
+  SNES iter 4: ||F|| = 2.094854e-03
+  SNES iter 4: ||F|| = 2.094854e-03
+  SNES iter 5: ||F|| = 8.188352e-04
+  SNES iter 5: ||F|| = 8.188352e-04
+  SNES iter 6: ||F|| = 3.309612e-04
+  SNES iter 6: ||F|| = 3.309612e-04
+  SNES iter 7: ||F|| = 1.353886e-04
+  SNES iter 7: ||F|| = 1.353886e-04
+  SNES iter 8: ||F|| = 5.566751e-05
+  SNES iter 8: ||F|| = 5.566751e-05
+  SNES iter 9: ||F|| = 2.294260e-05
+  SNES iter 9: ||F|| = 2.294260e-05
+  SNES iter 10: ||F|| = 9.466371e-06
+  SNES iter 10: ||F|| = 9.466371e-06
+  SNES iter 11: ||F|| = 3.908209e-06
+  SNES iter 11: ||F|| = 3.908209e-06
+  SNES iter 12: ||F|| = 1.614009e-06
+  SNES convergence reason: 3, iterations: 12
+  SNES iter 12: ||F|| = 1.614009e-06
+  SNES convergence reason: 3, iterations: 12
+
+  Picard iter 3/3
+
+  Picard iter 3/3
+  SNES iter 0: ||F|| = 5.483779e-01
+  SNES iter 0: ||F|| = 5.483779e-01
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+  SNES convergence reason: -6, iterations: 0
+  Newton não convergiu completamente.
+
+[RESULTADOS FINAIS]
+  Ti_final = 5.00 keV
+  Te_final = 5.00 keV
+  Evolução concluída.
+
+[RESULTADOS FINAIS]
+  Ti_final = 5.00 keV
+  Te_final = 5.00 keV
+  Evolução concluída.
+
+  Solução salva em psi_solution.bp
+
+  Solução salva em psi_solution.bp
