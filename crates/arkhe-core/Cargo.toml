@@ -1,12 +1,13 @@
 [package]
 name = "arkhe-core"
-license = "MIT OR Apache-2.0"
-version = "0.1.0"
+version = "2.2.0"
 edition = "2021"
 
 [dependencies]
-# kani = { version = "0.48.0", optional = true }
-regex = "1.0"
+# Fix R3: dependência `uuid` removida.
+chrono = { version = "0.4", features = ["serde", "clock"] }
 
 [dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
 pretty_assertions = "1.4.1"
+regex = "1.0"

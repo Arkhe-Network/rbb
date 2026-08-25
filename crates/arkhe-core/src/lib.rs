@@ -1,4 +1,11 @@
+pub mod delta;
+pub mod hash;
+pub mod invariants;
 pub mod string_safe;
+pub mod types;
+
+#[cfg(test)]
+pub mod tests;
 
 #[derive(Debug)]
 pub struct ArkheError;
@@ -11,10 +18,4 @@ impl std::fmt::Display for ArkheError {
 
 impl std::error::Error for ArkheError {}
 
-pub mod delta;
-pub mod hash;
-pub mod invariants;
-pub mod types;
-
-#[cfg(test)]
-pub mod tests;
+pub mod safety;
