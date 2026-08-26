@@ -27,8 +27,8 @@ alloc = []
 no_std = [
     "alloc", "aes-gcm-siv/heapless"]
 # Integration with Arkhe workspace crates
-arkhe-pea = [] # Removed "dep:arkhe-pea" for now unless we add it
-arkhe-core = [] # Removed "dep:arkhe-core" for now
+# arkhe-pea = [] # Removed "dep:arkhe-pea" for now unless we add it
+# arkhe-core = [] # Removed "dep:arkhe-core" for now
 # Hardware acceleration for x86_64 AES-NI
 hwaccel = ["aes-gcm-siv/aes"]
 
