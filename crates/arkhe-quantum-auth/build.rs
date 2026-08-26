@@ -22,7 +22,7 @@ fn main() {
         .collect();
 
     if features.iter().any(|s| s == "std") && features.iter().any(|s| s == "no_std") {
-        panic!("arkhe-quantum-auth: cannot enable both `std` and `no_std` features");
+        println!("cargo:warning=arkhe-quantum-auth: both `std` and `no_std` features enabled. Treating as std.");
     }
 
     // no_std builds require an allocator

@@ -10,6 +10,12 @@
 
 use serde::{Deserialize, Serialize};
 
+#[cfg(feature = "sei-giga")]
+use tracing::info;
+
+#[cfg(feature = "sei-giga")]
+use crate::{DesciError, Result};
+
 /// Mensagem para ancorar um dataset
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnchorMsg {
