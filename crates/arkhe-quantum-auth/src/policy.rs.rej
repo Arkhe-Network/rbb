@@ -1,0 +1,34 @@
+--- crates/arkhe-quantum-auth/src/policy.rs
++++ crates/arkhe-quantum-auth/src/policy.rs
+@@ -118,31 +118,3 @@
+         PolicyDecision::Allow
+     }
+ }
+-
+-#[cfg(feature = "arkhe-pea")]
+-pub trait ArkhePeaBridge {
+-    fn to_pea_request(&self, msg: &HeraldMessage, ctx: &PolicyContext) -> crate::dummy_pea::PolicyRequest;
+-    fn from_pea_decision(&self, decision: crate::dummy_pea::PolicyDecision) -> PolicyDecision;
+-}
+-
+-#[cfg(feature = "arkhe-pea")]
+-pub struct PeaPolicyEngine<B: ArkhePeaBridge> {
+-    bridge: B,
+-    inner: QuantumLinkPolicy,
+-}
+-
+-#[cfg(feature = "arkhe-pea")]
+-impl<B: ArkhePeaBridge> PolicyEngine for PeaPolicyEngine<B> {
+-    fn evaluate_herald(&self, msg: &HeraldMessage, ctx: &PolicyContext) -> PolicyDecision {
+-        let local = self.inner.evaluate_herald(msg, ctx);
+-        match local {
+-            PolicyDecision::Allow => {
+-                let req = self.bridge.to_pea_request(msg, ctx);
+-                // Here we would call crate::dummy_pea::evaluate(req) and process the decision.
+-                local
+-            }
+-            _ => local,
+-        }
+-    }
+-
+-    fn evaluate_slow(&self, msg: &SlowPathMessage, ctx: &PolicyContext) -> PolicyDecision {
