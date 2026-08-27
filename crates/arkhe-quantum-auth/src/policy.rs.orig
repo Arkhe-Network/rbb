@@ -108,10 +108,3 @@ impl PolicyEngine for QuantumLinkPolicy {
         if elapsed < ctx.min_rotation_interval_ns {
             let remaining = ctx.min_rotation_interval_ns - elapsed;
             log::debug!("slow path rate-limit: {}ns remaining", remaining);
-            return PolicyDecision::RateLimit {
-                delay_ns: remaining,
-            };
-        }
-        PolicyDecision::Allow
-    }
-}

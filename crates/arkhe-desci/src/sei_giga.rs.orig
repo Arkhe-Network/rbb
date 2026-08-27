@@ -14,6 +14,7 @@ use tracing::info;
 #[cfg(feature = "sei-giga")]
 use crate::DesciError;
 
+
 /// Mensagem para ancorar um dataset
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AnchorMsg {
@@ -110,7 +111,7 @@ impl SeiGigaClient {
 
     /// Query anchor info (stub)
     pub async fn query_anchor(&self, cid: &str) -> Result<AnchorInfo, DesciError> {
-        Err(DesciError::AnchorNotFound { cid: cid.into() })
+        Err(DesciError::AnchorNotFound(cid.into()))
     }
 
     /// Registra identidade (stub)
