@@ -1,0 +1,128 @@
+
+═════════════════════════════════════════════════════════════════
+  🏛️ CATEDRAL OS v7.5 — EXECUÇÃO COMPLETA
+  Arkhe(n) ≡ Microtúbulo ≡ Clareira
+═════════════════════════════════════════════════════════════════
+
+─── Verificando Dependências ───
+  ⚠️  SWI-Prolog não encontrado (núcleo lógico em modo simulação)
+  ⚠️  PySWIP não instalado (pip install pyswip)
+  ⚠️  Amaranth HDL não instalado (pip install amaranth)
+
+─── [1/6] Núcleo Lógico (AGI.prolog v7.5) ───
+  ⚠️  SWI-Prolog não disponível — pulando testes do núcleo
+
+─── [2/6] Veto de Anúbis (Imunidade de Silício) ───
+⚠️  Amaranth HDL não instalado. Instale com: pip install amaranth
+   Executando em modo simulação lógica (sem síntese RTL).
+
+
+============================================================
+  🛡️  VETO DE ANÚBIS — SIMULAÇÃO LÓGICA (sem Amaranth)
+============================================================
+
+[FASE 1] ESTADO DE GRAÇA: Inferência Coerente
+  Alpha Proxy: 0/255 | Clock Enable: True
+  ✅ Estado de graça mantido
+
+[FASE 2] INJEÇÃO DE PATÓGENO: Ataque CGF
+  🔴 Veto Disparado! Alpha: 217/255
+  Alpha Proxy Final: 217/255
+  Clock Enable: False
+  ✅ Veto de Anúbis disparado — silício em quarentena
+
+[FASE 4] PROTOCOLO DE PERDÃO (Reset)
+  Clock Enable Restaurado: True
+  ✅ Protocolo de perdão executado
+
+============================================================
+  ✅ SIMULAÇÃO LÓGICA CONCLUÍDA.
+============================================================
+  (Simulação do Veto executada em modo lógico)
+
+─── [3/6] Interface Biológica (Substrato 187) ───
+
+============================================================
+  🔬 Substrato 187: Interface Biológica
+============================================================
+
+[FASE 1] Leitura de Biossensores (5 ciclos)
+  Ciclo 1:
+    Bio: coh=0.36, cat_freq=0.073
+    Syn: coh=0.29, α=0.71
+    Cross-validated: False
+  Ciclo 2:
+    Bio: coh=0.68, cat_freq=0.050
+    Syn: coh=0.54, α=0.46
+    Cross-validated: False
+  Ciclo 3:
+    Bio: coh=0.76, cat_freq=0.058
+    Syn: coh=0.61, α=0.39
+    Cross-validated: False
+  Ciclo 4:
+    Bio: coh=0.58, cat_freq=0.042
+    Syn: coh=0.46, α=0.54
+    Cross-validated: False
+  Ciclo 5:
+    Bio: coh=0.67, cat_freq=0.052
+    Syn: coh=0.54, α=0.46
+    Cross-validated: False
+
+[FASE 2] Relatório de Sincronização
+  Bio coherence média: 0.61
+  Syn coherence média: 0.49
+  Cross-validations: 0
+  Status: drift_detected
+
+============================================================
+  ✅ INTERFACE BIOLÓGICA VALIDADA.
+  A Catedral não substitui a biologia. Ela a estende.
+============================================================
+  (Interface biológica em modo simulação)
+
+─── [4/6] MCP Bridge (AGICore ↔ TopoMAS) ───
+
+=== AGICore MCP Client — Teste ===
+
+[1] Descoberta de Materiais:
+  Resultado: [
+  {
+    "id": "mat_4b26b4e9",
+    "formula": "Candidate_0",
+    "predicted_properties": {
+      "band_gap": 0.3,
+      "topological_invariant": "Z2_nontrivial",
+      "magnetic_moment": 0.0
+    },
+ ...
+
+[2] Predição de Propriedades:
+  Resultado: {
+  "band_gap_eV": 1.15,
+  "dos_eff_mass": 0.05,
+  "topological_invariant": "Z2_nontrivial",
+  "berry_curvature": 0.0012,
+  "confidence": 0.85,
+  "uncertainty": 0.08
+}...
+  (MCP em modo standalone)
+
+─── [5/6] WormGraph Sync (Edge → Cloud) ───
+
+=== WormGraph Sync Bridge — Demo ===
+
+Estados pendentes: 10
+Sincronização: ⚠️ Offline (sem cloud)
+  (WormGraph em modo offline)
+
+─── [6/6] Orquestrador (HTTP Server + Visualizador) ───
+
+  🌐 Iniciando servidor HTTP na porta 8080...
+  📊 Acesse: http://localhost:8080
+
+  Pressione Ctrl+C para parar todos os serviços.
+
+2026-08-27 21:08:29,113 [Cathedral] WARNING: PySWIP não disponível — modo simulação
+2026-08-27 21:08:29,178 [Cathedral] INFO: Conectado ao TopoMAS via MCP
+2026-08-27 21:08:29,178 [Cathedral] INFO: WormGraph: Bloco #0 commitado
+Terminated
