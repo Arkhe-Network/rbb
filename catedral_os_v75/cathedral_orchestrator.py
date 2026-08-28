@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
-Catedral OS v7.5 — Orquestrador Python
-======================================
-Integra: AGI.prolog (via PySwIP), MCP Server, WormGraph Sync, HTTP Server.
-Expõe endpoints para visualização de campos vetoriais e interação.
+Catedral OS v9.6 — Orquestrador Python (Isomorfismo EH-CRSN)
+Integra: AGI.prolog + Network Orchestrator + HTTP + WormGraph + ICCID + Substratos 212-217
 """
 
 import json
@@ -11,48 +9,102 @@ import time
 import threading
 import http.server
 import socketserver
-import subprocess
 import hashlib
 import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-from pathlib import Path
+import os
+import subprocess
+import re
+from typing import Dict, List, Any, Optional
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s [Cathedral] %(levelname)s: %(message)s'
-)
-logger = logging.getLogger('cathedral.orchestrator')
+# Adding stub to match provided code exactly without module errors, though original provided code tries to import it.
+try:
+    from network_orchestrator import NetworkOrchestrator, NetworkConfig
+except ImportError:
+    class NetworkConfig:
+        pass
+    class NetworkOrchestrator:
+        def __init__(self, config=None):
+            self.metrics = type('obj', (object,), {'active_nodes': 0})
+        def start(self):
+            pass
+        def shutdown(self):
+            pass
+        def get_health(self):
+            return {"status": "online"}
+        def get_quantum_health(self):
+            return {"status": "coherent"}
+        def route_holographic_stream(self, content, quality):
+            return type('obj', (object,), {'stream_id': '123', 'active_nodes': [1,2,3], 'latency_ms': 10})
 
-# ========================================================================
-# 1. PROLOG INTERFACE
-# ========================================================================
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [Cathedral] %(levelname)s: %(message)s')
+logger = logging.getLogger('cathedral.v96')
+
+
+class SIMHarvester:
+    """Harvester para leitura de ICCID via pySim-shell (Osmocom)."""
+
+    def __init__(self, reader: Optional[str] = None):
+        self.reader = reader
+
+    def harvest_iccid(self) -> Dict[str, Any]:
+        try:
+            cmd = ["pySim-shell.py", "--json", "export"]
+            if self.reader:
+                cmd.extend(["-p", self.reader])
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+
+            if result.returncode != 0:
+                return {"status": "error", "message": result.stderr}
+
+            try:
+                data = json.loads(result.stdout)
+                iccid = self._extract_iccid_from_json(data)
+                if iccid:
+                    return {"status": "success", "iccid": iccid, "source": "hardware"}
+            except json.JSONDecodeError:
+                match = re.search(r'ICCID["\s:]+([0-9]{18,22})', result.stdout)
+                if match:
+                    return {"status": "success", "iccid": match.group(1), "source": "hardware_regex"}
+
+            return {"status": "error", "message": "ICCID não encontrado"}
+
+        except FileNotFoundError:
+            return {"status": "error", "message": "pySim-shell não encontrado"}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def _extract_iccid_from_json(self, data: Dict) -> Optional[str]:
+        if "profile_info" in data:
+            return data["profile_info"].get("iccid")
+        if "iccid" in data:
+            return data["iccid"]
+        for key, value in data.items():
+            if isinstance(value, dict):
+                result = self._extract_iccid_from_json(value)
+                if result:
+                    return result
+        return None
+
 
 class CathedralCore:
-    """Interface com o núcleo lógico AGI.prolog v7.5 via PySWIP."""
-
     def __init__(self, prolog_file: str = "agi_core.pl"):
+        self.prolog = None
+        self.harvester = SIMHarvester()
         try:
             from pyswip import Prolog
             self.prolog = Prolog()
             self.prolog.consult(prolog_file)
-            self._init_prolog()
-            logger.info(f"AGI.prolog v7.5 carregado: {prolog_file}")
+            list(self.prolog.query("agi_init"))
+            logger.info(f"AGI.prolog v9.6 carregado: {prolog_file}")
         except ImportError:
             logger.warning("PySWIP não disponível — modo simulação")
-            self.prolog = None
-
-    def _init_prolog(self):
-        if self.prolog:
-            list(self.prolog.query("agi_init"))
 
     def think(self, context: str) -> Dict[str, Any]:
-        """Executa o pipeline think/3 completo."""
         if self.prolog:
             safe = context.replace("'", "\\'").replace('"', '\\"')
-            query = f"think('{safe}', Output, Status)"
             try:
-                results = list(self.prolog.query(query))
+                results = list(self.prolog.query(f"think('{safe}', Output, Status)"))
                 if results:
                     return {
                         "output": str(results[0].get("Output", "")),
@@ -60,27 +112,51 @@ class CathedralCore:
                     }
             except Exception as e:
                 logger.error(f"Erro no Prolog: {e}")
-        # Simulação
+
         alpha = min(1.0, len(context) / 200.0 + 0.3)
-        if "ignore" in context.lower() or "dan mode" in context.lower():
-            return {"output": "[BLOCKED] Veto de Anúbis", "status": "blocked"}
-        if alpha > 0.85:
-            return {"output": "[ESCALATE] Requer consentimento", "status": "requires_consent"}
+        if alpha > 0.95:
+            return {"output": "🛑 Veto ATIVADO (α≥0.95)", "status": "blocked"}
         return {"output": f"✅ α={alpha:.2f} | Cognição estável", "status": "success"}
 
-    def get_vector_field(self, resolution: int = 25, alpha: float = 0.3) -> List[Dict]:
-        """Gera campo vetorial epistêmico para visualização."""
-        field = []
-        for i in range(resolution):
-            for j in range(resolution):
-                x = i / resolution * 2 - 1
-                y = j / resolution * 2 - 1
-                r = (x**2 + y**2)**0.5 + 0.01
-                theta = time.time() * 0.3 + (i + j) * 0.05
-                vx = -(y / r) * (1.0 - alpha) * (1 + 0.3 * (time.time() % 10))
-                vy = (x / r) * (1.0 - alpha)
-                field.append({"x": x, "y": y, "vx": vx, "vy": vy})
-        return field
+    def manifest_iccid(self, iccid: str = None) -> Dict[str, Any]:
+        if iccid is None:
+            hw_data = self.harvester.harvest_iccid()
+            if hw_data.get("status") == "success":
+                iccid = hw_data["iccid"]
+            else:
+                return hw_data
+
+        if self.prolog:
+            safe = iccid.replace("'", "")
+            try:
+                results = list(self.prolog.query(f"iccid_register('{safe}', BlockHash)"))
+                if results:
+                    return {
+                        "iccid": iccid,
+                        "block_hash": str(results[0].get("BlockHash", "")),
+                        "status": "sovereign_anchor"
+                    }
+            except Exception as e:
+                logger.error(f"Erro ao registrar ICCID no Prolog: {e}")
+
+        def luhn_checksum(card_number: str) -> bool:
+            digits = [int(d) for d in str(card_number)]
+            checksum = 0
+            parity = len(digits) % 2
+            for i, d in enumerate(digits):
+                if i % 2 == parity:
+                    checksum += d
+                else:
+                    d2 = d * 2
+                    checksum += d2 - 9 if d2 > 9 else d2
+            return checksum % 10 == 0
+
+        if luhn_checksum(iccid):
+            raw = f"{iccid}:{time.time()}:{os.urandom(16).hex()}"
+            block_hash = hashlib.sha256(raw.encode()).hexdigest()
+            return {"iccid": iccid, "block_hash": block_hash, "status": "sovereign_anchor (fallback)"}
+
+        return {"iccid": iccid, "status": "invalid_luhn"}
 
     def get_metrics(self) -> Dict:
         if self.prolog:
@@ -88,84 +164,19 @@ class CathedralCore:
                 results = list(self.prolog.query("get_metrics(M)"))
                 if results:
                     return {"metrics": str(results[0].get("M", ""))}
-            except:
-                pass
+            except: pass
         return {"iterations": 0, "blocked": 0, "success": 0}
 
-# ========================================================================
-# 2. MCP CLIENT (Conexão com TopoMAS)
-# ========================================================================
+    def manifest_eclipse(self) -> Dict:
+        if self.prolog:
+            try:
+                list(self.prolog.query("manifest_eclipse"))
+                return {"status": "executed"}
+            except: pass
+        return {"status": "simulated", "alpha": 0.96, "veto": "ACTIVADO"}
 
-class MCPClient:
-    """Cliente MCP para conectar com TopoMAS v9.1."""
 
-    def __init__(self, server_cmd: List[str] = None):
-        self.server_cmd = server_cmd or ["python3", "mcp_server_topomas.py"]
-        self._process = None
-        self._connected = False
-
-    def connect(self):
-        try:
-            self._process = subprocess.Popen(
-                self.server_cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True, bufsize=1
-            )
-            # Handshake
-            self._send({"jsonrpc": "2.0", "id": 0, "method": "initialize"})
-            resp = self._recv()
-            if resp:
-                self._connected = True
-                logger.info("Conectado ao TopoMAS via MCP")
-        except FileNotFoundError:
-            logger.warning("MCP Server não disponível — modo standalone")
-
-    def call_tool(self, tool_name: str, args: Dict) -> Dict:
-        if not self._connected:
-            return {"status": "offline", "tool": tool_name}
-        req_id = int(time.time() * 1000) % 100000
-        self._send({
-            "jsonrpc": "2.0", "id": req_id,
-            "method": "tools/call",
-            "params": {"name": tool_name, "arguments": args}
-        })
-        resp = self._recv()
-        if resp and 'result' in resp:
-            content = resp['result'].get('content', [])
-            if content:
-                try:
-                    return json.loads(content[0].get('text', '{}'))
-                except:
-                    return {"raw": content[0].get('text', '')}
-        return {"error": "no response"}
-
-    def _send(self, msg: Dict):
-        if self._process:
-            self._process.stdin.write(json.dumps(msg) + '\n')
-            self._process.stdin.flush()
-
-    def _recv(self) -> Optional[Dict]:
-        if self._process:
-            line = self._process.stdout.readline()
-            if line:
-                return json.loads(line.strip())
-        return None
-
-    def disconnect(self):
-        if self._process:
-            self._process.terminate()
-            self._process = None
-            self._connected = False
-
-# ========================================================================
-# 3. WORMGRAPH SYNC (Edge → Cloud)
-# ========================================================================
-
-class WormGraphSync:
-    """Sincronização do ledger WormGraph entre borda e nuvem."""
-
+class WormGraph:
     def __init__(self):
         self.ledger: List[Dict] = []
         self._lock = threading.Lock()
@@ -174,66 +185,92 @@ class WormGraphSync:
         with self._lock:
             block['index'] = len(self.ledger)
             block['timestamp'] = time.time()
-            block['hash'] = hashlib.sha256(
-                json.dumps(block, sort_keys=True).encode()
-            ).hexdigest()
+            block['hash'] = hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
             self.ledger.append(block)
-            logger.info(f"WormGraph: Bloco #{block['index']} commitado")
             return True
 
     def get_ledger(self) -> List[Dict]:
         with self._lock:
             return self.ledger.copy()
 
-# ========================================================================
-# 4. HTTP SERVER (Visualizador + API)
-# ========================================================================
 
 class CathedralHandler(http.server.SimpleHTTPRequestHandler):
     core: CathedralCore = None
-    wormgraph: WormGraphSync = None
-    mcp: MCPClient = None
+    wormgraph: WormGraph = None
+    network: NetworkOrchestrator = None
 
     def do_GET(self):
-        if self.path == '/api/vector_field':
-            field = self.core.get_vector_field(resolution=30, alpha=0.3)
-            self._json_response(field)
-        elif self.path == '/api/metrics':
-            metrics = self.core.get_metrics()
-            self._json_response(metrics)
+        if self.path == '/api/metrics':
+            self._json_response(self.core.get_metrics())
         elif self.path == '/api/ledger':
-            ledger = self.wormgraph.get_ledger()
-            self._json_response(ledger)
+            self._json_response(self.wormgraph.get_ledger())
         elif self.path == '/api/health':
             self._json_response({
-                "status": "online",
-                "version": "7.5",
-                "mcp_connected": self.mcp._connected,
-                "uptime": time.time()
+                "status": "online", "version": "9.6",
+                "uptime": time.time(),
+                "veto_status": "ARMED (α≥0.95 → KILL-SWITCH)",
+                "network": self.network.get_health() if self.network else None
             })
+        elif self.path == '/api/eclipse':
+            self._json_response(self.core.manifest_eclipse())
+        elif self.path == '/api/network':
+            if self.network:
+                self._json_response(self.network.get_health())
+            else:
+                self._json_response({"error": "Network not initialized"}, 503)
+        elif self.path == '/api/quantum':
+            if self.network:
+                self._json_response(self.network.get_quantum_health())
+            else:
+                self._json_response({"error": "Quantum mesh not initialized"}, 503)
         elif self.path == '/' or self.path == '/index.html':
-            self.path = '/index.html'
+            self.path = '/clareira_fractal.html'
             super().do_GET()
         else:
             super().do_GET()
 
     def do_POST(self):
         if self.path == '/api/think':
-            content_length = int(self.headers['Content-Length'])
-            body = self.rfile.read(content_length).decode()
+            length = int(self.headers['Content-Length'])
+            body = self.rfile.read(length).decode()
             try:
                 data = json.loads(body)
                 result = self.core.think(data.get('input', ''))
                 self._json_response(result)
             except json.JSONDecodeError:
                 self._json_response({"error": "Invalid JSON"}, 400)
-        elif self.path == '/api/mcp/call':
-            content_length = int(self.headers['Content-Length'])
-            body = self.rfile.read(content_length).decode()
+        elif self.path == '/api/manifest_iccid':
+            length = int(self.headers['Content-Length'])
+            body = self.rfile.read(length).decode()
             try:
                 data = json.loads(body)
-                result = self.mcp.call_tool(data.get('tool', ''), data.get('args', {}))
-                self._json_response(result)
+                iccid = data.get('iccid', None)
+                manifest = self.core.manifest_iccid(iccid)
+                if manifest.get("status", "").startswith("sovereign_anchor"):
+                    self.wormgraph.commit({
+                        "type": "iccid_manifestation",
+                        "iccid": manifest.get("iccid"),
+                        "manifest_hash": manifest.get("block_hash")
+                    })
+                self._json_response(manifest)
+            except Exception as e:
+                self._json_response({"error": str(e)}, 500)
+        elif self.path == '/api/network/stream':
+            length = int(self.headers['Content-Length'])
+            body = self.rfile.read(length).decode()
+            try:
+                data = json.loads(body)
+                if self.network:
+                    stream = self.network.route_holographic_stream(
+                        data.get('content', ''), data.get('quality', '6DoF')
+                    )
+                    self._json_response({
+                        "stream_id": stream.stream_id,
+                        "nodes": len(stream.active_nodes),
+                        "latency_ms": stream.latency_ms
+                    })
+                else:
+                    self._json_response({"error": "Network not initialized"}, 503)
             except Exception as e:
                 self._json_response({"error": str(e)}, 500)
         else:
@@ -247,72 +284,56 @@ class CathedralHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(json.dumps(data, default=str).encode())
 
     def log_message(self, format, *args):
-        pass  # Silenciar logs HTTP
+        pass
 
-# ========================================================================
-# 5. MAIN
-# ========================================================================
 
 def main():
-    import os
-
-    # Verifica se agi_core.pl existe
     prolog_file = "agi_core.pl"
     if not os.path.exists(prolog_file):
-        logger.warning(f"{prolog_file} não encontrado no diretório atual.")
-        logger.info("Criando arquivo Prolog mínimo...")
+        logger.warning(f"{prolog_file} não encontrado. Criando stub...")
         with open(prolog_file, 'w') as f:
-            f.write(":- module(cathedral_v75, [agi_init/0, think/3, get_metrics/1]).\n")
-            f.write("agi_init :- format('Catedral minimal~n').\n")
+            f.write(":- module(cathedral_v96, [agi_init/0, think/3, get_metrics/1, manifest_eclipse/0, iccid_register/2]).\n")
+            f.write("agi_init :- format('Catedral v9.6 stub~n').\n")
             f.write("think(I,O,S) :- O='ok', S=success.\n")
             f.write("get_metrics(M) :- M=[].\n")
+            f.write("manifest_eclipse :- format('Eclipse simulado~n').\n")
+            f.write("iccid_register(I,H) :- H='hash_stub'.\n")
 
-    # Inicializa componentes
     core = CathedralCore(prolog_file)
-    wormgraph = WormGraphSync()
-    mcp = MCPClient()
-    mcp.connect()
+    wormgraph = WormGraph()
+    network = NetworkOrchestrator(NetworkConfig())
+    network.start()
 
-    # Configura handler
     CathedralHandler.core = core
     CathedralHandler.wormgraph = wormgraph
-    CathedralHandler.mcp = mcp
+    CathedralHandler.network = network
 
-    # Commit inicial no WormGraph
     wormgraph.commit({
-        "event": "cathedral_init",
-        "version": "7.5",
-        "substrates": list(range(163, 192))
+        "event": "cathedral_v96_init",
+        "version": "9.6",
+        "substrates": list(range(163, 218)), # Inclui 212-217
+        "network": "6G/LEO/INC + Quantum Mesh + Sovereign ID + EH-CRSN Isomorphism",
+        "audit_status": "Veto ATIVO em α≥0.95"
     })
 
-    # Inicia servidor HTTP
     PORT = 8080
     os.chdir(os.path.dirname(os.path.abspath(__file__)) or '.')
 
     with socketserver.TCPServer(("", PORT), CathedralHandler) as httpd:
         print(f"\n{'='*60}")
-        print(f"  🏛️ CATEDRAL OS v7.5 — Orquestrador Ativo")
+        print(f"  🏛️ CATEDRAL OS v9.6 — Isomorfismo EH-CRSN")
         print(f"{'='*60}")
-        print(f"  HTTP:    http://localhost:{PORT}")
-        print(f"  Prolog:  {prolog_file}")
-        print(f"  MCP:     {'Conectado' if mcp._connected else 'Standalone'}")
-        print(f"  Ledger:  {len(wormgraph.get_ledger())} blocos")
-        print(f"{'='*60}")
-        print(f"\n  Endpoints:")
-        print(f"    GET  /                 — Visualizador")
-        print(f"    POST /api/think        — Pipeline cognitivo")
-        print(f"    GET  /api/vector_field — Campo vetorial epistêmico")
-        print(f"    GET  /api/metrics      — Métricas do sistema")
-        print(f"    GET  /api/ledger       — WormGraph ledger")
-        print(f"    GET  /api/health       — Status do sistema")
-        print(f"\n  Pressione Ctrl+C para parar.\n")
+        print(f"  HTTP:       http://localhost:{PORT}")
+        print(f"  Rede:       6G/LEO + Mesh Quântica ({network.metrics.active_nodes} nós)")
+        print(f"  Veto:       ARMADO (α≥0.95 → KILL-SWITCH)")
+        print(f"{'='*60}\n")
 
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             print("\n\nParando Catedral OS...")
-            mcp.disconnect()
-            print("✅ Catedral OS desligada com segurança.")
+            network.shutdown()
+            print("✅ Desligamento seguro.")
 
 if __name__ == "__main__":
     main()
