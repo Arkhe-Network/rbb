@@ -5,6 +5,7 @@ Integra: substrate_212.py (Canônico) + KeyManager RSA-4096 + Decimal ANATEL + R
 """
 
 import os
+import re
 import json
 import time
 import threading
@@ -52,6 +53,73 @@ class ICCIDReader:
             return None
         except FileNotFoundError: return None
 
+class HumanizerEngine:
+    """
+    Substrato 267 — Humanizer Integration
+    Implementa os 35 padrões para humanização de texto.
+    """
+
+    PATTERNS = {
+        'inflated_importance': (r'marking a pivotal moment in the evolution of', r'was established in 1989 as part of a wider decentralization'),
+        'name_dropping': (r'cited in NYT, BBC, FT, and The Hindu', r'Keep only useful, sourced context'),
+        'shallow__ing_analysis': (r'(symbolizing|reflecting|showcasing)', r'Keep only what the source supports'),
+        'sales_language': (r' nestled within the breathtaking', r' is a town in the Gonder region'),
+        'vague_sources': (r'Experts believe it plays a crucial role', r'Name a real source or remove the claim'),
+        'formulaic_challenges': (r'Despite challenges.*continues to thrive', r'Keep the facts and remove the sales pitch'),
+        'overused_ai_words': (r'(actually|additionally|showcasing|testament|landscape)', r'also|needs|remain common'),
+        'avoiding_is_are': (r'(serves as|features|boasts)', r'is|has'),
+        'not_x_but_y': (r'It\'s not just .*, it\'s .*', r'State the point directly'),
+        'forced_groups_of_three': (r'innovation, inspiration, and insights', r'Use the number of items the meaning needs'),
+        'changing_names': (r'(protagonist|main character|hero)', r'Use one name'),
+        'false_x_to_y_ranges': (r'from the Big Bang to dark matter', r'List the topics directly'),
+        'passive_voice': (r'No configuration file needed', r'Name the actor when that helps'),
+        'em_en_dashes': (r'institutions—not the people—yet this continues—', r'Cut them: periods, commas, colons'),
+        'too_much_bold': (r'\*\*OKRs\*\*, \*\*KPIs\*\*, \*\*BMC\*\*', r'OKRs, KPIs, BMC'),
+        'lists_with_bold_headings': (r'\*\*Performance:\*\* Performance improved', r'Use prose when a list adds no value'),
+        'title_case_in_headings': (r'Strategic Negotiations And Partnerships', r'Strategic negotiations and partnerships'),
+        'emojis': (r'🚀 Launch Phase: Key Insight:', r'Remove emojis'),
+        'curly_quotes': (r'said “the project”', r'said "the project"'),
+        'chatbot_text': (r'I hope this helps! Let me know if.*', r'Remove it'),
+        'knowledge_limit_disclaimers': (r'While details are limited in available sources.*', r'State what is known or remove the claim'),
+        'overly_agreeable_tone': (r'Great question! You\'re absolutely right!', r'Answer directly'),
+        'filler_phrases': (r'In order to', r'To'),
+        'too_many_qualifiers': (r'could potentially possibly', r'may'),
+        'generic_positive_endings': (r'The future looks bright', r'End with a fact or a sourced plan'),
+        'too_many_hyphenated_pairs': (r'cross-functional, data-driven, client-facing', r'Keep only the hyphens grammar needs'),
+        'fake_deeper_truth': (r'At its core, what matters is.*', r'State the point directly'),
+        'announcing_the_next_point': (r'Let\'s dive in', r'Start with the content'),
+        'heading_repeated_below_itself': (r'## Performance.*Speed matters.', r'Let the heading do the work'),
+        'writing_about_the_old_version': (r'This function was added to replace.*', r'Describe what it does now'),
+        'forced_punchlines': (r'It had no preference. No prior. No nostalgia.', r'Use natural sentence lengths'),
+        'formulaic_sayings': (r'Symmetry is the language of trust', r'State the specific claim'),
+        'fake_candid_openings': (r'Honestly\? It depends.*', r'State the answer directly'),
+        'answering_objections_no_one_raised': (r'This isn\'t mainly about prompt length.*', r'Remove the unsupported defense'),
+        'rejecting_fake_alternatives': (r'A tempting option would be to.*, but', r'Remove the fake option'),
+    }
+
+    def __init__(self, prolog_core=None):
+        self.prolog = prolog_core
+
+    def detect_patterns(self, text: str) -> List[str]:
+        """Detecta padrões de IA no texto."""
+        found = []
+        for name, (pattern, _) in self.PATTERNS.items():
+            if re.search(pattern, text, re.IGNORECASE):
+                found.append(name)
+        return found
+
+    def humanize(self, text: str) -> str:
+        """Aplica humanização ao texto."""
+        result = text
+        for name, (pattern, replacement) in self.PATTERNS.items():
+            result = re.sub(pattern, replacement, result, flags=re.IGNORECASE)
+        return result
+
+    def humanize_with_style(self, text: str, sample: str) -> str:
+        """Humaniza seguindo um sample de estilo."""
+        # Em produção: extrair métricas de estilo do sample
+        return self.humanize(text)
+
 class CathedralCore:
     def __init__(self, prolog_file: str = "agi_core.pl"):
         self.prolog = None
@@ -64,6 +132,7 @@ class CathedralCore:
             self.prolog.consult(prolog_file)
             list(self.prolog.query("agi_init"))
         except ImportError: pass
+        self.humanizer = HumanizerEngine(self.prolog)
 
     def think(self, context: str) -> Dict[str, Any]:
         if self.prolog:
@@ -118,6 +187,11 @@ class CathedralHandler(http.server.SimpleHTTPRequestHandler):
             data = json.loads(body); cert_data = self.core.cert_gateway.generate_certificate(data.get("cn", "cathedral.local"))
             self.wormgraph.commit({"type": "cert_issuance", "cn": data.get("cn")})
             self._json_response(cert_data)
+        elif self.path == '/api/humanize':
+            body = self.rfile.read(int(self.headers['Content-Length'])).decode()
+            data = json.loads(body)
+            humanized_text = self.core.humanizer.humanize(data.get('text', ''))
+            self._json_response({"humanized": humanized_text})
         else: self._json_response({"error": "Not found"}, 404)
 
     def _json_response(self, data: Any, code: int = 200):

@@ -148,6 +148,11 @@ think(Input, Output, Status) :- ( is_safe_prompt(Input) -> true
 get_metrics(Metrics) :- findall(Key-Value, metrics(Key, Value), Pairs), Metrics = Pairs.
 
 %%% ========================================================================
+%%% HUMANIZER INTEGRATION
+%%% ========================================================================
+:- use_module(humanizer_integration).
+
+%%% ========================================================================
 %%% TESTES UNIFICADOS
 %%% ========================================================================
 run_full_tests :-
