@@ -1,0 +1,55 @@
+# kubernetes/cilium/l7-network-policies.yaml
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: arkhe-l7-api-security
+  namespace: arkhe
+spec:
+  description: "Strict L7 HTTP filtering for the Arkhe API gateway"
+  endpointSelector:
+    matchLabels:
+      app: arkhe-api
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        role: frontend-ui
+    toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP
+      rules:
+        http:
+        - method: "GET"
+          path: "/api/v1/handovers"
+        - method: "POST"
+          path: "/api/v1/handovers"
+        - method: "GET"
+          path: "/metrics/coherence"
+
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: arkhe-quinfinity-grpc-isolation
+  namespace: arkhe
+spec:
+  description: "Restrict Quinfinity gRPC access only to authorized Arkhe Orchestrators"
+  endpointSelector:
+    matchLabels:
+      app: quinfinity
+  ingress:
+  - fromEndpoints:
+    - matchLabels:
+        app: arkhe-orchestrator
+    toPorts:
+    - ports:
+      - port: "50051"
+        protocol: TCP
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        role: gpu-worker
+    toPorts:
+    - ports:
+      - port: "8080"
+        protocol: TCP

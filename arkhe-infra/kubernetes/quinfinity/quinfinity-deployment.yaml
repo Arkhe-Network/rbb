@@ -1,0 +1,64 @@
+# kubernetes/quinfinity/quinfinity-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quinfinity-bridge
+  namespace: arkhe
+  labels:
+    app: quinfinity
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quinfinity
+  template:
+    metadata:
+      labels:
+        app: quinfinity
+        role: quantum-emulator
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9000"
+    spec:
+      containers:
+      - name: quinfinity-engine
+        image: arkhe/quinfinity-engine:v1.2.0
+        ports:
+        - containerPort: 50051 # gRPC port for quantum operations
+        - containerPort: 9000  # Metrics
+        env:
+        - name: QUBIT_CAPACITY
+          value: "128"
+        - name: COHERENCE_THRESHOLD
+          value: "0.985"
+        - name: ARKHE_API_URL
+          value: "http://arkhe-api.arkhe.svc.cluster.local:8080"
+        resources:
+          requests:
+            cpu: "2"
+            memory: "8Gi"
+            "nvidia.com/gpu": "1"
+          limits:
+            cpu: "4"
+            memory: "16Gi"
+            "nvidia.com/gpu": "1"
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quinfinity-service
+  namespace: arkhe
+spec:
+  selector:
+    app: quinfinity
+  ports:
+  - name: grpc
+    port: 50051
+    targetPort: 50051
+  - name: metrics
+    port: 9000
+    targetPort: 9000
